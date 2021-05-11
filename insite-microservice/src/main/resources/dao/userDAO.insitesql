@@ -8,25 +8,31 @@
 	    wr.role_type,
 	    sr.region
 	FROM
-	    marcs_db.users u
+	    users u
 	        INNER JOIN
-	    marcs_db.web_roles wr ON u.web_role_id = wr.web_role_id
+	    web_roles wr ON u.web_role_id = wr.web_role_id
 	        INNER JOIN
-	    marcs_db.store_region sr ON u.store_region_id = sr.store_region_id
+	    store_region sr ON u.store_region_id = sr.store_region_id
 	WHERE u.user_id = :userId:
-	
-@NAME(getUserCredentials)
-	SELECT * 
-	FROM 
-		marcs_db.user_creds
-	@WHERE(:userId:)
-		user_id = :userId:
-	@WHERE(:name:)
-		username = :name:
-	
-@NAME(getUserSecurity)
-	SELECT * 
-	FROM 
-		marcs_db.user_security
-	WHERE
-		user_id = :userId:
+
+@NAME(getUsers)
+	SELECT 
+	    up.id,
+	    up.first_name,
+	    up.last_name,
+	    up.email,
+	    up.app_access,
+        uc.username,
+        uc.password,
+	    wr.text_id AS 'web_role',
+	    r.text_id AS 'region'
+	FROM
+	    user_profile up
+			JOIN
+		user_credentials uc ON up.id = uc.user_id
+	        JOIN
+	    web_role wr ON up.role_id = wr.id
+	        JOIN
+	    region r ON up.region_id = r.id
+	@WHERE(:username:)
+		uc.username = :username:

@@ -1,13 +1,13 @@
 package com.marcs.app.manager.mapper;
 
-import static com.dataformatter.DateFormatter.formatDateText;
+import static com.marcs.service.util.DateFormatter.formatDateText;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.springframework.jdbc.core.RowMapper;
-
 import com.marcs.app.manager.client.domain.ManagerDetail;
+
+import org.springframework.jdbc.core.RowMapper;
 
 /**
  * Mapper class to map a Manager Detail Object {@link MangerDetail}

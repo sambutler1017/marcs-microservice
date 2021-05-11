@@ -1,13 +1,11 @@
 package com.marcs.app.user.service;
 
+import com.marcs.app.user.client.domain.User;
+import com.marcs.app.user.client.domain.request.UserGetRequest;
+import com.marcs.app.user.dao.UserDAO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.marcs.app.user.client.domain.UserCredentials;
-import com.marcs.app.user.client.domain.UserProfile;
-import com.marcs.app.user.client.domain.UserSecurity;
-import com.marcs.app.user.client.domain.request.UserCredentialsGetRequest;
-import com.marcs.app.user.dao.UserDAO;
 
 /**
  * User Service class that handles all service calls to the dao
@@ -22,32 +20,22 @@ public class UserService {
 	private UserDAO userDao;
 
 	/**
+	 * Get users based on given request filter
+	 * 
+	 * @param request of the user
+	 * @return User profile object {@link User}
+	 */
+	public User getUsers(UserGetRequest request) {
+		return userDao.getUsers(request);
+	}
+
+	/**
 	 * Service to get a users profile given the user id
 	 * 
 	 * @param id of the user
-	 * @return User profile object {@link UserProfile}
+	 * @return User profile object {@link User}
 	 */
-	public UserProfile getUserById(int id) {
+	public User getUserById(int id) {
 		return userDao.getUserById(id);
-	}
-
-	/**
-	 * Service to get a users login credentials
-	 * 
-	 * @param request to filter on {@link UserCredentialsGetRequest}
-	 * @return User Credentials object {@link UserCredentials}
-	 */
-	public UserCredentials getUserCredentials(UserCredentialsGetRequest request) {
-		return userDao.getUserCredentials(request);
-	}
-
-	/**
-	 * Service to get a users security info
-	 * 
-	 * @param id of the user
-	 * @return User Security object {@link UserSecurity}
-	 */
-	public UserSecurity getUserSecurity(int id) {
-		return userDao.getUserSecurity(id);
 	}
 }

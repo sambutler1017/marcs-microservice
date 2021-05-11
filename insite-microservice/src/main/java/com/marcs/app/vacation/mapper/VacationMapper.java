@@ -1,13 +1,13 @@
 package com.marcs.app.vacation.mapper;
 
-import static com.dataformatter.DateFormatter.formatDateTextShort;
+import static com.marcs.service.util.DateFormatter.formatDateTextShort;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.springframework.jdbc.core.RowMapper;
-
 import com.marcs.app.vacation.client.domain.Vacation;
+
+import org.springframework.jdbc.core.RowMapper;
 
 /**
  * Mapper class to map a Vacation Object {@link Vacation}

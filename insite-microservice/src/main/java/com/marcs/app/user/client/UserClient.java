@@ -1,14 +1,11 @@
 package com.marcs.app.user.client;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.marcs.app.user.client.domain.UserCredentials;
-import com.marcs.app.user.client.domain.UserProfile;
-import com.marcs.app.user.client.domain.UserSecurity;
-import com.marcs.app.user.client.domain.request.UserCredentialsGetRequest;
+import com.marcs.app.user.client.domain.User;
+import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.app.user.rest.UserController;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 /**
  * This class exposes the user endpoint's to other app's to pull data across the
  * platform.
@@ -23,36 +20,23 @@ public class UserClient {
 	private UserController userController;
 
 	/**
+	 * Get users based on given request filter
+	 * 
+	 * @param request of the user
+	 * @return User profile object {@link User}
+	 */
+	public User getUsers(UserGetRequest request) {
+		return userController.getUsers(request);
+	}
+
+	/**
 	 * Client method to get the user given a user id
 	 * 
 	 * @param id of the user
 	 * @return User profile object
 	 * @throws Exception
 	 */
-	public UserProfile getUserById(int id) throws Exception {
+	public User getUserById(int id) throws Exception {
 		return userController.getUserById(id);
 	}
-
-	/**
-	 * Client method to get the user credentials given a request
-	 * 
-	 * @param request of what to filter {@link USerCredentialsGetRequest}
-	 * @return User Credentials object
-	 * @throws Exception
-	 */
-	public UserCredentials getUserCredentials(UserCredentialsGetRequest request) throws Exception {
-		return userController.getUserCredentials(request);
-	}
-
-	/**
-	 * Client method to get the users security data given the user id
-	 * 
-	 * @param id of the user
-	 * @return User Security object
-	 * @throws Exception
-	 */
-	public UserSecurity getUserSecurity(int id) throws Exception {
-		return userController.getUserSecurity(id);
-	}
-
 }
