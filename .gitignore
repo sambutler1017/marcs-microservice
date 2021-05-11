@@ -1,0 +1,17 @@
+.metadata
+.gradle
+/bin/
+.classpath
+.project
+.settings
+.idea/
+*.iml
+/node_modules/
+aws-equipment-microservice.zip
+aws.json
+/build/
+/test-output/
+application-local.yml
+application.properties.local
+.springBeans
+src/test/resources/config/test.properties.local

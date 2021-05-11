@@ -1,0 +1,32 @@
+@NAME(getUserById)
+	SELECT 
+	    u.user_id,
+	    u.first_name,
+	    u.last_name,
+	    u.email,
+	    u.app_access,
+	    wr.role_type,
+	    sr.region
+	FROM
+	    marcs_db.users u
+	        INNER JOIN
+	    marcs_db.web_roles wr ON u.web_role_id = wr.web_role_id
+	        INNER JOIN
+	    marcs_db.store_region sr ON u.store_region_id = sr.store_region_id
+	WHERE u.user_id = :userId:
+	
+@NAME(getUserCredentials)
+	SELECT * 
+	FROM 
+		marcs_db.user_creds
+	@WHERE(:userId:)
+		user_id = :userId:
+	@WHERE(:name:)
+		username = :name:
+	
+@NAME(getUserSecurity)
+	SELECT * 
+	FROM 
+		marcs_db.user_security
+	WHERE
+		user_id = :userId:
