@@ -1,6 +1,0 @@
-@NAME(getManagerVacations)
-	SELECT * 
-	FROM 
-		marcs_db.manager_vacations 
-	WHERE 
-		manager_id = :id:
