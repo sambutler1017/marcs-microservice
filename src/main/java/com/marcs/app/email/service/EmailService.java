@@ -63,7 +63,7 @@ public class EmailService {
 
     /**
      * {@link UserEmail} object to send a email too. Default from user will be the
-     * admin email.
+     * admin email. Common method for sending an email.
      * 
      * @param userEmail UserEmail object to get the mail properties from
      * @return {@link UserEmail} object with the time it sent.
