@@ -46,6 +46,8 @@
 		user_status us ON up.id = us.user_id
 	@WHERE(:id:)
 		up.id = :id:
+	@AND(:excludedUserIds:)
+		up.id != :excludedUserIds:
 	@AND(:regionalId:)
 		s.regional_id = :regionalId:
 	@AND(:email:)

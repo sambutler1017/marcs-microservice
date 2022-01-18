@@ -279,8 +279,14 @@ public class SqlBundler {
         } else {
             String paramList = listValues.stream().map(v -> String.format("'%s'", v.toString()))
                     .collect(Collectors.joining(","));
-            return line.replace(String.format("= :%s:", field),
-                    String.format("%s", String.format("IN (%s)", paramList)));
+            if (line.contains("!=")) {
+                return line.replace(String.format("!= :%s:", field),
+                        String.format("%s", String.format("NOT IN (%s)", paramList)));
+            } else {
+                return line.replace(String.format("= :%s:", field),
+                        String.format("%s", String.format("IN (%s)", paramList)));
+            }
+
         }
     }
 

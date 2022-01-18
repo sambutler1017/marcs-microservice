@@ -42,7 +42,8 @@ public class UserProfileDao extends AbstractSqlDao {
 						.addValue("regionalId", request.getRegionalId()).addValue("firstName", request.getFirstName())
 						.addValue("lastName", request.getLastName()).addValue("storeName", request.getStoreName())
 						.addValue("notificationsEnabled", request.getNotificationsEnabled())
-						.addValue("accountStatus", request.getAccountStatus()),
+						.addValue("accountStatus", request.getAccountStatus())
+						.addValue("excludedUserIds", request.getExcludedUserIds()),
 				USER_MAPPER);
 	}
 

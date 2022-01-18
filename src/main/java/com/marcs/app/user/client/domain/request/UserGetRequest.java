@@ -31,6 +31,8 @@ public class UserGetRequest {
 
     private Set<AccountStatus> accountStatus;
 
+    private Set<Integer> excludedUserIds;
+
     private Boolean notificationsEnabled;
 
     public Set<Integer> getId() {
@@ -107,6 +109,14 @@ public class UserGetRequest {
 
     public void setAccountStatus(Set<AccountStatus> accountStatus) {
         this.accountStatus = accountStatus;
+    }
+
+    public Set<Integer> getExcludedUserIds() {
+        return excludedUserIds;
+    }
+
+    public void setExcludedUserIds(Set<Integer> excludedUserIds) {
+        this.excludedUserIds = excludedUserIds;
     }
 
     public Boolean getNotificationsEnabled() {
