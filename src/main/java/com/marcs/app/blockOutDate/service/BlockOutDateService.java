@@ -46,7 +46,12 @@ public class BlockOutDateService {
 	 * @throws Exception
 	 */
 	public BlockOutDate getBlockOutDateById(int id) throws Exception {
-		return getBlockOutDates(new BlockOutDateGetRequest(Sets.newHashSet(id))).get(0);
+		try {
+			return getBlockOutDates(new BlockOutDateGetRequest(Sets.newHashSet(id))).get(0);
+		} catch (Exception e) {
+			throw new Exception(String.format("Block out date id '%d' does not exist!", id));
+		}
+
 	}
 
 	/**
@@ -73,6 +78,7 @@ public class BlockOutDateService {
 	 * @throws Exception
 	 */
 	public void deleteBlockOutDate(int id) throws Exception {
+		getBlockOutDateById(id);
 		dao.deleteBlockOutDate(id);
 	}
 }
