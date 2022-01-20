@@ -2,6 +2,7 @@ package com.marcs.app.blockOutDate.service;
 
 import java.util.List;
 
+import com.google.common.collect.Sets;
 import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
 import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
 import com.marcs.app.blockOutDate.dao.BlockOutDateDao;
@@ -35,6 +36,17 @@ public class BlockOutDateService {
 	 */
 	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) throws Exception {
 		return dao.getBlockOutDates(request);
+	}
+
+	/**
+	 * Get a single block out date information by id.
+	 * 
+	 * @param request to filter stores on
+	 * @return Block out date object {@link BlockOutDate}
+	 * @throws Exception
+	 */
+	public BlockOutDate getBlockOutDateById(int id) throws Exception {
+		return getBlockOutDates(new BlockOutDateGetRequest(Sets.newHashSet(id))).get(0);
 	}
 
 	/**

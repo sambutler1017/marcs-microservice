@@ -11,6 +11,7 @@ import com.marcs.app.blockOutDate.service.BlockOutDateService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +26,25 @@ public class BlockOutDateController {
 	/**
 	 * Endpoint to get a list of block out dates based on the filter request
 	 * 
-	 * @param request to filter stores on
+	 * @param request to filter block out dates on
 	 * @return List of block out date objects {@link BlockOutDate}
 	 * @throws Exception
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) throws Exception {
 		return service.getBlockOutDates(request);
+	}
+
+	/**
+	 * Get a single block out date information by id.
+	 * 
+	 * @param request to filter stores on
+	 * @return Block out date object {@link BlockOutDate}
+	 * @throws Exception
+	 */
+	@GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
+	public BlockOutDate getBlockOutDateById(@PathVariable int id) throws Exception {
+		return service.getBlockOutDateById(id);
 	}
 
 	/**
