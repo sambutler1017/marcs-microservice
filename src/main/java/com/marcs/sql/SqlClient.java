@@ -114,7 +114,6 @@ public class SqlClient {
 	 * @return Integer value of the auto_increment id if there is one.
 	 */
 	public Optional<Integer> post(List<String> query, SqlParams params) {
-		System.out.println(bundler.bundle(query, params) + "\n");
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplateObject.update(connection -> {
 			PreparedStatement ps = connection.prepareStatement(bundler.bundle(query, params),

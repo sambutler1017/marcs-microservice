@@ -5,6 +5,8 @@ import java.util.List;
 import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
 import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
 import com.marcs.app.blockOutDate.dao.BlockOutDateDao;
+import com.marcs.common.enums.WebRole;
+import com.marcs.jwt.utility.JwtHolder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,9 @@ public class BlockOutDateService {
 	@Autowired
 	private BlockOutDateDao dao;
 
+	@Autowired
+	private JwtHolder jwtHolder;
+
 	/**
 	 * Endpoint to get a list of block out dates based on the filter request
 	 * 
@@ -30,5 +35,22 @@ public class BlockOutDateService {
 	 */
 	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) throws Exception {
 		return dao.getBlockOutDates(request);
+	}
+
+	/**
+	 * This will create a new block out date with the passed in request body
+	 * 
+	 * @param blockDate The block out date that needs to be created.
+	 * @return The block out date with the insert time stamp and unique id.
+	 * @throws Exception
+	 */
+	public BlockOutDate createBlockOutDate(BlockOutDate blockDate) throws Exception {
+		if (jwtHolder.getWebRole().getValue() < WebRole.DISTRICT_MANAGER.getValue()) {
+			throw new Exception(String.format("User with role '%s' does not have permission to create block out dates!",
+					jwtHolder.getWebRole().toString()));
+		}
+
+		blockDate.setInsertUserId(jwtHolder.getRequiredUserId());
+		return dao.createBlockOutDate(blockDate);
 	}
 }

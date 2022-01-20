@@ -1,5 +1,7 @@
 package com.marcs.app.blockOutDate.client.domain.request;
 
+import java.util.Set;
+
 /**
  * This class handles lookups passed to the DAO.
  *
@@ -8,4 +10,31 @@ package com.marcs.app.blockOutDate.client.domain.request;
  */
 public class BlockOutDateGetRequest {
 
+    private Set<Integer> id;
+
+    private Set<Integer> insertUserId;
+
+    public BlockOutDateGetRequest() {
+
+    }
+
+    public BlockOutDateGetRequest(Set<Integer> id) {
+        this.id = id;
+    }
+
+    public Set<Integer> getId() {
+        return id;
+    }
+
+    public void setId(Set<Integer> id) {
+        this.id = id;
+    }
+
+    public Set<Integer> getInsertUserId() {
+        return insertUserId;
+    }
+
+    public void setInsertUserId(Set<Integer> insertUserId) {
+        this.insertUserId = insertUserId;
+    }
 }
