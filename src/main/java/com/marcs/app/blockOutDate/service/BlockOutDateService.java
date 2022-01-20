@@ -65,4 +65,14 @@ public class BlockOutDateService {
 		blockDate.setInsertUserId(jwtHolder.getRequiredUserId());
 		return dao.createBlockOutDate(blockDate);
 	}
+
+	/**
+	 * Delete a block out date for the given id.
+	 * 
+	 * @param id The id of the block out date to be deleted.
+	 * @throws Exception
+	 */
+	public void deleteBlockOutDate(int id) throws Exception {
+		dao.deleteBlockOutDate(id);
+	}
 }

@@ -10,6 +10,7 @@ import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
 import com.marcs.app.blockOutDate.service.BlockOutDateService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,5 +58,16 @@ public class BlockOutDateController {
 	@PostMapping(produces = APPLICATION_JSON_VALUE)
 	public BlockOutDate createBlockOutDate(@RequestBody BlockOutDate blockDate) throws Exception {
 		return service.createBlockOutDate(blockDate);
+	}
+
+	/**
+	 * Delete a block out date for the given id.
+	 * 
+	 * @param id The id of the block out date to be deleted.
+	 * @throws Exception
+	 */
+	@DeleteMapping(path = "/{id}")
+	public void deleteBlockOutDate(@PathVariable int id) throws Exception {
+		service.deleteBlockOutDate(id);
 	}
 }

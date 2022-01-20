@@ -51,4 +51,14 @@ public class BlockOutDateDao extends AbstractSqlDao {
 			throw new Exception("Could not create block out date");
 		}
 	}
+
+	/**
+	 * Delete a block out date for the given id.
+	 * 
+	 * @param id The id of the block out date to be deleted.
+	 * @throws Exception
+	 */
+	public void deleteBlockOutDate(int id) throws Exception {
+		sqlClient.delete(getSql("deleteBlockOutDate"), params("id", id));
+	}
 }
