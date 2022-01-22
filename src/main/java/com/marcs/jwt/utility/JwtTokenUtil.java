@@ -130,7 +130,6 @@ public class JwtTokenUtil implements Serializable {
         claims.put("email", user.getEmail());
         claims.put("webRole", user.getWebRole());
         claims.put("env", activeProfile.getEnvironment());
-        claims.put("testProp", secret);
         claims.put("apps", userClient.getUserAppsById(user.getId()).stream()
                 .filter(v -> (v.isAccess() && v.isEnabled())).map(Application::getName).collect(Collectors.toList()));
         claims.put("access", featureAccessClient.getFeatureAccess(user.getWebRole().getValue()));
