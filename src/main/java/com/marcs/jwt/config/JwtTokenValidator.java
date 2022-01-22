@@ -41,14 +41,9 @@ public class JwtTokenValidator {
      */
     public void isValidJwt(HttpServletRequest request) throws IOException {
         final String tokenHeader = request.getHeader("Authorization");
-        final String callType = request.getHeader("callType");
-
-        if ("CLIENT".equals(callType)) {
-            return;
-        }
 
         if (tokenHeader != null && tokenHeader.startsWith("Bearer: ")) {
-            String jwtToken = tokenHeader.substring(7);
+            String jwtToken = tokenHeader.substring(7).trim();
 
             isCorrectEnvironment(jwtToken);
             hasCorrectFields(jwtToken);

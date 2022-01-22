@@ -129,7 +129,6 @@ public class JwtTokenUtil implements Serializable {
         claims.put("lastName", user.getLastName());
         claims.put("email", user.getEmail());
         claims.put("webRole", user.getWebRole());
-        claims.put("managersOnly", user.isManagersOnly());
         claims.put("env", activeProfile.getEnvironment());
         claims.put("apps", userClient.getUserAppsById(user.getId()).stream()
                 .filter(v -> (v.isAccess() && v.isEnabled())).map(Application::getName).collect(Collectors.toList()));
@@ -154,15 +153,5 @@ public class JwtTokenUtil implements Serializable {
         return Jwts.builder().setClaims(claims).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
-    }
-
-    /**
-     * Decodes a JWT token and returns the claims
-     *
-     * @param token - a JWT token that needs decoded
-     * @return the decoded token
-     */
-    public Claims decodeToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 }

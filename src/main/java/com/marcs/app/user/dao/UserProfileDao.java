@@ -151,7 +151,7 @@ public class UserProfileDao extends AbstractSqlDao {
 				params("firstName", user.getFirstName()).addValue("lastName", user.getLastName())
 						.addValue("email", user.getEmail()).addValue("storeId", user.getStoreId())
 						.addValue("webRole", user.getWebRole().id()).addValue("hireDate", user.getHireDate())
-						.addValue("id", userProfile.getId()).addValue("managersOnly", user.isManagersOnly())
+						.addValue("id", userProfile.getId())
 						.addValue("notificationsEnabled", user.isNotificationsEnabled()));
 
 		return getUserById(userId);
@@ -177,8 +177,6 @@ public class UserProfileDao extends AbstractSqlDao {
 			destination.setWebRole(source.getWebRole());
 		if (destination.isAppAccess() == null)
 			destination.setAppAccess(source.isAppAccess());
-		if (destination.isManagersOnly() == null)
-			destination.setManagersOnly(source.isManagersOnly());
 		if (destination.isNotificationsEnabled() == null)
 			destination.setNotificationsEnabled(source.isNotificationsEnabled());
 		if (destination.getHireDate() == null)

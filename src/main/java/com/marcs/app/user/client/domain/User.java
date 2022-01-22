@@ -26,8 +26,6 @@ public class User {
 
 	private Boolean appAccess;
 
-	private Boolean managersOnly;
-
 	private Boolean notificationsEnabled;
 
 	private String password;
@@ -91,14 +89,6 @@ public class User {
 
 	public void setAppAccess(Boolean appAccess) {
 		this.appAccess = appAccess;
-	}
-
-	public Boolean isManagersOnly() {
-		return managersOnly;
-	}
-
-	public void setManagersOnly(Boolean managersOnly) {
-		this.managersOnly = managersOnly;
 	}
 
 	public Boolean isNotificationsEnabled() {

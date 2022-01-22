@@ -151,20 +151,6 @@ public class JwtHolder {
 	}
 
 	/**
-	 * Gets the flag if they user wants to see managers only
-	 * 
-	 * @return String of the managersOnly flag from the current token
-	 */
-	public boolean getManagersOnlyFlag() {
-		try {
-			return Boolean.parseBoolean(jwtParser.parseClaimsJws(getToken()).getBody().get("managersOnly").toString());
-		} catch (Exception e) {
-			LOGGER.warn("Invalid or no Token given.");
-			return false;
-		}
-	}
-
-	/**
 	 * Get the current token passed in with the request
 	 * 
 	 * @return String of the token from the request headers
@@ -174,17 +160,5 @@ public class JwtHolder {
 				.getRequest();
 
 		return request.getHeader("Authorization") == null ? null : request.getHeader("Authorization").split(" ")[1];
-	}
-
-	/**
-	 * Gets the type of call that was made on the request.
-	 * 
-	 * @return {@link String} of the call type
-	 */
-	public String getCallType() {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-				.getRequest();
-
-		return request.getHeader("callType") == null ? "" : request.getHeader("callType");
 	}
 }
