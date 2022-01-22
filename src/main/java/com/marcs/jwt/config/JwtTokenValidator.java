@@ -133,7 +133,7 @@ public class JwtTokenValidator {
             jwtTokenUtil.getExpirationDateFromToken(token);
             jwtTokenUtil.getAllClaimsFromToken(token);
         } catch (Exception e) {
-            throw new BaseException("Could not process JWT token.");
+            throw new BaseException("Could not process JWT token. Invalid signature!");
         }
     }
 
