@@ -5,7 +5,6 @@
 		up.last_name,
 		up.email,
 		up.web_role_id,
-		up.managers_only,
 		up.notifications_enabled,
 		up.hire_date,
 		up.insert_date,
