@@ -23,7 +23,7 @@
 	@AND(:excludedUserIds:)
 		up.id != :excludedUserIds:
 	@AND(:regionalId:)
-		s.regional_id = :regionalId:
+		st.regional_id = :regionalId:
 	@AND(:email:)
 		up.email = :email:
 	@AND(:webRole:)
