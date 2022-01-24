@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
+import com.marcs.sql.domain.SqlFragmentData;
 import com.marcs.sql.domain.SqlParams;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ public class SqlClient {
 	 * @param mapper - The mapper to manipulate the data as.
 	 * @return Generic object
 	 */
-	public <T> List<T> getPage(List<String> query, SqlParams params, RowMapper<T> mapper) {
+	public <T> List<T> getPage(SqlFragmentData query, SqlParams params, RowMapper<T> mapper) {
 		return jdbcTemplateObject.query(bundler.bundle(query, params), mapper);
 	}
 
@@ -70,7 +71,7 @@ public class SqlClient {
 	 * @param mapper The mapper to manipulate the data as.
 	 * @return Generic object
 	 */
-	public <T> T getTemplate(List<String> query, SqlParams params, RowMapper<T> mapper) {
+	public <T> T getTemplate(SqlFragmentData query, SqlParams params, RowMapper<T> mapper) {
 		return jdbcTemplateObject.queryForObject(bundler.bundle(query, params), mapper);
 	}
 
@@ -81,7 +82,7 @@ public class SqlClient {
 	 * @param params The params to add to the query.
 	 * @return Generic object
 	 */
-	public List<Map<String, Object>> getListMap(List<String> query, SqlParams params) {
+	public List<Map<String, Object>> getListMap(SqlFragmentData query, SqlParams params) {
 		return jdbcTemplateObject.queryForList(bundler.bundle(query, params));
 	}
 
@@ -91,7 +92,7 @@ public class SqlClient {
 	 * @param query  The query to be executed.
 	 * @param params The params to add to the query.
 	 */
-	public void delete(List<String> query, SqlParams params) {
+	public void delete(SqlFragmentData query, SqlParams params) {
 		jdbcTemplateObject.execute(bundler.bundle(query, params));
 	}
 
@@ -102,7 +103,7 @@ public class SqlClient {
 	 * @param params The params to add to the query.
 	 * @return Integer value of the auto_increment id if there is one
 	 */
-	public Optional<Integer> update(List<String> query, SqlParams params) {
+	public Optional<Integer> update(SqlFragmentData query, SqlParams params) {
 		return post(query, params);
 	}
 
@@ -113,7 +114,7 @@ public class SqlClient {
 	 * @param params The params to add to the query.
 	 * @return Integer value of the auto_increment id if there is one.
 	 */
-	public Optional<Integer> post(List<String> query, SqlParams params) {
+	public Optional<Integer> post(SqlFragmentData query, SqlParams params) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplateObject.update(connection -> {
 			PreparedStatement ps = connection.prepareStatement(bundler.bundle(query, params),
@@ -151,7 +152,7 @@ public class SqlClient {
 	 * @param query The query to execute.
 	 * @return {@link long} of the value returned.
 	 */
-	public long queryForLong(List<String> query, SqlParams params) {
+	public long queryForLong(SqlFragmentData query, SqlParams params) {
 		return jdbcTemplateObject.queryForObject(bundler.bundle(query, params), Long.class);
 	}
 }

@@ -7,7 +7,8 @@ package com.marcs.common.enums;
  * @since September 6, 2021
  */
 public enum QueryTag {
-	NONE("@NONE", "NONE"), AND("@AND", "AND"), WHERE("@WHERE", "WHERE"), IF("@IF", "IF"), OR("@OR", "OR");
+	NONE("@NONE", "NONE"), AND("@AND", "AND"), WHERE("@WHERE", "WHERE"), IF("@IF", "IF"), OR("@OR", "OR"),
+	INCLUDE("@INCLUDE", "");
 
 	private String annotation;
 	private String type;

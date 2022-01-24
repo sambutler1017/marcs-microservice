@@ -1,17 +1,10 @@
+@NAME(authFields)
+	up.id,up.first_name, up.last_name, up.email, up.web_role_id, up.notifications_enabled, up.hire_date,
+	up.insert_date, us.app_access, us.account_status, st.id AS 'store_id', st.name AS 'store_name'
+
 @NAME(authenticateUser)
 	SELECT 
-		up.id,
-		up.first_name,
-		up.last_name,
-		up.email,
-		up.web_role_id,
-		up.notifications_enabled,
-		up.hire_date,
-		up.insert_date,
-		us.app_access,
-		us.account_status,
-		st.id AS 'store_id',
-		st.name AS 'store_name'
+		@INCLUDE(authFields)
 	FROM
 		user_profile up
 			JOIN

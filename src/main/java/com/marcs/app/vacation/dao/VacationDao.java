@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import com.marcs.app.user.client.domain.User;
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationRequest;
 import com.marcs.common.abstracts.AbstractSqlDao;
@@ -144,22 +143,5 @@ public class VacationDao extends AbstractSqlDao {
 	 */
 	public void deleteAllVacationsByUserId(int userId) throws Exception {
 		sqlClient.delete(getSql("deleteVacations"), params("userId", userId));
-	}
-
-	/**
-	 * Maps non null user fields from the source to the desitnation.
-	 * 
-	 * @param destination Where the null fields should be replaced.
-	 * @param source      Where to get the replacements for the null fields.
-	 * @return {@link User} with the replaced fields.
-	 */
-	private Vacation mapNonNullVacationFields(Vacation destination, Vacation source) {
-		if (destination.getStartDate() == null)
-			destination.setStartDate(source.getStartDate());
-		if (destination.getEndDate() == null)
-			destination.setEndDate(source.getEndDate());
-		if (destination.getStatus() == null)
-			destination.setStatus(source.getStatus());
-		return destination;
 	}
 }

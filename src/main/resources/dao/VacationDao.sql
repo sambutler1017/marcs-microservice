@@ -1,15 +1,10 @@
+@NAME(vacationFields)
+	v.id, v.user_id, v.start_date, v.end_date, v.insert_date, v.status, v.notes,
+	st.id AS 'store_id', st.regional_id, CONCAT(up.first_name, ' ', up.last_name) AS name
+
 @NAME(getVacations)
 	SELECT 
-		v.id,
-		v.user_id,
-		v.start_date,
-		v.end_date,
-		v.insert_date,
-		v.status,
-		v.notes,
-		st.id AS 'store_id',
-		st.regional_id,
-		CONCAT(up.first_name, ' ', up.last_name) AS name
+		@INCLUDE(vacationFields)
 	FROM
 		user_vacations v
 			JOIN
@@ -19,14 +14,14 @@
 	@AND(:userId: || :regionalId: || :status: || :startDate:)
 		(
 			@IF(:userId:)
-				v.user_id LIKE :userId:
+				v.user_id = :userId:
 			@IF(:regionalId:)
 				@OR(:userId:)
 				st.regional_id = :regionalId:
 			@IF(:status:)
 				@OR(:userId: || :regionalId:)
 				v.status LIKE :status:
-			@IF(:startDate: && true)
+			@IF(:startDate:)
 				@AND(:userId: || :regionalId: || :status:)
 				start_date >= (DATE_ADD(CURDATE(), INTERVAL 5 DAY) - WEEKDAY(CURDATE())) AND start_date <= DATE_ADD((DATE_ADD(CURDATE(), INTERVAL 5 DAY) - WEEKDAY(CURDATE())), INTERVAL 6 DAY)
 		)
@@ -34,16 +29,7 @@
 
 @NAME(getUserVacations)
 	SELECT 
-		v.id,
-		v.user_id,
-		v.start_date,
-		v.end_date,
-		v.insert_date,
-		v.status,
-		v.notes,
-		st.id AS 'store_id',
-		st.regional_id,
-		CONCAT(up.first_name, ' ', up.last_name) AS name
+		@INCLUDE(vacationFields)
 	FROM
 		user_vacations v
 			JOIN

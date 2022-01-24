@@ -39,7 +39,7 @@ public class UserGetRequest {
         return id;
     }
 
-    public void setUserId(Set<Integer> id) {
+    public void setId(Set<Integer> id) {
         this.id = id;
     }
 
@@ -73,10 +73,6 @@ public class UserGetRequest {
 
     public void setWebRole(Set<WebRole> webRole) {
         this.webRole = webRole;
-    }
-
-    public void setId(Set<Integer> id) {
-        this.id = id;
     }
 
     public Set<String> getStoreId() {

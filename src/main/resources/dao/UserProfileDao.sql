@@ -1,47 +1,23 @@
-@NAME(getUserById)
-	SELECT 
-	    up.id,
-	    up.first_name,
-	    up.last_name,
-	    up.email,
-	    up.web_role_id,
-		up.notifications_enabled,
-	    up.hire_date,
-		up.insert_date,
-		us.app_access,
-		us.account_status,
-		st.id AS 'store_id',
-		st.name AS 'store_name'
-	FROM
-	    user_profile up
-			LEFT JOIN
-		stores st ON up.store_id = st.id
-			JOIN
-		user_status us ON up.id = us.user_id
-	WHERE up.id = :id:
+@NAME(userProfileFields)
+	up.id, up.first_name, up.last_name, up.email, up.web_role_id,
+	up.notifications_enabled, up.hire_date, up.insert_date
+
+@NAME(storeFields)
+	st.id AS 'store_id', st.name AS 'store_name', st.regional_id, st.manager_id
+
+@NAME(userStatusFields)
+	us.request_id, us.app_access, us.account_status, us.updated_user_id
 
 @NAME(getUsers)
 	SELECT 
-		up.id,
-		up.first_name,
-		up.last_name,
-		up.email,
-		up.notifications_enabled,
-		up.web_role_id,
-		up.hire_date,
-		up.insert_date,
-		us.app_access,
-		us.account_status,
-		s.id AS 'store_id',
-		s.name AS 'store_name'
+	    @INCLUDE(userProfileFields),
+		@INCLUDE(storeFields),
+		@INCLUDE(userStatusFields)
 	FROM
 		user_profile up
-			JOIN
-		web_role wr ON up.web_role_id = wr.id
-			LEFT JOIN
-		stores s ON up.store_id = s.id
-			JOIN
-		user_status us ON up.id = us.user_id
+		JOIN web_role wr ON up.web_role_id = wr.id
+		LEFT JOIN stores st ON up.store_id = st.id
+		JOIN user_status us ON up.id = us.user_id
 	@WHERE(:id:)
 		up.id = :id:
 	@AND(:excludedUserIds:)
@@ -59,7 +35,7 @@
 	@AND(:storeId: || :firstName: || :lastName:)
 		(
 			@IF(:storeId:)
-				s.id LIKE :storeId:
+				st.id LIKE :storeId:
 			@IF(:firstName:)
 				@OR(:storeId:)
 				up.first_name LIKE :firstName:
@@ -68,9 +44,9 @@
 				up.last_name LIKE :lastName:
 			@IF(:storeName:)
 				@OR(:storeId: || :firstName: || :lastName:)
-				s.name LIKE :storeName:
+				st.name LIKE :storeName:
 		)
-	ORDER BY s.name
+	ORDER BY st.name
 
 @NAME(getApplications)
 	SELECT 
@@ -90,55 +66,27 @@
 
 @NAME(getRegionalOfStore)
 	SELECT 
-		up.id,
-		up.first_name,
-		up.last_name,
-		up.email,
-		wr.id AS 'web_role_id',
-		NULL AS 'store_id',
-		NULL AS 'store_name',
-		us.app_access,
-		up.notifications_enabled,
-		us.account_status,
-		up.hire_date,
-		up.insert_date
+		@INCLUDE(userProfileFields),
+		@INCLUDE(storeFields),
+		@INCLUDE(userStatusFields)
 	FROM
 		stores st
-			RIGHT JOIN
-		user_profile up ON st.manager_id = up.id
-			JOIN
-		web_role wr ON up.web_role_id = wr.id
-			LEFT JOIN
-		stores s ON up.store_id = s.id
-			JOIN
-		user_status us ON up.id = us.user_id
+		LEFT JOIN user_profile up ON st.regional_id = up.id
+		JOIN web_role wr ON up.web_role_id = wr.id
+		JOIN user_status us ON up.id = us.user_id
 	WHERE
 		st.id = :storeId:
 
 @NAME(getManagerOfStoreById)
 	SELECT 
-		up.id,
-		up.first_name,
-		up.last_name,
-		up.email,
-		wr.id AS 'web_role_id',
-		NULL AS 'store_id',
-		NULL AS 'store_name',
-		us.app_access,
-		up.notifications_enabled,
-		us.account_status,
-		up.hire_date,
-		up.insert_date
+		@INCLUDE(userProfileFields),
+		@INCLUDE(storeFields),
+		@INCLUDE(userStatusFields)
 	FROM
 		stores st
-			RIGHT JOIN
-		user_profile up ON st.manager_id = up.id
-			JOIN
-		web_role wr ON up.web_role_id = wr.id
-			LEFT JOIN
-		stores s ON up.store_id = s.id
-			JOIN
-		user_status us ON up.id = us.user_id
+		LEFT JOIN user_profile up ON st.manager_id = up.id
+		JOIN web_role wr ON up.web_role_id = wr.id
+		JOIN user_status us ON up.id = us.user_id
 	WHERE
 		st.id = :storeId:
 

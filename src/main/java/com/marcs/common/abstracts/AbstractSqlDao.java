@@ -3,12 +3,12 @@ package com.marcs.common.abstracts;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
 import java.util.stream.Collectors;
 
-import com.marcs.common.enums.SqlTag;
+import com.marcs.common.exceptions.SqlFragmentNotFoundException;
 import com.marcs.service.activeProfile.ActiveProfile;
 import com.marcs.sql.SqlClient;
+import com.marcs.sql.domain.SqlFragmentData;
 import com.marcs.sql.domain.SqlParams;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +27,6 @@ public abstract class AbstractSqlDao {
     private final String defaultSqlPath = "%s/resources/dao/%s.sql";
 
     private String sqlFilePath;
-
-    private boolean startOfFragmentFound;
-
-    private boolean endOfFragmentFound;
 
     @Autowired
     protected ActiveProfile activeProfile;
@@ -55,7 +51,7 @@ public abstract class AbstractSqlDao {
      *                                      given file.
      * @throws IOException
      */
-    protected List<String> getSql(String fragmentName) throws Exception {
+    protected SqlFragmentData getSql(String fragmentName) throws Exception {
         return getQueryFromFile(fragmentName, getChildClassName());
     }
 
@@ -68,7 +64,7 @@ public abstract class AbstractSqlDao {
      *                                      given file.
      * @throws IOException
      */
-    protected List<String> getSql(String fragmentName, String fileName) throws Exception {
+    protected SqlFragmentData getSql(String fragmentName, String fileName) throws Exception {
         return getQueryFromFile(fragmentName, fileName);
     }
 
@@ -93,14 +89,12 @@ public abstract class AbstractSqlDao {
      * @return {@link List<String>} of the query found.
      * @throws IOException If the file can't be found or Reader can't be closed.
      */
-    private List<String> getQueryFromFile(String fragmentName, String fileName) throws IOException {
-        resetFragmentStatus();
-
+    private SqlFragmentData getQueryFromFile(String fragmentName, String fileName) throws IOException {
         String filePath = String.format(defaultSqlPath, sqlFilePath, getChildClassName());
         BufferedReader br = new BufferedReader(new FileReader(filePath));
 
-        List<String> result = br.lines().filter(s -> isContainedInFragment(s, fragmentName))
-                .collect(Collectors.toList());
+        SqlFragmentData result = new SqlFragmentData(br.lines().collect(Collectors.toList()), fragmentName);
+
         br.close();
         return result;
     }
@@ -114,40 +108,5 @@ public abstract class AbstractSqlDao {
      */
     private String getChildClassName() {
         return this.getClass().getSimpleName();
-    }
-
-    /**
-     * Determines if the provided string in the file should be included in the
-     * fragment.
-     * 
-     * @param value        The string value to decide if it is needed.
-     * @param fragmentName The fragement section we are looking for.
-     * @return {@link boolean} to say if the string should be kept on the stream.
-     * @see #getSql(String)
-     */
-    private boolean isContainedInFragment(String value, String fragmentName) {
-        if (startOfFragmentFound && !endOfFragmentFound && value.contains(SqlTag.NAME.toString())) {
-            endOfFragmentFound = true;
-        }
-
-        if (value.contains(String.format("%s(%s)", SqlTag.NAME.toString(), fragmentName))) {
-            startOfFragmentFound = true;
-        } else if (startOfFragmentFound && !endOfFragmentFound) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Resets the variables to their original values. This is so if a back to back
-     * request is called with the same object then it will not use the previously
-     * set values.
-     * 
-     * @see #getSql(String)
-     */
-    private void resetFragmentStatus() {
-        startOfFragmentFound = false;
-        endOfFragmentFound = false;
     }
 }

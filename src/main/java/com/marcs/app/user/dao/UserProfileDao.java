@@ -6,6 +6,7 @@ import static com.marcs.app.user.mapper.UserProfileMapper.USER_MAPPER;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.google.common.collect.Sets;
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
@@ -57,7 +58,9 @@ public class UserProfileDao extends AbstractSqlDao {
 	 */
 	public User getUserById(int id) throws Exception {
 		try {
-			return sqlClient.getTemplate(getSql("getUserById"), params("id", id), USER_MAPPER);
+			UserGetRequest request = new UserGetRequest();
+			request.setId(Sets.newHashSet(id));
+			return getUsers(request).get(0);
 		} catch (Exception e) {
 			throw new UserNotFoundException(String.format("User not found for id: %d", id));
 		}

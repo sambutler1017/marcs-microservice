@@ -12,7 +12,9 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import com.marcs.common.enums.QueryTag;
+import com.marcs.common.enums.SqlTag;
 import com.marcs.common.exceptions.MaliciousSqlQueryException;
+import com.marcs.sql.domain.SqlFragmentData;
 import com.marcs.sql.domain.SqlParams;
 
 import org.springframework.stereotype.Service;
@@ -33,7 +35,13 @@ public class SqlBundler {
 
     private long previousSpaceCount;
 
+    private boolean startOfFragmentFound;
+
+    private boolean endOfFragmentFound;
+
     private ScriptEngineManager sem;
+
+    private SqlFragmentData fileFragmentData;
 
     /**
      * Default constructor to intialize the class level variables. These will be
@@ -45,6 +53,8 @@ public class SqlBundler {
         hasWhereCondition = false;
         deleteNextLine = false;
         previousSpaceCount = 1L;
+        startOfFragmentFound = false;
+        endOfFragmentFound = false;
         sem = new ScriptEngineManager();
     }
 
@@ -54,12 +64,14 @@ public class SqlBundler {
      * value is null and is contained in a condition, this condition will be
      * omitted.
      * 
-     * @param query  The query string to be populated with the params.
-     * @param params The params to populate the string with.
+     * @param fragmentData The SqlFragmentData to be populated with the params.
+     * @param params       The params to populate the string with.
      * @return {@link String} of the modified query.
      */
-    public String bundle(List<String> query, SqlParams params) {
+    public String bundle(SqlFragmentData fragmentData, SqlParams params) {
         resetConditionStatus();
+        fileFragmentData = fragmentData;
+        List<String> query = getFragmentSection(fragmentData.getFragment());
 
         int index = 0;
         for (String line : query) {
@@ -95,6 +107,42 @@ public class SqlBundler {
         } else {
             return q;
         }
+    }
+
+    /**
+     * This will take the sql fragement data and get the specified fragment to be
+     * run. If the fragment can not be found it will throw an error.
+     * 
+     * @param fragmentData The fragment data containing the stream and name.
+     * @return {@link String} of the fragment data.
+     */
+    private List<String> getFragmentSection(String fragment) {
+        resetFragmentStatus();
+        return fileFragmentData.getSql().stream().filter(s -> isContainedInFragment(s, fragment))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Determines if the provided string in the file should be included in the
+     * fragment.
+     * 
+     * @param value        The string value to decide if it is needed.
+     * @param fragmentName The fragement section we are looking for.
+     * @return {@link boolean} to say if the string should be kept on the stream.
+     * @see #getSql(String)
+     */
+    private boolean isContainedInFragment(String value, String fragmentName) {
+        if (startOfFragmentFound && !endOfFragmentFound && value.contains(SqlTag.NAME.toString())) {
+            endOfFragmentFound = true;
+        }
+
+        if (value.contains(String.format("%s(%s)", SqlTag.NAME.toString(), fragmentName))) {
+            startOfFragmentFound = true;
+        } else if (startOfFragmentFound && !endOfFragmentFound) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -139,17 +187,22 @@ public class SqlBundler {
             ex.find();
             String exp = ex.group(0).trim();
             boolean valid = false;
+            String replacingValue = condition.text();
 
             if (isExpression(line)) {
                 valid = modifyExpressionCondition(line, sqlParams, exp, exParams);
+            } else if (condition.equals(QueryTag.INCLUDE)) {
+                replacingValue = getFragmentSection(exp).stream().collect(Collectors.joining("")).trim();
+                valid = true;
             } else {
                 valid = modifySingleCondition(line, sqlParams, exParams);
             }
 
-            String replacingValue = condition.text();
             if (valid) {
                 if (condition.equals(QueryTag.IF)) {
                     replacingValue = "";
+                } else if (condition.equals(QueryTag.INCLUDE)) {
+                    // Don't do anything, continue
                 } else if (!hasWhereCondition) {
                     hasWhereCondition = true;
                     replacingValue = QueryTag.WHERE.text();
@@ -312,6 +365,18 @@ public class SqlBundler {
     private void resetConditionStatus() {
         hasWhereCondition = false;
         deleteNextLine = false;
+    }
+
+    /**
+     * Resets the variables to their original values. This is so if a back to back
+     * request is called with the same object then it will not use the previously
+     * set values.
+     * 
+     * @see #getSql(String)
+     */
+    private void resetFragmentStatus() {
+        startOfFragmentFound = false;
+        endOfFragmentFound = false;
     }
 
     /**
