@@ -7,6 +7,7 @@ import com.marcs.app.email.client.EmailClient;
 import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.app.notifications.client.domain.request.NotificationGetRequest;
 import com.marcs.app.notifications.rest.NotificationController;
+import com.marcs.app.store.client.StoreClient;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.vacation.client.domain.Vacation;
@@ -30,6 +31,9 @@ public class NotificationClient {
 
     @Autowired
     private UserProfileClient userProfileClient;
+
+    @Autowired
+    private StoreClient storeClient;
 
     @Autowired
     private EmailClient emailClient;
@@ -115,9 +119,9 @@ public class NotificationClient {
         n.setType(NotificationType.VACATION);
 
         if (userRequesting.getWebRole().isManager()) {
-            n.setReceiverId(userProfileClient.getRegionalOfStoreById(userRequesting.getStoreId()).getId());
+            n.setReceiverId(storeClient.getRegionalOfStoreById(userRequesting.getStoreId()).getId());
         } else if (userRequesting.getWebRole().equals(WebRole.EMPLOYEE)) {
-            n.setReceiverId(userProfileClient.getManagerOfStoreById(userRequesting.getStoreId()).getId());
+            n.setReceiverId(storeClient.getManagerOfStoreById(userRequesting.getStoreId()).getId());
         } else {
             n.setReceiverId(-1); // Notification to only site admin and admins
         }
@@ -137,9 +141,9 @@ public class NotificationClient {
         n.setType(NotificationType.USER);
 
         if (user.getWebRole().isManager()) {
-            n.setReceiverId(userProfileClient.getRegionalOfStoreById(user.getStoreId()).getId());
+            n.setReceiverId(storeClient.getRegionalOfStoreById(user.getStoreId()).getId());
         } else if (user.getWebRole().equals(WebRole.EMPLOYEE)) {
-            n.setReceiverId(userProfileClient.getManagerOfStoreById(user.getStoreId()).getId());
+            n.setReceiverId(storeClient.getManagerOfStoreById(user.getStoreId()).getId());
         } else {
             n.setReceiverId(-1); // Notification to only site admin and admins
         }

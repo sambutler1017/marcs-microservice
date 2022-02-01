@@ -64,32 +64,6 @@
         up.id = :id:
 	ORDER BY a.id
 
-@NAME(getRegionalOfStore)
-	SELECT 
-		@INCLUDE(userProfileFields),
-		@INCLUDE(storeFields),
-		@INCLUDE(userStatusFields)
-	FROM
-		stores st
-		LEFT JOIN user_profile up ON st.regional_id = up.id
-		JOIN web_role wr ON up.web_role_id = wr.id
-		JOIN user_status us ON up.id = us.user_id
-	WHERE
-		st.id = :storeId:
-
-@NAME(getManagerOfStoreById)
-	SELECT 
-		@INCLUDE(userProfileFields),
-		@INCLUDE(storeFields),
-		@INCLUDE(userStatusFields)
-	FROM
-		stores st
-		LEFT JOIN user_profile up ON st.manager_id = up.id
-		JOIN web_role wr ON up.web_role_id = wr.id
-		JOIN user_status us ON up.id = us.user_id
-	WHERE
-		st.id = :storeId:
-
 @NAME(insertUser)
 	@IF(:storeId: && :email:)
 		INSERT INTO user_profile (`first_name`,`last_name`,`email`,`store_id`,`web_role_id`,`hire_date`)

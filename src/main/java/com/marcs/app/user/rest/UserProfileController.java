@@ -87,28 +87,6 @@ public class UserProfileController {
 	}
 
 	/**
-	 * Get the regional of the passed in store ID.
-	 * 
-	 * @return The regional of that store
-	 * @throws Exception
-	 */
-	@GetMapping(path = "/regional/{storeId}", produces = APPLICATION_JSON_VALUE)
-	public User getRegionalOfStoreById(@PathVariable String storeId) throws Exception {
-		return userService.getRegionalOfStoreById(storeId);
-	}
-
-	/**
-	 * Get the manager of the passed in store ID.
-	 * 
-	 * @return The manager of that store
-	 * @throws Exception
-	 */
-	@GetMapping(path = "/manager/{storeId}", produces = APPLICATION_JSON_VALUE)
-	public User getManagerOfStoreById(@PathVariable String storeId) throws Exception {
-		return userService.getManagerOfStoreById(storeId);
-	}
-
-	/**
 	 * This will check to see if the email exists. If it does then it will return
 	 * true, otherwise false.
 	 * 

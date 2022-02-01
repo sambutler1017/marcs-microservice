@@ -5,6 +5,7 @@ import java.util.List;
 import com.marcs.app.store.client.domain.Store;
 import com.marcs.app.store.client.domain.request.StoreGetRequest;
 import com.marcs.app.store.dao.StoreDao;
+import com.marcs.app.user.client.domain.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class StoreService {
 
 	@Autowired
-	private StoreDao storeDao;
+	private StoreDao dao;
 
 	/**
 	 * Endpoint to get a list of stores based on the given request
@@ -29,7 +30,7 @@ public class StoreService {
 	 * @throws Exception
 	 */
 	public List<Store> getStores(StoreGetRequest request) throws Exception {
-		return storeDao.getStores(request);
+		return dao.getStores(request);
 	}
 
 	/**
@@ -40,6 +41,26 @@ public class StoreService {
 	 * @throws Exception
 	 */
 	public Store getStoreById(String id) throws Exception {
-		return storeDao.getStoreById(id);
+		return dao.getStoreById(id);
+	}
+
+	/**
+	 * Get the regional of the passed in store ID
+	 * 
+	 * @return The regional of that store
+	 * @throws Exception
+	 */
+	public User getRegionalOfStoreById(String storeId) throws Exception {
+		return dao.getRegionalOfStoreById(storeId);
+	}
+
+	/**
+	 * Get the manager of the passed in store ID.
+	 * 
+	 * @return The manager of that store
+	 * @throws Exception
+	 */
+	public User getManagerOfStoreById(String storeId) throws Exception {
+		return dao.getManagerOfStoreById(storeId);
 	}
 }

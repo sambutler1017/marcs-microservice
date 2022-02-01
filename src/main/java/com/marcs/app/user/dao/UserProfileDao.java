@@ -89,26 +89,6 @@ public class UserProfileDao extends AbstractSqlDao {
 	}
 
 	/**
-	 * Get the regional of the passed in store ID
-	 * 
-	 * @return The regional of that store
-	 * @throws Exception
-	 */
-	public User getRegionalOfStoreById(String storeId) throws Exception {
-		return sqlClient.getTemplate(getSql("getRegionalOfStore"), params("storeId", storeId), USER_MAPPER);
-	}
-
-	/**
-	 * Get the manager of the passed in store ID.
-	 * 
-	 * @return The manager of that store
-	 * @throws Exception
-	 */
-	public User getManagerOfStoreById(String storeId) throws Exception {
-		return sqlClient.getTemplate(getSql("getManagerOfStoreById"), params("storeId", storeId), USER_MAPPER);
-	}
-
-	/**
 	 * Creates a new user for the given user object.
 	 * 
 	 * @param user The user to create.

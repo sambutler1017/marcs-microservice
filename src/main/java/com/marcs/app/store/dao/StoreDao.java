@@ -1,11 +1,13 @@
 package com.marcs.app.store.dao;
 
 import static com.marcs.app.store.mapper.StoreMapper.STORE_MAPPER;
+import static com.marcs.app.user.mapper.UserProfileMapper.USER_MAPPER;
 
 import java.util.List;
 
 import com.marcs.app.store.client.domain.Store;
 import com.marcs.app.store.client.domain.request.StoreGetRequest;
+import com.marcs.app.user.client.domain.User;
 import com.marcs.common.abstracts.AbstractSqlDao;
 import com.marcs.common.exceptions.StoreNotFoundException;
 
@@ -48,5 +50,25 @@ public class StoreDao extends AbstractSqlDao {
 		} catch (Exception e) {
 			throw new StoreNotFoundException(String.format("Store could not be found for id: %s", id));
 		}
+	}
+
+	/**
+	 * Get the regional of the passed in store ID
+	 * 
+	 * @return The regional of that store
+	 * @throws Exception
+	 */
+	public User getRegionalOfStoreById(String storeId) throws Exception {
+		return sqlClient.getTemplate(getSql("getRegionalOfStore"), params("storeId", storeId), USER_MAPPER);
+	}
+
+	/**
+	 * Get the manager of the passed in store ID.
+	 * 
+	 * @return The manager of that store
+	 * @throws Exception
+	 */
+	public User getManagerOfStoreById(String storeId) throws Exception {
+		return sqlClient.getTemplate(getSql("getManagerOfStoreById"), params("storeId", storeId), USER_MAPPER);
 	}
 }

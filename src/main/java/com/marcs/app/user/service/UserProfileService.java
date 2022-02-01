@@ -106,26 +106,6 @@ public class UserProfileService {
 	}
 
 	/**
-	 * Get the regional of the passed in store ID
-	 * 
-	 * @return The regional of that store
-	 * @throws Exception
-	 */
-	public User getRegionalOfStoreById(String storeId) throws Exception {
-		return dao.getRegionalOfStoreById(storeId);
-	}
-
-	/**
-	 * Get the manager of the passed in store ID.
-	 * 
-	 * @return The manager of that store
-	 * @throws Exception
-	 */
-	public User getManagerOfStoreById(String storeId) throws Exception {
-		return dao.getManagerOfStoreById(storeId);
-	}
-
-	/**
 	 * This will check to see if the email exists. If it does then it will return
 	 * true, otherwise false.
 	 * 

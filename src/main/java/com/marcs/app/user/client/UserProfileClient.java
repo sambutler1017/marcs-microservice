@@ -77,26 +77,6 @@ public class UserProfileClient {
 	}
 
 	/**
-	 * Get the regional of the passed in store ID.
-	 * 
-	 * @return The regional of that store
-	 * @throws Exception
-	 */
-	public User getRegionalOfStoreById(String storeId) throws Exception {
-		return userController.getRegionalOfStoreById(storeId);
-	}
-
-	/**
-	 * Get the manager of the passed in store ID.
-	 * 
-	 * @return The manager of that store
-	 * @throws Exception
-	 */
-	public User getManagerOfStoreById(String storeId) throws Exception {
-		return userController.getManagerOfStoreById(storeId);
-	}
-
-	/**
 	 * Creates a new user.
 	 * 
 	 * @param user The user to be created.
