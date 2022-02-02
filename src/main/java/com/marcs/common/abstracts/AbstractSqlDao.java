@@ -12,6 +12,7 @@ import com.marcs.sql.domain.SqlFragmentData;
 import com.marcs.sql.domain.SqlParams;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,25 +23,16 @@ import org.springframework.stereotype.Service;
  * @since July 31, 2021
  */
 @Service
+@Scope("prototype")
 public abstract class AbstractSqlDao {
 
     private final String defaultSqlPath = "%s/resources/dao/%s.sql";
-
-    private String sqlFilePath;
 
     @Autowired
     protected ActiveProfile activeProfile;
 
     @Autowired
     protected SqlClient sqlClient;
-
-    public AbstractSqlDao() {
-        sqlFilePath = new ActiveProfile().getEnvironmentUrl();
-    }
-
-    public AbstractSqlDao(String sqlFilePath) {
-        this.sqlFilePath = sqlFilePath;
-    }
 
     /**
      * Gets the sql based on the given fragment name.
@@ -90,7 +82,7 @@ public abstract class AbstractSqlDao {
      * @throws IOException If the file can't be found or Reader can't be closed.
      */
     private SqlFragmentData getQueryFromFile(String fragmentName, String fileName) throws IOException {
-        String filePath = String.format(defaultSqlPath, sqlFilePath, getChildClassName());
+        String filePath = String.format(defaultSqlPath, activeProfile.getEnvironmentUrl(), getChildClassName());
         BufferedReader br = new BufferedReader(new FileReader(filePath));
 
         SqlFragmentData result = new SqlFragmentData(br.lines().collect(Collectors.toList()), fragmentName);
