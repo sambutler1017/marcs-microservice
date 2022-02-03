@@ -55,9 +55,10 @@ public class UserProfileDao extends BaseDao {
 						request.getFirstName())
 				.withParam("lastName", request.getLastName()).withParam("storeName",
 						request.getStoreName())
-				.withParam("notificationsEnabled", request.getNotificationsEnabled())
+				.withParam("emailReportsEnabled", request.getEmailReportsEnabled())
 				.withParamTextEnumCollection("accountStatus", request.getAccountStatus())
-				.withParam("excludedUserIds", request.getExcludedUserIds());
+				.withParam("excludedUserIds", request.getExcludedUserIds())
+				.withParamTextEnumCollection("webRole", request.getWebRole());
 		MapSqlParameterSource params = builder.build();
 		return getPage(getSql("getUsers", params), params, USER_MAPPER);
 	}
@@ -114,7 +115,7 @@ public class UserProfileDao extends BaseDao {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParamBuilder builder = SqlParamBuilder.with().useAllParams().withParam("firstName", user.getFirstName())
 				.withParam("lastName", user.getLastName()).withParam("email", user.getEmail())
-				.withParam("webRoleId", user.getWebRole().id()).withParam("storeId", user.getStoreId())
+				.withParam("webRoleId", user.getWebRole().getRank()).withParam("storeId", user.getStoreId())
 				.withParam("hireDate",
 						user.getHireDate() == null ? LocalDate.now().toString() : user.getHireDate().toString());
 
@@ -150,14 +151,14 @@ public class UserProfileDao extends BaseDao {
 		user.setPassword(null);
 		user = mapNonNullUserFields(user, userProfile);
 
-		MapSqlParameterSource params = parameterSource("firstName", user.getFirstName())
-				.addValue("lastName", user.getLastName())
-				.addValue("email", user.getEmail()).addValue("storeId", user.getStoreId())
-				.addValue("webRole", user.getWebRole() == null ? null : user.getWebRole().id())
-				.addValue("hireDate", user.getHireDate())
-				.addValue("id", userProfile.getId())
-				.addValue("notificationsEnabled", user.isNotificationsEnabled());
-
+		SqlParamBuilder builder = SqlParamBuilder.with().withParam("firstName", user.getFirstName())
+				.withParam("lastName", user.getLastName())
+				.withParam("email", user.getEmail()).withParam("storeId", user.getStoreId())
+				.withParam("webRoleId", user.getWebRole().getRank())
+				.withParam("hireDate", user.getHireDate())
+				.withParam("id", userProfile.getId())
+				.withParam("emailReportsEnabled", user.isEmailReportsEnabled());
+		MapSqlParameterSource params = builder.build();
 		update(getSql("updateUserProfile", params), params);
 
 		return getUserById(userId);
@@ -183,8 +184,8 @@ public class UserProfileDao extends BaseDao {
 			destination.setWebRole(source.getWebRole());
 		if (destination.isAppAccess() == null)
 			destination.setAppAccess(source.isAppAccess());
-		if (destination.isNotificationsEnabled() == null)
-			destination.setNotificationsEnabled(source.isNotificationsEnabled());
+		if (destination.isEmailReportsEnabled() == null)
+			destination.setEmailReportsEnabled(source.isEmailReportsEnabled());
 		if (destination.getHireDate() == null)
 			destination.setHireDate(source.getHireDate());
 		return destination;

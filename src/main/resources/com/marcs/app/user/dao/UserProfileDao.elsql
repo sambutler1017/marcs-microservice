@@ -1,5 +1,5 @@
 @NAME(userProfileFields)
-  up.id, up.first_name, up.last_name, up.email, up.web_role_id, up.notifications_enabled, up.hire_date, up.insert_date
+  up.id, up.first_name, up.last_name, up.email, up.web_role_id, up.email_reports_enabled, up.hire_date, up.insert_date
 
 @NAME(storeFields)
   st.id AS 'store_id', st.name AS 'store_name', st.regional_id, st.manager_id
@@ -21,8 +21,8 @@
       up.email IN (:email)
     @AND(:webRole)
       wr.text_id IN (:webRole)
-    @AND(:notificationsEnabled)
-      up.notifications_enabled = :notificationsEnabled
+    @AND(:emailReportsEnabled)
+      up.email_reports_enabled = :emailReportsEnabled
     @AND(:accountStatus)
       us.account_status IN (:accountStatus)
     @AND(:searchEnabled = true)
@@ -71,8 +71,8 @@
     store_id = :storeId,
     first_name = :firstName,
     last_name = :lastName,
-    web_role_id = :webRole,
-    notifications_enabled = :notificationsEnabled,
+    web_role_id = :webRoleId,
+    email_reports_enabled = :emailReportsEnabled,
     hire_date = :hireDate
   WHERE
     id = :id

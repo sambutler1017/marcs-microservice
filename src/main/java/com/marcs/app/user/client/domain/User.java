@@ -26,7 +26,7 @@ public class User {
 
 	private Boolean appAccess;
 
-	private Boolean notificationsEnabled;
+	private Boolean emailReportsEnabled;
 
 	private String password;
 
@@ -91,12 +91,12 @@ public class User {
 		this.appAccess = appAccess;
 	}
 
-	public Boolean isNotificationsEnabled() {
-		return notificationsEnabled;
+	public Boolean isEmailReportsEnabled() {
+		return emailReportsEnabled;
 	}
 
-	public void setNotificationsEnabled(Boolean notificationsEnabled) {
-		this.notificationsEnabled = notificationsEnabled;
+	public void setEmailReportsEnabled(Boolean emailReportsEnabled) {
+		this.emailReportsEnabled = emailReportsEnabled;
 	}
 
 	public void setPassword(String password) {

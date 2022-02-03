@@ -39,7 +39,7 @@ public class UserGetRequest implements SearchParam, SearchFieldParams<UserProfil
 
     private Set<Integer> excludedUserIds;
 
-    private Boolean notificationsEnabled;
+    private Boolean emailReportsEnabled;
 
     private String search;
 
@@ -123,12 +123,12 @@ public class UserGetRequest implements SearchParam, SearchFieldParams<UserProfil
         this.excludedUserIds = excludedUserIds;
     }
 
-    public Boolean getNotificationsEnabled() {
-        return notificationsEnabled;
+    public Boolean getEmailReportsEnabled() {
+        return emailReportsEnabled;
     }
 
-    public void setNotificationsEnabled(Boolean notificationsEnabled) {
-        this.notificationsEnabled = notificationsEnabled;
+    public void setEmailReportsEnabled(Boolean emailReportsEnabled) {
+        this.emailReportsEnabled = emailReportsEnabled;
     }
 
     public String getSearch() {

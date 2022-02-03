@@ -29,7 +29,7 @@ public class UserProfileMapper implements RowMapper<User> {
 		user.setStoreId(rs.getString("store_id"));
 		user.setStoreName(rs.getString("store_name"));
 		user.setAppAccess(rs.getBoolean("app_access"));
-		user.setNotificationsEnabled(rs.getBoolean("notifications_enabled"));
+		user.setEmailReportsEnabled(rs.getBoolean("email_reports_enabled"));
 		user.setAccountStatus(AccountStatus.valueOf(rs.getString("account_status")));
 
 		try {

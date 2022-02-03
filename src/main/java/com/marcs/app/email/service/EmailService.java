@@ -121,7 +121,7 @@ public class EmailService {
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         String emailContent = br.lines().collect(Collectors.joining(" "));
 
-        List<User> usersWithNotifications = getUsersWithNotificationsEnabled();
+        List<User> usersWithNotifications = getUsersWithEmailReportsEnabled();
         for (User user : usersWithNotifications) {
             VacationRequest vRequest = new VacationRequest();
             vRequest.setStatus(Sets.newHashSet(VacationStatus.APPROVED));
@@ -222,15 +222,15 @@ public class EmailService {
 
     /**
      * Get the list of regionals that have notifications enabled to get a weekly
-     * reminder.
+     * reminder of who is on vacation.
      * 
      * @return List of users
      * @throws Exception
      */
-    private List<User> getUsersWithNotificationsEnabled() throws Exception {
+    private List<User> getUsersWithEmailReportsEnabled() throws Exception {
         UserGetRequest request = new UserGetRequest();
         request.setWebRole(Sets.newHashSet(WebRole.REGIONAL, WebRole.DISTRICT_MANAGER, WebRole.ADMIN));
-        request.setNotificationsEnabled(true);
+        request.setEmailReportsEnabled(true);
         return userClient.getUsers(request);
     }
 

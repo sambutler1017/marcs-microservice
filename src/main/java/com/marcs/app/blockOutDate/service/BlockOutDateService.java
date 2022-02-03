@@ -62,7 +62,7 @@ public class BlockOutDateService {
 	 * @throws Exception
 	 */
 	public BlockOutDate createBlockOutDate(BlockOutDate blockDate) throws Exception {
-		if (jwtHolder.getWebRole().getValue() < WebRole.DISTRICT_MANAGER.getValue()) {
+		if (jwtHolder.getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
 			throw new Exception(String.format("User with role '%s' does not have permission to create block out dates!",
 					jwtHolder.getWebRole().toString()));
 		}

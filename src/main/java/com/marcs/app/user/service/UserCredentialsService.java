@@ -79,7 +79,7 @@ public class UserCredentialsService {
      */
     public User updateUserPasswordById(int userId, PasswordUpdate passUpdate) throws Exception {
         User updatingUser = userProfileClient.getUserById(userId);
-        if (userId != updatingUser.getId() && jwtHolder.getWebRole().id() <= updatingUser.getWebRole().id()) {
+        if (userId != updatingUser.getId() && jwtHolder.getWebRole().getRank() <= updatingUser.getWebRole().getRank()) {
             throw new InsufficientPermissionsException(
                     String.format("Your role of '%s' can not update a user of role '%s'", jwtHolder.getWebRole(),
                             updatingUser.getWebRole()));

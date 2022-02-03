@@ -75,7 +75,7 @@ public class NotificationDao extends BaseDao {
      */
     public Notification createNotification(Notification n) throws Exception {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        SqlParamBuilder builder = SqlParamBuilder.with().withParam("type", n.getType().toString())
+        SqlParamBuilder builder = SqlParamBuilder.with().withParam("type", n.getType())
                 .withParam("receiverId", n.getReceiverId()).withParam("linkId", n.getLinkId());
         MapSqlParameterSource params = builder.build();
         post(getSql("createNotification"), params, keyHolder);
