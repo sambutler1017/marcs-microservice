@@ -1,10 +1,13 @@
 package com.marcs.app.user.dao;
 
+import javax.sql.DataSource;
+
 import com.marcs.app.auth.client.domain.AuthPassword;
 import com.marcs.app.user.client.domain.User;
-import com.marcs.common.abstracts.AbstractSqlDao;
+import com.marcs.common.abstracts.BaseDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,10 +17,15 @@ import org.springframework.stereotype.Repository;
  * @since October 9, 2021
  */
 @Repository
-public class UserCredentialsDao extends AbstractSqlDao {
+public class UserCredentialsDao extends BaseDao {
 
     @Autowired
     private UserProfileDao userProfileDao;
+
+    @Autowired
+    public UserCredentialsDao(DataSource source) {
+        super(source);
+    }
 
     /**
      * This will be called when new users are created so that they have default
@@ -29,8 +37,9 @@ public class UserCredentialsDao extends AbstractSqlDao {
      * @throws Exception
      */
     public void insertUserPassword(int userId, AuthPassword authPass) throws Exception {
-        sqlClient.post(getSql("insertUserPassword"), params("userId", userId)
-                .addValue("password", authPass.getPassword()).addValue("salt", authPass.getSalt()));
+        MapSqlParameterSource params = parameterSource("userId", userId)
+                .addValue("password", authPass.getPassword()).addValue("salt", authPass.getSalt());
+        post(getSql("insertUserPassword", params), params);
     }
 
     /**
@@ -45,8 +54,9 @@ public class UserCredentialsDao extends AbstractSqlDao {
     public User updateUserPassword(int userId, AuthPassword authPassword) throws Exception {
         User userProfile = userProfileDao.getUserById(userId);
 
-        sqlClient.update(getSql("updateUserPassword"), params("password", authPassword.getPassword())
-                .addValue("id", userProfile.getId()).addValue("salt", authPassword.getSalt()));
+        MapSqlParameterSource params = parameterSource("password", authPassword.getPassword())
+                .addValue("id", userProfile.getId()).addValue("salt", authPassword.getSalt());
+        update(getSql("updateUserPassword", params), params);
         return userProfile;
     }
 }

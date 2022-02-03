@@ -4,12 +4,18 @@ import static com.marcs.app.notifications.mapper.NotificationMapper.NOTIFICATION
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+
+import javax.sql.DataSource;
 
 import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.app.notifications.client.domain.request.NotificationGetRequest;
-import com.marcs.common.abstracts.AbstractSqlDao;
+import com.marcs.common.abstracts.BaseDao;
+import com.marcs.sql.SqlParamBuilder;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -19,7 +25,12 @@ import org.springframework.stereotype.Repository;
  * @since December 21, 2021
  */
 @Repository
-public class NotificationDao extends AbstractSqlDao {
+public class NotificationDao extends BaseDao {
+
+    @Autowired
+    public NotificationDao(DataSource source) {
+        super(source);
+    }
 
     /**
      * This will get a list of notifications that the user has. The request will be
@@ -32,10 +43,12 @@ public class NotificationDao extends AbstractSqlDao {
      * @throws Exception If no data is returned
      */
     public List<Notification> getNotifications(NotificationGetRequest request) throws Exception {
-        return sqlClient.getPage(getSql("getNotifications"), params("notificationId", request.getId())
-                .addValue("type", request.getType()).addValue("receiverId", request.getReceiverId())
-                .addValue("read", request.getRead()),
-                NOTIFICATION_MAPPER);
+        SqlParamBuilder builder = SqlParamBuilder.with(request).withParam("notificationId", request.getId())
+                .withParamTextEnumCollection("type", request.getType()).withParam("receiverId", request.getReceiverId())
+                .withParam("read", request.getRead());
+        MapSqlParameterSource params = builder.build();
+
+        return getPage(getSql("getNotifications", params), params, NOTIFICATION_MAPPER);
     }
 
     /**
@@ -47,7 +60,9 @@ public class NotificationDao extends AbstractSqlDao {
      * @throws Exception
      */
     public void markNotificationRead(int id) throws Exception {
-        sqlClient.update(getSql("markNotificationRead"), params("read", true).addValue("id", id));
+        SqlParamBuilder builder = SqlParamBuilder.with().withParam("read", true).withParam("id", id);
+        MapSqlParameterSource params = builder.build();
+        update(getSql("markNotificationRead"), params);
     }
 
     /**
@@ -59,16 +74,14 @@ public class NotificationDao extends AbstractSqlDao {
      * @throws Exception
      */
     public Notification createNotification(Notification n) throws Exception {
-        Optional<Integer> createId = sqlClient.post(getSql("createNotification"), params("type", n.getType().toString())
-                .addValue("receiverId", n.getReceiverId()).addValue("linkId", n.getLinkId()));
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        SqlParamBuilder builder = SqlParamBuilder.with().withParam("type", n.getType().toString())
+                .withParam("receiverId", n.getReceiverId()).withParam("linkId", n.getLinkId());
+        MapSqlParameterSource params = builder.build();
+        post(getSql("createNotification"), params, keyHolder);
 
-        if (createId.isPresent()) {
-            n.setId(createId.get());
-            n.setInsertDate(LocalDate.now());
-        } else {
-            throw new Exception("Could not create notification!");
-        }
-
+        n.setId(keyHolder.getKey().intValue());
+        n.setInsertDate(LocalDate.now());
         return n;
     }
 
@@ -80,6 +93,6 @@ public class NotificationDao extends AbstractSqlDao {
      * @throws Exception
      */
     public void deleteNotification(int id) throws Exception {
-        sqlClient.delete(getSql("deleteNotification"), params("id", id));
+        delete(getSql("deleteNotification"), parameterSource("id", id));
     }
 }

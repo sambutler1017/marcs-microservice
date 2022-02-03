@@ -2,6 +2,7 @@ package com.marcs.app.store.service;
 
 import java.util.List;
 
+import com.google.common.collect.Sets;
 import com.marcs.app.store.client.domain.Store;
 import com.marcs.app.store.client.domain.request.StoreGetRequest;
 import com.marcs.app.store.dao.StoreDao;
@@ -41,7 +42,9 @@ public class StoreService {
 	 * @throws Exception
 	 */
 	public Store getStoreById(String id) throws Exception {
-		return dao.getStoreById(id);
+		StoreGetRequest request = new StoreGetRequest();
+		request.setId(Sets.newHashSet(id));
+		return getStores(request).get(0);
 	}
 
 	/**

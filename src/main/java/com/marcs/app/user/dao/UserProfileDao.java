@@ -6,15 +6,21 @@ import static com.marcs.app.user.mapper.UserProfileMapper.USER_MAPPER;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import com.google.common.collect.Sets;
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
-import com.marcs.common.abstracts.AbstractSqlDao;
+import com.marcs.common.abstracts.BaseDao;
 import com.marcs.common.exceptions.UserNotFoundException;
 import com.marcs.jwt.utility.JwtHolder;
+import com.marcs.sql.SqlParamBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -24,10 +30,15 @@ import org.springframework.stereotype.Repository;
  * @since June 25, 2020
  */
 @Repository
-public class UserProfileDao extends AbstractSqlDao {
+public class UserProfileDao extends BaseDao {
 
 	@Autowired
 	private JwtHolder jwtHolder;
+
+	@Autowired
+	public UserProfileDao(DataSource source) {
+		super(source);
+	}
 
 	/**
 	 * Get users based on given request filter
@@ -37,15 +48,18 @@ public class UserProfileDao extends AbstractSqlDao {
 	 * @throws Exception
 	 */
 	public List<User> getUsers(UserGetRequest request) throws Exception {
-		return sqlClient.getPage(getSql("getUsers"),
-				params("id", request.getId()).addValue("email", request.getEmail())
-						.addValue("webRole", request.getWebRole()).addValue("storeId", request.getStoreId())
-						.addValue("regionalId", request.getRegionalId()).addValue("firstName", request.getFirstName())
-						.addValue("lastName", request.getLastName()).addValue("storeName", request.getStoreName())
-						.addValue("notificationsEnabled", request.getNotificationsEnabled())
-						.addValue("accountStatus", request.getAccountStatus())
-						.addValue("excludedUserIds", request.getExcludedUserIds()),
-				USER_MAPPER);
+		SqlParamBuilder builder = SqlParamBuilder.with(request).useAllParams().withParam("id", request.getId())
+				.withParam("email", request.getEmail()).withParam("storeId",
+						request.getStoreId())
+				.withParam("regionalId", request.getRegionalId()).withParam("firstName",
+						request.getFirstName())
+				.withParam("lastName", request.getLastName()).withParam("storeName",
+						request.getStoreName())
+				.withParam("notificationsEnabled", request.getNotificationsEnabled())
+				.withParamTextEnumCollection("accountStatus", request.getAccountStatus())
+				.withParam("excludedUserIds", request.getExcludedUserIds());
+		MapSqlParameterSource params = builder.build();
+		return getPage(getSql("getUsers", params), params, USER_MAPPER);
 	}
 
 	/**
@@ -85,7 +99,8 @@ public class UserProfileDao extends AbstractSqlDao {
 	 * @since May 13, 2020
 	 */
 	public List<Application> getUserApps(int id) throws Exception {
-		return sqlClient.getPage(getSql("getApplications"), params("id", id), APPLICATION_MAPPER);
+		MapSqlParameterSource params = parameterSource("id", id);
+		return getPage(getSql("getApplications", params), params, APPLICATION_MAPPER);
 	}
 
 	/**
@@ -96,13 +111,18 @@ public class UserProfileDao extends AbstractSqlDao {
 	 * @throws Exception
 	 */
 	public User insertUser(User user) throws Exception {
-		int userId = sqlClient.post(getSql("insertUser"), params("firstName", user.getFirstName())
-				.addValue("lastName", user.getLastName()).addValue("email", user.getEmail())
-				.addValue("webRoleId", user.getWebRole().id()).addValue("storeId", user.getStoreId())
-				.addValue("hireDate",
-						user.getHireDate() == null ? LocalDate.now().toString() : user.getHireDate().toString()))
-				.get();
-		user.setId(userId);
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParamBuilder builder = SqlParamBuilder.with().useAllParams().withParam("firstName", user.getFirstName())
+				.withParam("lastName", user.getLastName()).withParam("email", user.getEmail())
+				.withParam("webRoleId", user.getWebRole().id()).withParam("storeId", user.getStoreId())
+				.withParam("hireDate",
+						user.getHireDate() == null ? LocalDate.now().toString() : user.getHireDate().toString());
+
+		MapSqlParameterSource params = builder.build();
+
+		post(getSql("insertUser", params), params, keyHolder);
+
+		user.setId(keyHolder.getKey().intValue());
 		return user;
 	}
 
@@ -112,7 +132,7 @@ public class UserProfileDao extends AbstractSqlDao {
 	 * @param id The id of the user being deleted
 	 */
 	public void deleteUser(int id) throws Exception {
-		sqlClient.delete(getSql("deleteUser"), params("id", id));
+		delete(getSql("deleteUser"), parameterSource("id", id));
 	}
 
 	/**
@@ -130,12 +150,15 @@ public class UserProfileDao extends AbstractSqlDao {
 		user.setPassword(null);
 		user = mapNonNullUserFields(user, userProfile);
 
-		sqlClient.update(getSql("updateUserProfile"),
-				params("firstName", user.getFirstName()).addValue("lastName", user.getLastName())
-						.addValue("email", user.getEmail()).addValue("storeId", user.getStoreId())
-						.addValue("webRole", user.getWebRole().id()).addValue("hireDate", user.getHireDate())
-						.addValue("id", userProfile.getId())
-						.addValue("notificationsEnabled", user.isNotificationsEnabled()));
+		MapSqlParameterSource params = parameterSource("firstName", user.getFirstName())
+				.addValue("lastName", user.getLastName())
+				.addValue("email", user.getEmail()).addValue("storeId", user.getStoreId())
+				.addValue("webRole", user.getWebRole() == null ? null : user.getWebRole().id())
+				.addValue("hireDate", user.getHireDate())
+				.addValue("id", userProfile.getId())
+				.addValue("notificationsEnabled", user.isNotificationsEnabled());
+
+		update(getSql("updateUserProfile", params), params);
 
 		return getUserById(userId);
 	}

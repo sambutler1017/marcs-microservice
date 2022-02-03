@@ -3,13 +3,19 @@ package com.marcs.app.blockOutDate.dao;
 import static com.marcs.app.blockOutDate.mapper.BlockOutDateMapper.BLOCK_OUT_DATE_MAPPER;
 
 import java.util.List;
-import java.util.Optional;
+
+import javax.sql.DataSource;
 
 import com.google.common.collect.Sets;
 import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
 import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
-import com.marcs.common.abstracts.AbstractSqlDao;
+import com.marcs.common.abstracts.BaseDao;
+import com.marcs.sql.SqlParamBuilder;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -19,7 +25,12 @@ import org.springframework.stereotype.Repository;
  * @since June 25, 2020
  */
 @Repository
-public class BlockOutDateDao extends AbstractSqlDao {
+public class BlockOutDateDao extends BaseDao {
+
+	@Autowired
+	public BlockOutDateDao(DataSource source) {
+		super(source);
+	}
 
 	/**
 	 * Endpoint to get a list of block out dates based on the filter request
@@ -29,9 +40,12 @@ public class BlockOutDateDao extends AbstractSqlDao {
 	 * @throws Exception
 	 */
 	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) throws Exception {
-		return sqlClient.getPage(getSql("getBlockOutDates"),
-				params("id", request.getId()).addValue("insertUserId", request.getInsertUserId()),
-				BLOCK_OUT_DATE_MAPPER);
+		SqlParamBuilder builder = SqlParamBuilder.with(request).withParam("id", request.getId())
+				.withParam("insertUserId", request.getInsertUserId());
+
+		MapSqlParameterSource params = builder.build();
+
+		return getPage(getSql("getBlockOutDates", params), params, BLOCK_OUT_DATE_MAPPER);
 	}
 
 	/**
@@ -42,14 +56,15 @@ public class BlockOutDateDao extends AbstractSqlDao {
 	 * @throws Exception
 	 */
 	public BlockOutDate createBlockOutDate(BlockOutDate blockDate) throws Exception {
-		Optional<Integer> autoId = sqlClient.post(getSql("insertBlockOutDate"),
-				params("startDate", blockDate.getStartDate()).addValue("endDate", blockDate.getEndDate())
-						.addValue("insertUserId", blockDate.getInsertUserId()));
-		if (autoId.isPresent()) {
-			return getBlockOutDates(new BlockOutDateGetRequest(Sets.newHashSet(autoId.get()))).get(0);
-		} else {
-			throw new Exception("Could not create block out date");
-		}
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParamBuilder builder = SqlParamBuilder.with().withParam("startDate", blockDate.getStartDate())
+				.withParam("endDate", blockDate.getEndDate())
+				.withParam("insertUserId", blockDate.getInsertUserId());
+
+		MapSqlParameterSource params = builder.build();
+
+		post(getSql("insertBlockOutDate"), params, keyHolder);
+		return getBlockOutDates(new BlockOutDateGetRequest(Sets.newHashSet(keyHolder.getKey().intValue()))).get(0);
 	}
 
 	/**
@@ -59,6 +74,6 @@ public class BlockOutDateDao extends AbstractSqlDao {
 	 * @throws Exception
 	 */
 	public void deleteBlockOutDate(int id) throws Exception {
-		sqlClient.delete(getSql("deleteBlockOutDate"), params("id", id));
+		delete(getSql("deleteBlockOutDate"), parameterSource("id", id));
 	}
 }

@@ -1,0 +1,17 @@
+@NAME(getUserStatusById)
+  SELECT *
+  FROM
+    user_status
+  WHERE user_id = :userId
+
+@NAME(insertUserStatus)
+  INSERT INTO user_status (`user_id`,`account_status`,`app_access`, `updated_user_id`)
+  VALUES(:userId, :accountStatus, :appAccess, :updatedUserId)
+
+@NAME(updateUserStatus)
+  UPDATE user_status
+  SET
+    updated_user_id = :updatedUserId,
+    account_status = :accountStatus,
+    app_access = :appAccess
+  WHERE user_id = :userId

@@ -1,0 +1,81 @@
+@NAME(userProfileFields)
+  up.id, up.first_name, up.last_name, up.email, up.web_role_id, up.notifications_enabled, up.hire_date, up.insert_date
+
+@NAME(storeFields)
+  st.id AS 'store_id', st.name AS 'store_name', st.regional_id, st.manager_id
+
+@NAME(userStatusFields)
+  us.request_id, us.app_access, us.account_status, us.updated_user_id
+
+@NAME(userFilters)
+  @WHERE
+    @AND(:id)
+      up.id IN (:id)
+    @AND(:excludedUserIds)
+      up.id NOT IN (:excludedUserIds)
+    @AND(:storeId)
+      st.id IN (:storeId)
+    @AND(:regionalId)
+      st.regional_id IN ():regionalId)
+    @AND(:email)
+      up.email IN (:email)
+    @AND(:webRole)
+      wr.text_id IN (:webRole)
+    @AND(:notificationsEnabled)
+      up.notifications_enabled = :notificationsEnabled
+    @AND(:accountStatus)
+      us.account_status IN (:accountStatus)
+    @AND(:searchEnabled = true)
+      @INCLUDE(search)
+
+@NAME(getUsers)
+  SELECT @INCLUDE(userProfileFields), @INCLUDE(storeFields), @INCLUDE(userStatusFields)
+  FROM
+    user_profile up
+    JOIN web_role wr ON up.web_role_id = wr.id
+    LEFT JOIN stores st ON up.store_id = st.id
+    JOIN user_status us ON up.id = us.user_id
+  @INCLUDE(userFilters)
+  ORDER BY st.name
+
+@NAME(getApplications)
+  SELECT 
+    a.id AS 'app_id',
+    a.app_name AS 'app_name',
+    wraa.access AS 'access',
+    a.enabled AS 'enabled'
+  FROM
+    user_profile up
+      JOIN
+    web_role_app_access wraa ON up.web_role_id = wraa.web_role_id
+      JOIN
+    application a ON wraa.app_id = a.id
+  @WHERE
+    @AND(:id)
+      up.id = :id
+  ORDER BY a.id
+
+@NAME(insertUser)
+  INSERT INTO user_profile (`first_name`,`last_name`,`email`,`store_id`,`web_role_id`,`hire_date`)
+  VALUES (:firstName, :lastName, :email, :storeId, :webRoleId, :hireDate)
+
+@NAME(deleteUser)
+  DELETE FROM user_profile
+  WHERE
+    id = :id
+
+@NAME(updateUserProfile)
+  UPDATE user_profile 
+  SET
+    email = :email,
+    store_id = :storeId,
+    first_name = :firstName,
+    last_name = :lastName,
+    web_role_id = :webRole,
+    notifications_enabled = :notificationsEnabled,
+    hire_date = :hireDate
+  WHERE
+    id = :id
+
+@NAME(search)
+  (@VALUE(:searchContent))

@@ -7,9 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.marcs.app.featureAccess.client.domain.Feature;
-import com.marcs.common.abstracts.AbstractSqlDao;
+import javax.sql.DataSource;
 
+import com.marcs.app.featureAccess.client.domain.Feature;
+import com.marcs.common.abstracts.BaseDao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -19,7 +23,12 @@ import org.springframework.stereotype.Repository;
  * @since June 25, 2020
  */
 @Repository
-public class FeatureAccessDao extends AbstractSqlDao {
+public class FeatureAccessDao extends BaseDao {
+
+    @Autowired
+    public FeatureAccessDao(DataSource source) {
+        super(source);
+    }
 
     /**
      * Get the feature access for the user
@@ -29,8 +38,9 @@ public class FeatureAccessDao extends AbstractSqlDao {
      * @throws Exception
      */
     public Map<String, List<Map<String, String>>> getFeatureAccess(int roleId) throws Exception {
+        MapSqlParameterSource params = parameterSource("webRole", roleId);
         return mapSingleton(
-                sqlClient.getPage(getSql("getFeatureAccess"), params("webRole", roleId), FEATURE_ACCESS_MAPPER));
+                getPage(getSql("getFeatureAccess", params), params, FEATURE_ACCESS_MAPPER));
     }
 
     /**

@@ -1,9 +1,15 @@
 package com.marcs.app.user.client.domain.request;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.marcs.common.enums.AccountStatus;
 import com.marcs.common.enums.WebRole;
+import com.marcs.common.search.SearchField;
+import com.marcs.common.search.SearchFieldParams;
+import com.marcs.common.search.SearchParam;
 
 /**
  * This class handles lookups passed to the DAO.
@@ -11,7 +17,7 @@ import com.marcs.common.enums.WebRole;
  * @author Sam Butler
  * @since September 9, 2021
  */
-public class UserGetRequest {
+public class UserGetRequest implements SearchParam, SearchFieldParams<UserProfileSearchFields> {
 
     private Set<Integer> id;
 
@@ -34,6 +40,8 @@ public class UserGetRequest {
     private Set<Integer> excludedUserIds;
 
     private Boolean notificationsEnabled;
+
+    private String search;
 
     public Set<Integer> getId() {
         return id;
@@ -121,5 +129,19 @@ public class UserGetRequest {
 
     public void setNotificationsEnabled(Boolean notificationsEnabled) {
         this.notificationsEnabled = notificationsEnabled;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
+    @JsonIgnore
+    @Override
+    public List<SearchField> getSearchFields() {
+        return Arrays.asList(UserProfileSearchFields.values());
     }
 }

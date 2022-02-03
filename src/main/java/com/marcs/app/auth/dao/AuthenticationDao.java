@@ -5,13 +5,16 @@ import static com.marcs.app.user.mapper.UserProfileMapper.USER_MAPPER;
 
 import java.io.IOException;
 
+import javax.sql.DataSource;
+
 import com.marcs.app.auth.client.domain.AuthPassword;
 import com.marcs.app.user.client.domain.User;
-import com.marcs.common.abstracts.AbstractSqlDao;
+import com.marcs.common.abstracts.BaseDao;
 import com.marcs.common.exceptions.InvalidCredentialsException;
 import com.marcs.common.exceptions.SqlFragmentNotFoundException;
 import com.marcs.common.exceptions.UserNotFoundException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +25,13 @@ import org.springframework.stereotype.Repository;
  * @since June 25, 2021
  */
 @Repository
-public class AuthenticationDao extends AbstractSqlDao {
+public class AuthenticationDao extends BaseDao {
+
+    @Autowired
+    public AuthenticationDao(DataSource source) {
+        super(source);
+    }
+
     /**
      * Not an exposed endpoint, strictly used by the authentication controller to
      * autheticate a user.
@@ -35,8 +44,8 @@ public class AuthenticationDao extends AbstractSqlDao {
      */
     public User authenticateUser(String email, String password) throws Exception {
         try {
-            return sqlClient.getTemplate(getSql("authenticateUser"),
-                    params("email", email).addValue("password", password), USER_MAPPER);
+            return get(getSql("authenticateUser"),
+                    parameterSource("email", email).addValue("password", password), USER_MAPPER);
         } catch (EmptyResultDataAccessException e) {
             throw new InvalidCredentialsException("Invalid Credentials!");
         }
@@ -51,7 +60,7 @@ public class AuthenticationDao extends AbstractSqlDao {
      */
     public AuthPassword getUserAuthPassword(String email) throws Exception {
         try {
-            return sqlClient.getTemplate(getSql("getUserAuthenticationSalt"), params("email", email),
+            return get(getSql("getUserAuthenticationSalt"), parameterSource("email", email),
                     AUTH_PASSWORD_MAPPER);
         } catch (Exception e) {
             throw new UserNotFoundException(String.format("User not found for email: %s", email));

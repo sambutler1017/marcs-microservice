@@ -2,16 +2,20 @@ package com.marcs.app.vacation.dao;
 
 import static com.marcs.app.vacation.mapper.VacationMapper.VACATION_MAPPER;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+
+import javax.sql.DataSource;
 
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationRequest;
-import com.marcs.common.abstracts.AbstractSqlDao;
-import com.marcs.common.exceptions.BaseException;
-import com.marcs.common.exceptions.VacationNotFoundException;
+import com.marcs.common.abstracts.BaseDao;
+import com.marcs.common.enums.VacationStatus;
+import com.marcs.sql.SqlParamBuilder;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,7 +25,12 @@ import org.springframework.stereotype.Component;
  * @since June 25, 2020
  */
 @Component
-public class VacationDao extends AbstractSqlDao {
+public class VacationDao extends BaseDao {
+
+	@Autowired
+	public VacationDao(DataSource source) {
+		super(source);
+	}
 
 	/**
 	 * Get list of vacations for the current request.
@@ -30,36 +39,12 @@ public class VacationDao extends AbstractSqlDao {
 	 * @throws Exception
 	 */
 	public List<Vacation> getVacations(VacationRequest request) throws Exception {
-		return sqlClient.getPage(
-				getSql("getVacations"), params("userId", request.getUserId())
-						.addValue("regionalId", request.getRegionalId()).addValue("status", request.getStatus()),
-				VACATION_MAPPER);
-	}
-
-	/**
-	 * Get the vacation for the given id of the vacation.
-	 * 
-	 * @param id The id of the vacation inserted.
-	 * @return {@link Vacation} object.
-	 * @throws Exception
-	 */
-	public Vacation getVacationById(int id) throws Exception {
-		try {
-			return sqlClient.getTemplate(getSql("getUserVacations"), params("id", id), VACATION_MAPPER);
-		} catch (Exception e) {
-			throw new VacationNotFoundException(String.format("Vacation Not found for id: %d", id));
-		}
-	}
-
-	/**
-	 * Get a list of vacations for the given user id.
-	 * 
-	 * @param userId The user id to get vacations for.
-	 * @return {@link Lst<Vacation>} for the user.
-	 * @throws Exception
-	 */
-	public List<Vacation> getVacationsByUserId(int userId) throws Exception {
-		return sqlClient.getPage(getSql("getUserVacations"), params("userId", userId), VACATION_MAPPER);
+		SqlParamBuilder builder = SqlParamBuilder.with(request).withParam("id", request.getId())
+				.withParam("userId", request.getUserId())
+				.withParam("regionalId", request.getRegionalId())
+				.withParamTextEnumCollection("status", request.getStatus());
+		MapSqlParameterSource params = builder.build();
+		return getPage(getSql("getVacations", params), params, VACATION_MAPPER);
 	}
 
 	/**
@@ -69,10 +54,13 @@ public class VacationDao extends AbstractSqlDao {
 	 * @throws Exception
 	 */
 	public List<Vacation> getVacationsForReport(VacationRequest request) throws Exception {
-		return sqlClient.getPage(getSql("getVacations"),
-				params("userId", request.getUserId()).addValue("regionalId", request.getRegionalId())
-						.addValue("status", request.getStatus()).addValue("startDate", LocalDate.now()),
-				VACATION_MAPPER);
+		SqlParamBuilder builder = SqlParamBuilder.with(request).withParam("id", request.getId())
+				.withParam("userId", request.getUserId())
+				.withParam("regionalId", request.getRegionalId())
+				.withParamTextEnumCollection("status", request.getStatus())
+				.withParam("reportFilter", true);
+		MapSqlParameterSource params = builder.build();
+		return getPage(getSql("getVacations", params), params, VACATION_MAPPER);
 	}
 
 	/**
@@ -84,13 +72,14 @@ public class VacationDao extends AbstractSqlDao {
 	 * @throws Exception
 	 */
 	public int createVacation(int id, Vacation vac) throws Exception {
-		Optional<Integer> autoId = sqlClient.post(getSql("insertVacation"),
-				params("userId", id).addValue("startDate", vac.getStartDate()).addValue("endDate", vac.getEndDate())
-						.addValue("status", vac.getStatus()));
-		if (autoId.get() == -1) {
-			throw new BaseException("Could not create Vacation");
-		}
-		return autoId.get();
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		SqlParamBuilder builder = SqlParamBuilder.with().withParam("userId", id)
+				.withParam("startDate", vac.getStartDate()).withParam("endDate", vac.getEndDate())
+				.withParam("status", vac.getStatus() == null ? VacationStatus.APPROVED : vac.getStatus());
+		MapSqlParameterSource params = builder.build();
+
+		post(getSql("insertVacation"), params, keyHolder);
+		return keyHolder.getKey().intValue();
 	}
 
 	/**
@@ -101,11 +90,12 @@ public class VacationDao extends AbstractSqlDao {
 	 * @return Vacation object of the updated information.
 	 * @throws Exception
 	 */
-	public Vacation updateVacationDatesById(int id, Vacation vac) throws Exception {
-		sqlClient.update(getSql("updateVacationDatesById"), params("startDate", vac.getStartDate()).addValue("id", id)
-				.addValue("endDate", vac.getEndDate()));
+	public void updateVacationDatesById(int id, Vacation vac) throws Exception {
+		SqlParamBuilder builder = SqlParamBuilder.with().withParam("startDate", vac.getStartDate()).withParam("id", id)
+				.withParam("endDate", vac.getEndDate());
+		MapSqlParameterSource params = builder.build();
 
-		return getVacationById(id);
+		update(getSql("updateVacationDatesById"), params);
 	}
 
 	/**
@@ -116,11 +106,11 @@ public class VacationDao extends AbstractSqlDao {
 	 * @return {@link Vacation} object.
 	 * @throws Exception
 	 */
-	public Vacation updateVacationInfoById(int id, Vacation vac) throws Exception {
-		sqlClient.update(getSql("updateVacationInfoById"), params("status", vac.getStatus()).addValue("id", id)
-				.addValue("notes", vac.getNotes() == null || vac.getNotes().trim().equals("") ? "-" : vac.getNotes()));
-
-		return getVacationById(id);
+	public void updateVacationInfoById(int id, Vacation vac) throws Exception {
+		SqlParamBuilder builder = SqlParamBuilder.with().withParam("status", vac.getStatus()).withParam("id", id)
+				.withParam("notes", vac.getNotes());
+		MapSqlParameterSource params = builder.build();
+		update(getSql("updateVacationInfoById"), params);
 	}
 
 	/**
@@ -131,7 +121,9 @@ public class VacationDao extends AbstractSqlDao {
 	 * @throws Exception
 	 */
 	public void deleteVacationById(int id) throws Exception {
-		sqlClient.delete(getSql("deleteVacations"), params("id", id));
+		SqlParamBuilder builder = SqlParamBuilder.with().withParam("id", id);
+		MapSqlParameterSource params = builder.build();
+		delete(getSql("deleteVacations", params), params);
 	}
 
 	/**
@@ -142,6 +134,8 @@ public class VacationDao extends AbstractSqlDao {
 	 * @throws Exception
 	 */
 	public void deleteAllVacationsByUserId(int userId) throws Exception {
-		sqlClient.delete(getSql("deleteVacations"), params("userId", userId));
+		SqlParamBuilder builder = SqlParamBuilder.with().withParam("userId", userId);
+		MapSqlParameterSource params = builder.build();
+		delete(getSql("deleteVacations", params), params);
 	}
 }

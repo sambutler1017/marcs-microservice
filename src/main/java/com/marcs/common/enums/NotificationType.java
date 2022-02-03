@@ -6,27 +6,17 @@ package com.marcs.common.enums;
  * @author Sam Butler
  * @since December 21, 2021
  */
-public enum NotificationType {
-    USER(1), VACATION(2);
+public enum NotificationType implements TextEnum {
+    USER("USER"), VACATION("VACATION");
 
-    private int id;
+    private String textId;
 
-    NotificationType(int type) {
-        this.id = type;
+    NotificationType(String textId) {
+        this.textId = textId;
     }
 
-    public int id() {
-        return id;
-    }
-
-    public static NotificationType getNotificationType(int id) {
-        for (NotificationType w : NotificationType.values())
-            if (w.id == id)
-                return w;
-        return USER;
-    }
-
-    public int getValue() {
-        return id;
+    @Override
+    public String getTextId() {
+        return textId;
     }
 }

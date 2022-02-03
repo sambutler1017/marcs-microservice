@@ -2,6 +2,7 @@ package com.marcs.app.vacation.service;
 
 import java.util.List;
 
+import com.google.common.collect.Sets;
 import com.marcs.app.notifications.client.NotificationClient;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.vacation.client.domain.Vacation;
@@ -62,7 +63,9 @@ public class VacationService {
 	 * @throws Exception
 	 */
 	public Vacation getVacationById(int id) throws Exception {
-		return vacationDao.getVacationById(id);
+		VacationRequest request = new VacationRequest();
+		request.setId(Sets.newHashSet(id));
+		return getVacations(request).get(0);
 	}
 
 	/**
@@ -73,7 +76,9 @@ public class VacationService {
 	 * @throws Exception
 	 */
 	public List<Vacation> getVacationsByUserId(int userId) throws Exception {
-		return vacationDao.getVacationsByUserId(userId);
+		VacationRequest request = new VacationRequest();
+		request.setUserId(Sets.newHashSet(userId));
+		return getVacations(request);
 	}
 
 	/**
@@ -139,11 +144,13 @@ public class VacationService {
 	 * @throws Exception
 	 */
 	public Vacation updateVacationDatesById(int id, Vacation vac) throws Exception {
-		getVacationById(id);
-		if (vac.getStartDate() == null || vac.getEndDate() == null) {
-			throw new Exception("Start Date AND End Date are required fields!");
-		}
-		return vacationDao.updateVacationDatesById(id, vac);
+		Vacation currentVac = getVacationById(id);
+
+		vac.setStartDate(vac.getStartDate() == null ? currentVac.getStartDate() : vac.getStartDate());
+		vac.setEndDate(vac.getEndDate() == null ? currentVac.getEndDate() : vac.getEndDate());
+
+		vacationDao.updateVacationDatesById(id, vac);
+		return getVacationById(id);
 	}
 
 	/**
@@ -155,12 +162,13 @@ public class VacationService {
 	 * @throws Exception
 	 */
 	public Vacation updateVacationInfoById(int id, Vacation vac) throws Exception {
-		getVacationById(id);
-		if (vac.getNotes() == null && vac.getStatus() == null) {
-			throw new Exception("Notes OR status is a required fields!");
-		}
+		Vacation currentVac = getVacationById(id);
 
-		return vacationDao.updateVacationInfoById(id, vac);
+		vac.setNotes(vac.getNotes() == null ? currentVac.getNotes() : vac.getNotes());
+		vac.setStatus(vac.getStatus() == null ? currentVac.getStatus() : vac.getStatus());
+
+		vacationDao.updateVacationInfoById(id, vac);
+		return getVacationById(id);
 	}
 
 	/**

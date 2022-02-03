@@ -1,23 +1,21 @@
 package com.marcs.common.abstracts;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.stream.Collectors;
+import java.util.List;
 
-import com.marcs.common.exceptions.SqlFragmentNotFoundException;
-import com.marcs.service.activeProfile.ActiveProfile;
-import com.marcs.sql.SqlClient;
-import com.marcs.sql.domain.SqlFragmentData;
-import com.marcs.sql.domain.SqlParams;
+import com.opengamma.elsql.ElSqlBundle;
+import com.opengamma.elsql.ElSqlConfig;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
 /**
  * Abstract class for building the DAO classes and running queries against the
- * database
+ * database.
  * 
  * @author Sam Butler
  * @since July 31, 2021
@@ -26,79 +24,129 @@ import org.springframework.stereotype.Service;
 @Scope("prototype")
 public abstract class AbstractSqlDao {
 
-    private final String defaultSqlPath = "%s/resources/dao/%s.sql";
+    private final NamedParameterJdbcTemplate template;
+    private final ElSqlBundle bundle;
 
-    @Autowired
-    protected ActiveProfile activeProfile;
+    public AbstractSqlDao() {
+        this.template = null;
+        this.bundle = null;
+    }
 
-    @Autowired
-    protected SqlClient sqlClient;
-
-    /**
-     * Gets the sql based on the given fragment name.
-     * 
-     * @param fragmentName Name of the sql fragment to search for.
-     * @return {@link AbstractSqlDao} instance containing the sql string.
-     * @throws SqlFragmentNotFoundException If the fragment can not be found in the
-     *                                      given file.
-     * @throws IOException
-     */
-    protected SqlFragmentData getSql(String fragmentName) throws Exception {
-        return getQueryFromFile(fragmentName, getChildClassName());
+    public AbstractSqlDao(NamedParameterJdbcTemplate template, ElSqlConfig config) {
+        this.template = template;
+        this.bundle = ElSqlBundle.of(config, this.getClass());
     }
 
     /**
-     * Gets the sql based on the given fragment name.
+     * Gets the default template for the datasource.
      * 
-     * @param fragmentName Name of the sql fragment to search for.
-     * @return {@link AbstractSqlDao} instance containing the sql string.
-     * @throws SqlFragmentNotFoundException If the fragment can not be found in the
-     *                                      given file.
-     * @throws IOException
+     * @return {@link NamedParameterJdbcTemplate} object.
      */
-    protected SqlFragmentData getSql(String fragmentName, String fileName) throws Exception {
-        return getQueryFromFile(fragmentName, fileName);
+    public NamedParameterJdbcTemplate getTemplate() {
+        return template;
     }
 
     /**
-     * Gets a {@link SqlParams} object to store the params to be used on the sql
-     * query.
+     * Does a get on the database for a single record. It will return the top most
+     * record if multiple rows are returned.
      * 
-     * @param name  The name of the field to store the object under.
-     * @param value The object to store in the params.
-     * @return Instance of {@link SqlParams} object with the added param.
+     * @param <T>    The object type of the method to cast the rows too.
+     * @param sql    The sql to run against the database.
+     * @param params Params to be inserted into the query.
+     * @param mapper The mapper to return the data as.
+     * @return Object of the returned data.
      */
-    protected SqlParams params(String name, Object value) {
-        return new SqlParams(name, value);
+    public <T> T get(String sql, MapSqlParameterSource params, RowMapper<T> mapper) {
+        return getTemplate().queryForObject(sql, params, mapper);
     }
 
     /**
-     * Gets the sql based on the given fragment name and name of the file to search
-     * in.
+     * Querys the database for a page of data. It will return the data as a list of
+     * the called object.
      * 
-     * @param fragmentName Name of the sql fragment to search for.
-     * @param fileName     Name of the file to search in.
-     * @return {@link List<String>} of the query found.
-     * @throws IOException If the file can't be found or Reader can't be closed.
+     * @param <T>    The object type of the method to cast the rows too.
+     * @param sql    The sql to run against the database.
+     * @param params Params to be inserted into the query.
+     * @param mapper The mapper to return the data as.
+     * @return List of the returned data.
      */
-    private SqlFragmentData getQueryFromFile(String fragmentName, String fileName) throws IOException {
-        String filePath = String.format(defaultSqlPath, activeProfile.getEnvironmentUrl(), getChildClassName());
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-
-        SqlFragmentData result = new SqlFragmentData(br.lines().collect(Collectors.toList()), fragmentName);
-
-        br.close();
-        return result;
+    public <T> List<T> getPage(String sql, MapSqlParameterSource params, RowMapper<T> mapper) {
+        return getTemplate().query(sql, params, mapper);
     }
 
     /**
-     * This will get the name of the child class. This is used when finding what
-     * file the sql fragment is contained in.
+     * Does an insertion into the database with the given sql and params. It will
+     * also get the auto incremented id of the table with the key holder.
      * 
-     * @return {@link String} of the filename
-     * @see #getSql(String)
+     * @param sql       The sql to run against the database.
+     * @param params    Params to be inserted into the query.
+     * @param keyHolder used to get the auto increment id.
      */
-    private String getChildClassName() {
-        return this.getClass().getSimpleName();
+    public void post(String sql, MapSqlParameterSource params, KeyHolder keyHolder) {
+        getTemplate().update(sql, params, keyHolder);
+    }
+
+    /**
+     * Does an insertion into the database with the given sql and params.
+     * 
+     * @param sql    The sql to run against the database.
+     * @param params Params to be inserted into the query.
+     */
+    public void post(String sql, MapSqlParameterSource params) {
+        getTemplate().update(sql, params);
+    }
+
+    /**
+     * Performs a delete on the database for the given sql.
+     * 
+     * @param sql    The sql to run against the database.
+     * @param params Params to be inserted into the query.
+     */
+    public void delete(String sql, MapSqlParameterSource params) {
+        getTemplate().update(sql, params);
+    }
+
+    /**
+     * Performs an update against the database.
+     * 
+     * @param sql    The sql to run against the database.
+     * @param params Params to be inserted into the query.
+     */
+    public void update(String sql, MapSqlParameterSource params) {
+        getTemplate().update(sql, params);
+    }
+
+    /**
+     * Gets the sql fragement for the given name and filters out any parameters that
+     * don't exist in the fragment.
+     * 
+     * @param name   The name of the sql fragement.
+     * @param params The params to filter out of the query.
+     * @return {@link String} of the filtered query.
+     */
+    protected String getSql(String name, SqlParameterSource params) {
+        return bundle.getSql(name, params).trim();
+    }
+
+    /**
+     * Gets the raw sql fragement string for the given name.
+     * 
+     * @param name The name of the sql fragement.
+     * @return {@link String} of the sql fragment.
+     */
+    protected String getSql(String name) {
+        return bundle.getSql(name).trim();
+    }
+
+    /**
+     * Creates a new {@link MapSqlParameterSource} object with the given name and
+     * value.
+     * 
+     * @param name  Name of the map to store the value under.
+     * @param value What value to store in the map.
+     * @return {@link MapSqlParameterSource} instance
+     */
+    protected MapSqlParameterSource parameterSource(String name, Object value) {
+        return new MapSqlParameterSource(name, value);
     }
 }

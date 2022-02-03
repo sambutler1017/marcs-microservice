@@ -3,6 +3,7 @@ package com.marcs.app.notifications.client.domain.request;
 import java.util.Set;
 
 import com.marcs.common.enums.NotificationType;
+import com.marcs.common.search.CommonParam;
 
 /**
  * Notification get request for filtering out request.
@@ -10,7 +11,7 @@ import com.marcs.common.enums.NotificationType;
  * @author Sam Butler
  * @since December 21, 2021
  */
-public class NotificationGetRequest {
+public class NotificationGetRequest implements CommonParam {
     private Set<Integer> id;
 
     private Set<NotificationType> type;

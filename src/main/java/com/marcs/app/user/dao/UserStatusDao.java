@@ -2,9 +2,16 @@ package com.marcs.app.user.dao;
 
 import static com.marcs.app.user.mapper.UserStatusMapper.USER_STATUS_MAPPER;
 
-import com.marcs.app.user.client.domain.UserStatus;
-import com.marcs.common.abstracts.AbstractSqlDao;
+import javax.sql.DataSource;
 
+import com.marcs.app.user.client.domain.UserStatus;
+import com.marcs.common.abstracts.BaseDao;
+import com.marcs.sql.SqlParamBuilder;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,7 +21,12 @@ import org.springframework.stereotype.Repository;
  * @since October 9, 2021
  */
 @Repository
-public class UserStatusDao extends AbstractSqlDao {
+public class UserStatusDao extends BaseDao {
+
+    @Autowired
+    public UserStatusDao(DataSource source) {
+        super(source);
+    }
 
     /**
      * Gets the status for the given user id.
@@ -24,7 +36,7 @@ public class UserStatusDao extends AbstractSqlDao {
      * @throws Exception
      */
     public UserStatus getUserStatusById(int userId) throws Exception {
-        return sqlClient.getTemplate(getSql("getUserStatusById"), params("userId", userId), USER_STATUS_MAPPER);
+        return get(getSql("getUserStatusById"), parameterSource("userId", userId), USER_STATUS_MAPPER);
     }
 
     /**
@@ -36,12 +48,16 @@ public class UserStatusDao extends AbstractSqlDao {
      * @throws Exception
      */
     public UserStatus insertUserStatus(UserStatus userStatus, int updatingUserId) throws Exception {
-        int requestId = sqlClient.post(getSql("insertUserStatus"),
-                params("userId", userStatus.getUserId()).addValue("accountStatus", userStatus.getAccountStatus())
-                        .addValue("appAccess", userStatus.isAppAccess())
-                        .addValue("updatedUserId", updatingUserId == -1 ? null : updatingUserId))
-                .get();
-        userStatus.setRequestId(requestId);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        SqlParamBuilder builder = SqlParamBuilder.with().withParam("userId", userStatus.getUserId())
+                .withParam("accountStatus", userStatus.getAccountStatus())
+                .withParam("appAccess", userStatus.isAppAccess())
+                .withParam("updatedUserId", updatingUserId == -1 ? null : updatingUserId);
+
+        MapSqlParameterSource params = builder.build();
+        post(getSql("insertUserStatus", params), params, keyHolder);
+
+        userStatus.setRequestId(keyHolder.getKey().intValue());
         return userStatus;
     }
 
@@ -56,10 +72,13 @@ public class UserStatusDao extends AbstractSqlDao {
         UserStatus currentStatus = getUserStatusById(id);
         userStatus = mapNonNullUserStatusFields(userStatus, currentStatus);
 
-        sqlClient.update(getSql("updateUserStatus"),
-                params("userId", id).addValue("appAccess", userStatus.isAppAccess())
-                        .addValue("accountStatus", userStatus.getAccountStatus())
-                        .addValue("updatedUserId", userStatus.getUpdatedUserId()));
+        SqlParamBuilder builder = SqlParamBuilder.with().withParam("userId", id)
+                .withParam("accountStatus", userStatus.getAccountStatus())
+                .withParam("appAccess", userStatus.isAppAccess())
+                .withParam("updatedUserId", userStatus.getUpdatedUserId());
+
+        MapSqlParameterSource params = builder.build();
+        update(getSql("updateUserStatus", params), params);
 
         return getUserStatusById(id);
     }

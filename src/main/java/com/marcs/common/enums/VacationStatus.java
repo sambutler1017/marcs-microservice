@@ -6,6 +6,17 @@ package com.marcs.common.enums;
  * @author Sam Butler
  * @since September 6, 2021
  */
-public enum VacationStatus {
-    APPROVED, DENIED, PENDING;
+public enum VacationStatus implements TextEnum {
+    APPROVED("APPROVED"), DENIED("DENIED"), PENDING("PENDING");
+
+    private String textId;
+
+    VacationStatus(String textId) {
+        this.textId = textId;
+    }
+
+    @Override
+    public String getTextId() {
+        return textId;
+    }
 }
