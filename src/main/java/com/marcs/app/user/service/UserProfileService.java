@@ -1,14 +1,13 @@
 package com.marcs.app.user.service;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import com.google.common.collect.Sets;
-import com.marcs.app.auth.client.AuthenticationClient;
 import com.marcs.app.email.client.EmailClient;
 import com.marcs.app.notifications.client.NotificationClient;
+import com.marcs.app.user.client.UserCredentialsClient;
+import com.marcs.app.user.client.UserStatusClient;
 import com.marcs.app.user.client.domain.Application;
-import com.marcs.app.user.client.domain.PasswordUpdate;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.UserStatus;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
@@ -17,7 +16,6 @@ import com.marcs.common.enums.AccountStatus;
 import com.marcs.common.exceptions.BaseException;
 import com.marcs.common.exceptions.InsufficientPermissionsException;
 import com.marcs.jwt.utility.JwtHolder;
-import com.marcs.service.util.PasswordUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,19 +33,16 @@ public class UserProfileService {
 	private UserProfileDao dao;
 
 	@Autowired
-	private UserCredentialsService userCredentialsService;
+	private UserCredentialsClient userCredentialsClient;
 
 	@Autowired
-	private UserStatusService userStatusService;
+	private UserStatusClient UserStatusClient;
 
 	@Autowired
 	private EmailClient emailClient;
 
 	@Autowired
 	private JwtHolder jwtHolder;
-
-	@Autowired
-	private AuthenticationClient authClient;
 
 	@Autowired
 	private NotificationClient notificationClient;
@@ -131,9 +126,8 @@ public class UserProfileService {
 	public User createUser(User user, AccountStatus accountStatus) throws Exception {
 		User newUser = dao.insertUser(user);
 
-		userCredentialsService.insertUserPassword(newUser.getId(),
-				PasswordUtil.hashPasswordWithSalt(user.getPassword()));
-		userStatusService.insertUserStatus(new UserStatus(newUser.getId(), accountStatus, user.isAppAccess()));
+		userCredentialsClient.insertUserPassword(newUser.getId(), user.getPassword());
+		UserStatusClient.insertUserStatus(new UserStatus(newUser.getId(), accountStatus, false));
 		notificationClient.createNotificationForUser(newUser);
 		return getUserById(newUser.getId());
 	}
@@ -152,9 +146,8 @@ public class UserProfileService {
 
 		User newUser = dao.insertUser(user);
 
-		userCredentialsService.insertUserPassword(newUser.getId(),
-				PasswordUtil.hashPasswordWithSalt(user.getPassword()));
-		userStatusService.insertUserStatus(new UserStatus(newUser.getId(), AccountStatus.APPROVED, user.isAppAccess()));
+		userCredentialsClient.insertUserPassword(newUser.getId(), user.getPassword());
+		UserStatusClient.insertUserStatus(new UserStatus(newUser.getId(), AccountStatus.APPROVED, user.isAppAccess()));
 
 		return getUserById(newUser.getId());
 	}
@@ -210,59 +203,6 @@ public class UserProfileService {
 	}
 
 	/**
-	 * This will take in a {@link PasswordUpdate} object that will confirm that the
-	 * current password matches the database password. If it does then it will
-	 * update the password to the new password.
-	 * 
-	 * @param passUpdate Object the holds the current password and new user password
-	 *                   to change it too.
-	 * @return {@link User} object of the user that was updated.
-	 * @throws Exception If the user can not be authenticated or the function was
-	 *                   not able to hash the new password.
-	 */
-	public User updateUserPassword(PasswordUpdate passUpdate) throws Exception {
-		authClient.authenticateUser(jwtHolder.getRequiredEmail(), passUpdate.getCurrentPassword()).getBody();
-		return passwordUpdate(jwtHolder.getRequiredUserId(), passUpdate.getNewPassword());
-	}
-
-	/**
-	 * Method that will take in an id and a PasswordUpdate object
-	 * 
-	 * @param passUpdate Object the holds the current password and new user password
-	 *                   to change it too.
-	 * @return {@link User} object of the user that was updated.
-	 * @throws Exception If the user can not be authenticated or the function was
-	 *                   not able to hash the new password.
-	 */
-	public User updateUserPasswordById(int userId, PasswordUpdate passUpdate) throws Exception {
-		User updatingUser = getUserById(userId);
-		if (userId != updatingUser.getId() && jwtHolder.getWebRole().id() <= updatingUser.getWebRole().id()) {
-			throw new InsufficientPermissionsException(
-					String.format("Your role of '%s' can not update a user of role '%s'", jwtHolder.getWebRole(),
-							updatingUser.getWebRole()));
-		}
-		return passwordUpdate(userId, passUpdate.getNewPassword());
-	}
-
-	/**
-	 * This will get called when a user has forgotten their password. This will
-	 * allow them to reset it.
-	 * 
-	 * @param passUpdate Object the holds the current password and new user password
-	 *                   to change it too.
-	 * @return {@link User} object of the user that was updated.
-	 * @throws Exception If the user can not be authenticated or the function was
-	 *                   not able to hash the new password.
-	 */
-	public User resetUserPassword(String pass) throws Exception {
-		if (!jwtHolder.getRequiredResetPassword()) {
-			throw new Exception("Invalid token for reset password!");
-		}
-
-		return passwordUpdate(jwtHolder.getRequiredUserId(), pass);
-	}
-
-	/**
 	 * Delete the user for the given id.
 	 * 
 	 * @param id The id of the user being deleted
@@ -282,25 +222,5 @@ public class UserProfileService {
 	 */
 	private User updateUserProfile(int userId, User user) throws Exception {
 		return dao.updateUserProfile(userId, user);
-	}
-
-	/**
-	 * Update the users credentials.
-	 * 
-	 * @param userId   Id of the user wanting to update their password.
-	 * @param password THe password to update on the user's account.
-	 * @return user associated to that id with the updated information
-	 * @throws Exception
-	 */
-	private User passwordUpdate(int userId, String password) throws Exception {
-		try {
-			if (password != null && password.trim() != "") {
-				return userCredentialsService.updateUserPassword(userId, PasswordUtil.hashPasswordWithSalt(password));
-			} else {
-				return getCurrentUser();
-			}
-		} catch (NoSuchAlgorithmException e) {
-			throw new BaseException("Could not hash password!");
-		}
 	}
 }

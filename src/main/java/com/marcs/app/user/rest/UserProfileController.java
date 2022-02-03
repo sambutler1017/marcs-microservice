@@ -5,7 +5,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import java.util.List;
 
 import com.marcs.app.user.client.domain.Application;
-import com.marcs.app.user.client.domain.PasswordUpdate;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.app.user.service.UserProfileService;
@@ -160,50 +159,6 @@ public class UserProfileController {
 	@PutMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public User updateUserProfileById(@PathVariable int id, @RequestBody User user) throws Exception {
 		return userService.updateUserProfileById(id, user);
-	}
-
-	/**
-	 * This will take in a {@link PasswordUpdate} object that will confirm that the
-	 * current password matches the database password. If it does then it will
-	 * update the password to the new password.
-	 * 
-	 * @param passUpdate Object the holds the current password and new user password
-	 *                   to change it too.
-	 * @return {@link User} object of the user that was updated.
-	 * @throws Exception If the user can not be authenticated or it failed to hash
-	 *                   the new password.
-	 */
-	@PutMapping(path = "/password", produces = APPLICATION_JSON_VALUE)
-	public User updateUserPassword(@RequestBody PasswordUpdate passUpdate) throws Exception {
-		return userService.updateUserPassword(passUpdate);
-	}
-
-	/**
-	 * This will take in a {@link PasswordUpdate} object and a user id that needs
-	 * the password updated.
-	 * 
-	 * @param passUpdate Object the holds the current password and new user password
-	 *                   to change it too.
-	 * @return {@link User} object of the user that was updated.
-	 */
-	@PutMapping(path = "/password/{id}", produces = APPLICATION_JSON_VALUE)
-	public User updateUserPasswordById(@PathVariable int id, @RequestBody PasswordUpdate passUpdate) throws Exception {
-		return userService.updateUserPasswordById(id, passUpdate);
-	}
-
-	/**
-	 * This will get called when a user has forgotten their password. This will
-	 * allow them to reset it.
-	 * 
-	 * @param passUpdate Object the holds the current password and new user password
-	 *                   to change it too.
-	 * @return {@link User} object of the user that was updated.
-	 * @throws Exception If the user can not be authenticated or it failed to hash
-	 *                   the new password.
-	 */
-	@PutMapping(path = "/password/reset", produces = APPLICATION_JSON_VALUE)
-	public User resetUserPassword(@RequestBody PasswordUpdate passUpdate) throws Exception {
-		return userService.resetUserPassword(passUpdate.getNewPassword());
 	}
 
 	/**

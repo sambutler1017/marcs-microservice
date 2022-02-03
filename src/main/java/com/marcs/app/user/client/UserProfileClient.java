@@ -2,13 +2,13 @@ package com.marcs.app.user.client;
 
 import java.util.List;
 
+import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.app.user.rest.UserProfileController;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * This class exposes the user endpoint's to other app's to pull data across the
@@ -17,11 +17,11 @@ import org.springframework.stereotype.Component;
  * @author Sam Butler
  * @since June 25, 2020
  */
-@Component
+@Client
 public class UserProfileClient {
 
 	@Autowired
-	private UserProfileController userController;
+	private UserProfileController controller;
 
 	/**
 	 * Get users based on given request filter
@@ -31,7 +31,7 @@ public class UserProfileClient {
 	 * @throws Exception
 	 */
 	public List<User> getUsers(UserGetRequest request) throws Exception {
-		return userController.getUsers(request);
+		return controller.getUsers(request);
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class UserProfileClient {
 	 * @throws Exception
 	 */
 	public User getCurrentUser() throws Exception {
-		return userController.getCurrentUser();
+		return controller.getCurrentUser();
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class UserProfileClient {
 	 * @throws Exception
 	 */
 	public User getUserById(int id) throws Exception {
-		return userController.getUserById(id);
+		return controller.getUserById(id);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class UserProfileClient {
 	 * @throws Exception
 	 */
 	public List<Application> getUserApps() throws Exception {
-		return userController.getUserApps();
+		return controller.getUserApps();
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class UserProfileClient {
 	 * @since May 13, 2020
 	 */
 	public List<Application> getUserAppsById(int id) throws Exception {
-		return userController.getUserAppsById(id);
+		return controller.getUserAppsById(id);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class UserProfileClient {
 	 * @throws Exception
 	 */
 	public User createUser(User user) throws Exception {
-		return userController.createUser(user);
+		return controller.createUser(user);
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class UserProfileClient {
 	 * @throws Exception
 	 */
 	public User addNewUser(User user) throws Exception {
-		return userController.addNewUser(user);
+		return controller.addNewUser(user);
 	}
 
 	/**
@@ -104,6 +104,6 @@ public class UserProfileClient {
 	 * @param id The id of the user being deleted
 	 */
 	public void deleteUser(int id) throws Exception {
-		userController.deleteUser(id);
+		controller.deleteUser(id);
 	}
 }

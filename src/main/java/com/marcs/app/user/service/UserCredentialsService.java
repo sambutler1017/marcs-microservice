@@ -1,8 +1,17 @@
 package com.marcs.app.user.service;
 
+import java.security.NoSuchAlgorithmException;
+
+import com.marcs.app.auth.client.AuthenticationClient;
 import com.marcs.app.auth.client.domain.AuthPassword;
+import com.marcs.app.user.client.UserProfileClient;
+import com.marcs.app.user.client.domain.PasswordUpdate;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.dao.UserCredentialsDao;
+import com.marcs.common.exceptions.BaseException;
+import com.marcs.common.exceptions.InsufficientPermissionsException;
+import com.marcs.jwt.utility.JwtHolder;
+import com.marcs.service.util.PasswordUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,6 +29,15 @@ public class UserCredentialsService {
     @Autowired
     private UserCredentialsDao dao;
 
+    @Autowired
+    private JwtHolder jwtHolder;
+
+    @Autowired
+    private AuthenticationClient authClient;
+
+    @Autowired
+    private UserProfileClient userProfileClient;
+
     /**
      * This will be called when new users are created so that they have default
      * passwords. This will only be called when someone else is creating a user
@@ -29,20 +47,81 @@ public class UserCredentialsService {
      * @param authPass Contains the hashed password and salt value.
      * @throws Exception
      */
-    public void insertUserPassword(int userId, AuthPassword authPass) throws Exception {
-        dao.insertUserPassword(userId, authPass);
+    public void insertUserPassword(int userId, String pass) throws Exception {
+        AuthPassword encryptedPass = PasswordUtil.hashPasswordWithSalt(pass);
+        dao.insertUserPassword(userId, encryptedPass);
     }
 
     /**
-     * Update the users password, for the given password.
+     * This will take in a {@link PasswordUpdate} object that will confirm that the
+     * current password matches the database password. If it does then it will
+     * update the password to the new password.
      * 
-     * @param userId   Id of the use that is being updated.
-     * @param password The password to set on the user profile.
-     * @param salt     The salt value that was appended to the password.
+     * @param passUpdate Object the holds the current password and new user password
+     *                   to change it too.
+     * @return {@link User} object of the user that was updated.
+     * @throws Exception If the user can not be authenticated or the function was
+     *                   not able to hash the new password.
+     */
+    public User updateUserPassword(PasswordUpdate passUpdate) throws Exception {
+        authClient.authenticateUser(jwtHolder.getRequiredEmail(), passUpdate.getCurrentPassword()).getBody();
+        return passwordUpdate(jwtHolder.getRequiredUserId(), passUpdate.getNewPassword());
+    }
+
+    /**
+     * Method that will take in an id and a PasswordUpdate object
+     * 
+     * @param passUpdate Object the holds the current password and new user password
+     *                   to change it too.
+     * @return {@link User} object of the user that was updated.
+     * @throws Exception If the user can not be authenticated or the function was
+     *                   not able to hash the new password.
+     */
+    public User updateUserPasswordById(int userId, PasswordUpdate passUpdate) throws Exception {
+        User updatingUser = userProfileClient.getUserById(userId);
+        if (userId != updatingUser.getId() && jwtHolder.getWebRole().id() <= updatingUser.getWebRole().id()) {
+            throw new InsufficientPermissionsException(
+                    String.format("Your role of '%s' can not update a user of role '%s'", jwtHolder.getWebRole(),
+                            updatingUser.getWebRole()));
+        }
+        return passwordUpdate(userId, passUpdate.getNewPassword());
+    }
+
+    /**
+     * This will get called when a user has forgotten their password. This will
+     * allow them to reset it.
+     * 
+     * @param passUpdate Object the holds the current password and new user password
+     *                   to change it too.
+     * @return {@link User} object of the user that was updated.
+     * @throws Exception If the user can not be authenticated or the function was
+     *                   not able to hash the new password.
+     */
+    public User resetUserPassword(String pass) throws Exception {
+        if (!jwtHolder.getRequiredResetPassword()) {
+            throw new Exception("Invalid token for reset password!");
+        }
+
+        return passwordUpdate(jwtHolder.getRequiredUserId(), pass);
+    }
+
+    /**
+     * Update the users credentials.
+     * 
+     * @param userId   Id of the user wanting to update their password.
+     * @param password THe password to update on the user's account.
      * @return user associated to that id with the updated information
      * @throws Exception
      */
-    public User updateUserPassword(int userId, AuthPassword authPassword) throws Exception {
-        return dao.updateUserPassword(userId, authPassword);
+    private User passwordUpdate(int userId, String password) throws Exception {
+        try {
+            if (password != null && password.trim() != "") {
+                return dao.updateUserPassword(userId, PasswordUtil.hashPasswordWithSalt(password));
+            } else {
+                return userProfileClient.getCurrentUser();
+            }
+        } catch (NoSuchAlgorithmException e) {
+            throw new BaseException("Could not hash password!");
+        }
     }
 }
