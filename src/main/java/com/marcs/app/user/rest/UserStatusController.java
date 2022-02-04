@@ -57,4 +57,18 @@ public class UserStatusController {
             throws Exception {
         return service.updateUserStatusByUserId(id, userStatus);
     }
+
+    /**
+     * Updates a users app access for the given user id
+     * 
+     * @param id        The id of the user to get the status for.
+     * @param appAccess boolean determining what access the user has.
+     * @return {@link UserStatus} object
+     * @throws Exception
+     */
+    @PutMapping(path = "/{id}/access/{appAccess}", produces = APPLICATION_JSON_VALUE)
+    public UserStatus updateUserAppAccessByUserId(@PathVariable int id, @PathVariable Boolean appAccess)
+            throws Exception {
+        return service.updateUserAppAccessByUserId(id, appAccess);
+    }
 }

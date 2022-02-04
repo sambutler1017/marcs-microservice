@@ -60,4 +60,17 @@ public class UserStatusService {
         emailClient.sendUserAccountUpdateStatusEmail(id, userStatus.getAccountStatus());
         return dao.updateUserStatusByUserId(id, userStatus);
     }
+
+    /**
+     * Updates a users app access for the given user id
+     * 
+     * @param id        The id of the user to get the status for.
+     * @param appAccess boolean determining what access the user has.
+     * @return {@link UserStatus} object
+     * @throws Exception
+     */
+    public UserStatus updateUserAppAccessByUserId(int id, Boolean appAccess)
+            throws Exception {
+        return dao.updateUserStatusByUserId(id, new UserStatus(this.jwtHolder.getRequiredUserId(), null, appAccess));
+    }
 }
