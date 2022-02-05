@@ -46,5 +46,17 @@
   WHERE
     st.id = :storeId
 
+@NAME(updateStoreManagerByStoreId)
+  UPDATE stores
+  SET
+    manager_id = :managerId
+  WHERE id = :storeId
+
+@NAME(updateRegionalOfStore)
+  UPDATE stores
+  SET
+    regional_id = :regionalId
+  WHERE id = :storeId
+
 @NAME(search)
   (@VALUE(:searchContent))

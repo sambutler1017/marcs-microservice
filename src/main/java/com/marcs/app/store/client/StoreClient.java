@@ -64,4 +64,30 @@ public class StoreClient {
 	public User getManagerOfStoreById(String storeId) throws Exception {
 		return controller.getManagerOfStoreById(storeId);
 	}
+
+	/**
+	 * This will update the manager of a store. It will take in a user id to update
+	 * the manager too and a store Id to say what store the manager should be
+	 * updated at.
+	 * 
+	 * @param userId  The user id of the manager.
+	 * @param storeId The store Id to update the manager at.
+	 * @return {@link Store} object with the updated manager.
+	 * @throws Exception
+	 */
+	public Store updateStoreManagerOfStore(int userId, String storeId) throws Exception {
+		return controller.updateStoreManagerOfStore(userId, storeId);
+	}
+
+	/**
+	 * This will update the regional of a store.
+	 * 
+	 * @param userId  The user id of the regional.
+	 * @param storeId The store Id to update the regional at.
+	 * @return {@link Store} object with the updated regional.
+	 * @throws Exception
+	 */
+	public Store updateRegionalOfStore(int userId, String storeId) throws Exception {
+		return controller.updateRegionalOfStore(userId, storeId);
+	}
 }

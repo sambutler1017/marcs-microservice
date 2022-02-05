@@ -99,6 +99,29 @@ public class UserProfileClient {
 	}
 
 	/**
+	 * Update the user's information such as email, first name, last name, and
+	 * password
+	 * 
+	 * @param user what information on the user needs to be updated.
+	 * @return user associated to that id with the updated information
+	 * @throws Exception
+	 */
+	public User updateUserProfile(User user) throws Exception {
+		return controller.updateUserProfile(user);
+	}
+
+	/**
+	 * Updates a user for the given id.
+	 * 
+	 * @param id of the user
+	 * @return user associated to that id with the updated information
+	 * @throws Exception
+	 */
+	public User updateUserProfileById(int id, User user) throws Exception {
+		return controller.updateUserProfileById(id, user);
+	}
+
+	/**
 	 * Delete the user for the given id.
 	 * 
 	 * @param id The id of the user being deleted

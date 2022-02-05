@@ -13,6 +13,7 @@ import com.marcs.app.user.client.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestApiController
@@ -66,5 +67,33 @@ public class StoreController {
 	@GetMapping(path = "/manager/{storeId}", produces = APPLICATION_JSON_VALUE)
 	public User getManagerOfStoreById(@PathVariable String storeId) throws Exception {
 		return service.getManagerOfStoreById(storeId);
+	}
+
+	/**
+	 * This will update the manager of a store. It will take in a user id to update
+	 * the manager too and a store Id to say what store the manager should be
+	 * updated at.
+	 * 
+	 * @param userId  The user id of the manager.
+	 * @param storeId The store Id to update the manager at.
+	 * @return {@link Store} object with the updated manager.
+	 * @throws Exception
+	 */
+	@PutMapping(path = "{userId}/manager/{storeId}", produces = APPLICATION_JSON_VALUE)
+	public Store updateStoreManagerOfStore(@PathVariable int userId, @PathVariable String storeId) throws Exception {
+		return service.updateStoreManagerOfStore(userId, storeId);
+	}
+
+	/**
+	 * This will update the regional of a store.
+	 * 
+	 * @param userId  The user id of the regional.
+	 * @param storeId The store Id to update the regional at.
+	 * @return {@link Store} object with the updated regional.
+	 * @throws Exception
+	 */
+	@PutMapping(path = "{userId}/regional/{storeId}", produces = APPLICATION_JSON_VALUE)
+	public Store updateRegionalOfStore(@PathVariable int userId, @PathVariable String storeId) throws Exception {
+		return service.updateRegionalOfStore(userId, storeId);
 	}
 }

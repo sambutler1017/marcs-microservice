@@ -156,7 +156,7 @@ public class UserProfileDao extends BaseDao {
 				.withParam("email", user.getEmail()).withParam("storeId", user.getStoreId())
 				.withParam("webRoleId", user.getWebRole().getRank())
 				.withParam("hireDate", user.getHireDate())
-				.withParam("id", userProfile.getId())
+				.withParam("id", userId)
 				.withParam("emailReportsEnabled", user.isEmailReportsEnabled());
 		MapSqlParameterSource params = builder.build();
 		update(getSql("updateUserProfile", params), params);
