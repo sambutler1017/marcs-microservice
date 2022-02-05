@@ -16,7 +16,7 @@
     @AND(:storeId)
       st.id IN (:storeId)
     @AND(:regionalId)
-      st.regional_id IN ():regionalId)
+      st.regional_id IN (:regionalId)
     @AND(:email)
       up.email IN (:email)
     @AND(:webRole)
