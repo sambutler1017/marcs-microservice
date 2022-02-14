@@ -34,8 +34,8 @@
       user_id = :userId
 
 @NAME(insertVacation)
-  INSERT INTO user_vacations (`user_id`,`start_date`,`end_date`, `status`)
-  VALUES (:userId, :startDate, :endDate, :status)
+  INSERT INTO user_vacations (user_id, start_date, end_date, status, notes)
+  VALUES (:userId, :startDate, :endDate, :status, :notes)
 
 @NAME(updateVacationInfoById)
   UPDATE user_vacations

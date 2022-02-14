@@ -75,7 +75,8 @@ public class VacationDao extends BaseDao {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParamBuilder builder = SqlParamBuilder.with().withParam("userId", id)
 				.withParam("startDate", vac.getStartDate()).withParam("endDate", vac.getEndDate())
-				.withParam("status", vac.getStatus() == null ? VacationStatus.APPROVED : vac.getStatus());
+				.withParam("status", vac.getStatus() == null ? VacationStatus.APPROVED : vac.getStatus())
+				.withParam("notes", vac.getNotes());
 		MapSqlParameterSource params = builder.build();
 
 		post(getSql("insertVacation"), params, keyHolder);
