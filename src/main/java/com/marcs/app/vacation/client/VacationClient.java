@@ -42,4 +42,12 @@ public class VacationClient {
 	public List<Vacation> getVacationsByUserId(int id) throws Exception {
 		return controller.getVacationsByUserId(id);
 	}
+
+	/**
+	 * Simple helper method to mark the vacations stored as expired if the date has
+	 * already passed.
+	 */
+	public void markExpiredVacations() {
+		controller.markExpiredVacations();
+	}
 }

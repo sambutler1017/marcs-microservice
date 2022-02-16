@@ -51,3 +51,9 @@
     end_date = :endDate
   WHERE id = :id
 
+@NAME(markExpiredVacations)
+  UPDATE user_vacations 
+  SET 
+    status = 'EXPIRED'
+  WHERE end_date < CURRENT_DATE()
+  AND status != 'EXPIRED'

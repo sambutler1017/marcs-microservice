@@ -7,7 +7,7 @@ package com.marcs.common.enums;
  * @since September 6, 2021
  */
 public enum VacationStatus implements TextEnum {
-    APPROVED("APPROVED"), DENIED("DENIED"), PENDING("PENDING");
+    APPROVED("APPROVED"), DENIED("DENIED"), PENDING("PENDING"), EXPIRED("EXPIRED");
 
     private String textId;
 

@@ -84,6 +84,15 @@ public class VacationDao extends BaseDao {
 	}
 
 	/**
+	 * Simple helper method to mark the vacations stored as expired if the date has
+	 * already passed.
+	 */
+	public void markExpiredVacations() {
+		MapSqlParameterSource params = SqlParamBuilder.with().build();
+		delete(getSql("markExpiredVacations", params), params);
+	}
+
+	/**
 	 * This will update the vacations dates for the given vacation id.
 	 * 
 	 * @param id  The id of the vacation to be updates.

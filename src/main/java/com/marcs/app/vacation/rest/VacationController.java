@@ -124,6 +124,15 @@ public class VacationController {
 	}
 
 	/**
+	 * Simple helper method to mark the vacations stored as expired if the date has
+	 * already passed.
+	 */
+	@PostMapping("/mark-expired")
+	public void markExpiredVacations() {
+		vacationSerivce.markExpiredVacations();
+	}
+
+	/**
 	 * This will update the vacations dates for the given vacation id.
 	 * 
 	 * @param id  The id of the vacation to be updates.
