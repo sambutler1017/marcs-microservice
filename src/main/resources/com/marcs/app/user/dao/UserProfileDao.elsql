@@ -36,7 +36,7 @@
     LEFT JOIN stores st ON up.store_id = st.id
     JOIN user_status us ON up.id = us.user_id
   @INCLUDE(userFilters)
-  ORDER BY st.name
+  ORDER BY st.name, up.web_role_id DESC
 
 @NAME(getApplications)
   SELECT 
