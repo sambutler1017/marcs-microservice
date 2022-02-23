@@ -18,3 +18,12 @@
   WHERE
     id = :id
 
+@NAME(updateBlockOutDateById)
+  UPDATE block_out_dates 
+  SET 
+    start_date = :startDate,
+    end_date = :endDate,
+    insert_user_id = :insertUserId
+  WHERE
+    id = :id
+

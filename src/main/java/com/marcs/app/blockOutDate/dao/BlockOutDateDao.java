@@ -49,6 +49,30 @@ public class BlockOutDateDao extends BaseDao {
 	}
 
 	/**
+	 * Method to update the given block out date with the passed in body and the
+	 * given id.
+	 * 
+	 * @param id        The id of the block out date to update.
+	 * @param blockDate The block out date body to be updated.
+	 * @return {@link BlockOutDate} with the updated fields.
+	 * @throws Exception
+	 */
+	public BlockOutDate updateBlockOutDateById(int id, BlockOutDate currentBlockOutDate, BlockOutDate blockDate)
+			throws Exception {
+
+		blockDate = mapNonNullBlockOutDateFields(blockDate, currentBlockOutDate);
+
+		SqlParamBuilder builder = SqlParamBuilder.with().withParam("startDate", blockDate.getStartDate())
+				.withParam("endDate", blockDate.getEndDate())
+				.withParam("insertUserId", blockDate.getInsertUserId()).withParam("id", id);
+		MapSqlParameterSource params = builder.build();
+		update(getSql("updateBlockOutDateById", params), params);
+
+		blockDate.setId(id);
+		return blockDate;
+	}
+
+	/**
 	 * This will create a new block out date with the passed in request body
 	 * 
 	 * @param blockDate The block out date that needs to be created.
@@ -75,5 +99,22 @@ public class BlockOutDateDao extends BaseDao {
 	 */
 	public void deleteBlockOutDate(int id) throws Exception {
 		delete(getSql("deleteBlockOutDate"), parameterSource("id", id));
+	}
+
+	/**
+	 * Maps non null block out date fields from the source to the desitnation.
+	 * 
+	 * @param destination Where the null fields should be replaced.
+	 * @param source      Where to get the replacements for the null fields.
+	 * @return {@link BlockOutDate} with the replaced fields.
+	 */
+	private BlockOutDate mapNonNullBlockOutDateFields(BlockOutDate destination, BlockOutDate source) {
+		if (destination.getStartDate() == null)
+			destination.setStartDate(source.getStartDate());
+		if (destination.getEndDate() == null)
+			destination.setEndDate(source.getEndDate());
+		if (destination.getInsertUserId() == 0)
+			destination.setInsertUserId(source.getInsertUserId());
+		return destination;
 	}
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -46,6 +47,21 @@ public class BlockOutDateController {
 	@GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public BlockOutDate getBlockOutDateById(@PathVariable int id) throws Exception {
 		return service.getBlockOutDateById(id);
+	}
+
+	/**
+	 * Method to update the given block out date with the passed in body and the
+	 * given id.
+	 * 
+	 * @param id        The id of the block out date to update.
+	 * @param blockDate The block out date body to be updated.
+	 * @return {@link BlockOutDate} with the updated fields.
+	 * @throws Exception
+	 */
+	@PutMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
+	public BlockOutDate updateBlockOutDateById(@PathVariable int id, @RequestBody BlockOutDate blockDate)
+			throws Exception {
+		return service.updateBlockOutDateById(id, blockDate);
 	}
 
 	/**

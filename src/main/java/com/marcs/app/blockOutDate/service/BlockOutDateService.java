@@ -55,6 +55,22 @@ public class BlockOutDateService {
 	}
 
 	/**
+	 * Method to update the given block out date with the passed in body and the
+	 * given id.
+	 * 
+	 * @param id        The id of the block out date to update.
+	 * @param blockDate The block out date body to be updated.
+	 * @return {@link BlockOutDate} with the updated fields.
+	 * @throws Exception
+	 */
+	public BlockOutDate updateBlockOutDateById(int id, BlockOutDate blockDate)
+			throws Exception {
+		blockDate.setInsertUserId(jwtHolder.getRequiredUserId());
+		blockDate.setId(id);
+		return dao.updateBlockOutDateById(id, getBlockOutDateById(id), blockDate);
+	}
+
+	/**
 	 * This will create a new block out date with the passed in request body
 	 * 
 	 * @param blockDate The block out date that needs to be created.
