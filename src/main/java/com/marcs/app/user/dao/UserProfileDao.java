@@ -115,7 +115,8 @@ public class UserProfileDao extends BaseDao {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		SqlParamBuilder builder = SqlParamBuilder.with().useAllParams().withParam("firstName", user.getFirstName())
 				.withParam("lastName", user.getLastName()).withParam("email", user.getEmail())
-				.withParam("webRoleId", user.getWebRole().getRank()).withParam("storeId", user.getStoreId())
+				.withParam("webRoleId", user.getWebRole().getRank())
+				.withParam("storeId", user.getStoreId().trim() == "" ? null : user.getStoreId())
 				.withParam("hireDate",
 						user.getHireDate() == null ? LocalDate.now().toString() : user.getHireDate().toString());
 
@@ -125,15 +126,6 @@ public class UserProfileDao extends BaseDao {
 
 		user.setId(keyHolder.getKey().intValue());
 		return user;
-	}
-
-	/**
-	 * Delete the user for the given id.
-	 * 
-	 * @param id The id of the user being deleted
-	 */
-	public void deleteUser(int id) throws Exception {
-		delete(getSql("deleteUser"), parameterSource("id", id));
 	}
 
 	/**
@@ -153,7 +145,8 @@ public class UserProfileDao extends BaseDao {
 
 		SqlParamBuilder builder = SqlParamBuilder.with().withParam("firstName", user.getFirstName())
 				.withParam("lastName", user.getLastName())
-				.withParam("email", user.getEmail()).withParam("storeId", user.getStoreId())
+				.withParam("email", user.getEmail())
+				.withParam("storeId", user.getStoreId().trim() == "" ? null : user.getStoreId())
 				.withParam("webRoleId", user.getWebRole().getRank())
 				.withParam("hireDate", user.getHireDate())
 				.withParam("id", userId)
@@ -162,6 +155,15 @@ public class UserProfileDao extends BaseDao {
 		update(getSql("updateUserProfile", params), params);
 
 		return getUserById(userId);
+	}
+
+	/**
+	 * Delete the user for the given id.
+	 * 
+	 * @param id The id of the user being deleted
+	 */
+	public void deleteUser(int id) throws Exception {
+		delete(getSql("deleteUser"), parameterSource("id", id));
 	}
 
 	/**
