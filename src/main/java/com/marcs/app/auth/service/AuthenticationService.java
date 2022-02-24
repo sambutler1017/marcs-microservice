@@ -1,14 +1,16 @@
 package com.marcs.app.auth.service;
 
-import com.marcs.app.auth.client.domain.AuthPassword;
+import com.google.common.collect.Sets;
 import com.marcs.app.auth.dao.AuthenticationDao;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
+import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.exceptions.BaseException;
+import com.marcs.common.exceptions.InvalidCredentialsException;
 import com.marcs.jwt.utility.JwtHolder;
-import com.marcs.service.util.PasswordUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,15 +33,19 @@ public class AuthenticationService {
     private UserProfileClient userClient;
 
     /**
-     * Verifies user credentials passed as a JWTRequest
+     * Verifies user credentials.
      *
      * @param email    Entered email at login.
      * @param password Password entered at login.
      * @throws Exception Throw an exception if the credentials do not match.
      */
     public User verifyUser(String email, String password) throws Exception {
-        return validateUserAccess(authDao.authenticateUser(email,
-                PasswordUtil.hashPassword(new AuthPassword(password, authDao.getUserAuthPassword(email).getSalt()))));
+        if (BCrypt.checkpw(password, authDao.getUserAuthPassword(email))) {
+            return getAuthenticatedUser(email);
+        } else {
+            throw new InvalidCredentialsException("Invalid Credentials!");
+        }
+
     }
 
     /**
@@ -50,6 +56,20 @@ public class AuthenticationService {
      */
     public User getUserToAuthenticate() throws Exception {
         return validateUserAccess(userClient.getUserById(jwtHolder.getRequiredUserId()));
+    }
+
+    /**
+     * Get a user based on their email address. Used when a user has sucessfully
+     * authenticated.
+     * 
+     * @param email The email to search for.
+     * @return {@link User} object of the authenticated user.
+     * @throws Exception
+     */
+    private User getAuthenticatedUser(String email) throws Exception {
+        UserGetRequest request = new UserGetRequest();
+        request.setEmail(Sets.newHashSet(email));
+        return userClient.getUsers(request).get(0);
     }
 
     /**

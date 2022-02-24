@@ -61,6 +61,21 @@ public abstract class AbstractSqlDao {
     }
 
     /**
+     * Does a get on the database for a single record. It will return the top most
+     * record if multiple rows are returned. It will return the type of the passed
+     * in class.
+     * 
+     * @param <T>    The object type of the method to cast the rows too.
+     * @param sql    The sql to run against the database.
+     * @param params Params to be inserted into the query.
+     * @param clazz  The class to map the data as.
+     * @return Object of the returned data.
+     */
+    public <T> T get(String sql, MapSqlParameterSource params, Class<T> clazz) {
+        return getTemplate().queryForObject(sql, params, clazz);
+    }
+
+    /**
      * Querys the database for a page of data. It will return the data as a list of
      * the called object.
      * 

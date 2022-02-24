@@ -2,7 +2,6 @@ package com.marcs.app.user.dao;
 
 import javax.sql.DataSource;
 
-import com.marcs.app.auth.client.domain.AuthPassword;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.common.abstracts.BaseDao;
 
@@ -36,9 +35,8 @@ public class UserCredentialsDao extends BaseDao {
      * @param authPass Contains the hashed password and salt value.
      * @throws Exception
      */
-    public void insertUserPassword(int userId, AuthPassword authPass) throws Exception {
-        MapSqlParameterSource params = parameterSource("userId", userId)
-                .addValue("password", authPass.getPassword()).addValue("salt", authPass.getSalt());
+    public void insertUserPassword(int userId, String hashedPass) throws Exception {
+        MapSqlParameterSource params = parameterSource("userId", userId).addValue("password", hashedPass);
         post(getSql("insertUserPassword", params), params);
     }
 
@@ -51,11 +49,10 @@ public class UserCredentialsDao extends BaseDao {
      * @return user associated to that id with the updated information
      * @throws Exception
      */
-    public User updateUserPassword(int userId, AuthPassword authPassword) throws Exception {
+    public User updateUserPassword(int userId, String hashedPass) throws Exception {
         User userProfile = userProfileDao.getUserById(userId);
 
-        MapSqlParameterSource params = parameterSource("password", authPassword.getPassword())
-                .addValue("id", userProfile.getId()).addValue("salt", authPassword.getSalt());
+        MapSqlParameterSource params = parameterSource("password", hashedPass).addValue("id", userProfile.getId());
         update(getSql("updateUserPassword", params), params);
         return userProfile;
     }

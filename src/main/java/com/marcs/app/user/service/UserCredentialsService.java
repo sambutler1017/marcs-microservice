@@ -3,7 +3,6 @@ package com.marcs.app.user.service;
 import java.security.NoSuchAlgorithmException;
 
 import com.marcs.app.auth.client.AuthenticationClient;
-import com.marcs.app.auth.client.domain.AuthPassword;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.PasswordUpdate;
 import com.marcs.app.user.client.domain.User;
@@ -11,9 +10,9 @@ import com.marcs.app.user.dao.UserCredentialsDao;
 import com.marcs.common.exceptions.BaseException;
 import com.marcs.common.exceptions.InsufficientPermissionsException;
 import com.marcs.jwt.utility.JwtHolder;
-import com.marcs.service.util.PasswordUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
 /**
@@ -48,8 +47,7 @@ public class UserCredentialsService {
      * @throws Exception
      */
     public void insertUserPassword(int userId, String pass) throws Exception {
-        AuthPassword encryptedPass = PasswordUtil.hashPasswordWithSalt(pass);
-        dao.insertUserPassword(userId, encryptedPass);
+        dao.insertUserPassword(userId, BCrypt.hashpw(pass, BCrypt.gensalt()));
     }
 
     /**
@@ -116,7 +114,7 @@ public class UserCredentialsService {
     private User passwordUpdate(int userId, String password) throws Exception {
         try {
             if (password != null && password.trim() != "") {
-                return dao.updateUserPassword(userId, PasswordUtil.hashPasswordWithSalt(password));
+                return dao.updateUserPassword(userId, BCrypt.hashpw(password, BCrypt.gensalt()));
             } else {
                 return userProfileClient.getCurrentUser();
             }
