@@ -68,6 +68,20 @@ public class StoreDao extends BaseDao {
 	}
 
 	/**
+	 * This will update the information of a store. It will only be able to update
+	 * the store id, store name, and regional of the store.
+	 * 
+	 * @param storeId The store Id to update the manager at.
+	 * @param store   The information to be updated
+	 * @return {@link Store} object with the updated information.
+	 * @throws Exception
+	 */
+	public void updateStore(String storeId, Store store) throws Exception {
+		update(getSql("updateStore"), parameterSource("oldId", storeId).addValue("newId", store.getId())
+				.addValue("storeName", store.getName()));
+	}
+
+	/**
 	 * This will update the manager of a store. It will take in a user id to update
 	 * the manager too and a store Id to say what store the manager should be
 	 * updated at.
@@ -93,5 +107,33 @@ public class StoreDao extends BaseDao {
 	public void updateRegionalOfStore(int userId, String storeId) throws Exception {
 		update(getSql("updateRegionalOfStore"),
 				parameterSource("storeId", storeId).addValue("regionalId", userId));
+	}
+
+	/**
+	 * This will create a new store for the given store id, store name, and regional
+	 * on the store.
+	 * 
+	 * @param store The information to be created
+	 * @return {@link Store} object with the created information.
+	 * @throws Exception
+	 */
+	public Store createStore(Store store) throws Exception {
+		SqlParamBuilder builder = SqlParamBuilder.with().useAllParams().withParam("storeId", store.getId())
+				.withParam("storeName", store.getName())
+				.withParam("regionalId", store.getRegionalId());
+
+		MapSqlParameterSource params = builder.build();
+
+		post(getSql("insertStore", params), params);
+		return store;
+	}
+
+	/**
+	 * This will delete a store for the given store id.
+	 * 
+	 * @param storeId The store id of the store to be deleted.
+	 */
+	public void deleteStoreById(String storeId) {
+		delete(getSql("deleteStore"), parameterSource("storeId", storeId));
 	}
 }

@@ -46,6 +46,14 @@
   WHERE
     st.id = :storeId
 
+@NAME(updateStore)
+  UPDATE stores
+  SET
+    id = :newId,
+    name = :storeName
+  WHERE 
+    id = :oldId
+
 @NAME(updateStoreManagerByStoreId)
   UPDATE stores
   SET
@@ -56,6 +64,14 @@
   UPDATE stores
   SET
     regional_id = :regionalId
+  WHERE id = :storeId
+
+@NAME(insertStore)
+  INSERT INTO stores (id, name, regional_id)
+  VALUES (:storeId, :storeName, :regionalId)
+
+@NAME(deleteStore)
+  DELETE FROM stores
   WHERE id = :storeId
 
 @NAME(search)
