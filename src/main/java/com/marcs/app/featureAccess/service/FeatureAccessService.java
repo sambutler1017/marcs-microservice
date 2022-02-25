@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class FeatureAccessService {
 
     @Autowired
-    private FeatureAccessDao featureAccessDAO;
+    private FeatureAccessDao dao;
 
     /**
      * Gets the feature access in an application for user.
@@ -26,6 +26,6 @@ public class FeatureAccessService {
      * @return {@link Map} of the list of feature access.
      */
     public Map<String, List<Map<String, String>>> getFeatureAccess(int roleId) throws Exception {
-        return featureAccessDAO.getFeatureAccess(roleId);
+        return dao.getFeatureAccess(roleId);
     }
 }

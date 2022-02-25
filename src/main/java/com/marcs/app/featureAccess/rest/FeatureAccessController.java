@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class FeatureAccessController {
 
     @Autowired
-    private FeatureAccessService featureAccessService;
+    private FeatureAccessService service;
 
     /**
      * Gets the feature access in an application for user.
@@ -32,6 +32,6 @@ public class FeatureAccessController {
      */
     @GetMapping("/{webRoleId}")
     public Map<String, List<Map<String, String>>> getFeatureAccess(@PathVariable int webRoleId) throws Exception {
-        return featureAccessService.getFeatureAccess(webRoleId);
+        return service.getFeatureAccess(webRoleId);
     }
 }

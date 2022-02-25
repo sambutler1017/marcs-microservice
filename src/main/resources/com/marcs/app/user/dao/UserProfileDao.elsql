@@ -51,8 +51,8 @@
       JOIN
     application a ON wraa.app_id = a.id
   @WHERE
-    @AND(:id)
-      up.id = :id
+    @AND(:userId)
+      up.id = :userId
   ORDER BY a.id
 
 @NAME(insertUser)

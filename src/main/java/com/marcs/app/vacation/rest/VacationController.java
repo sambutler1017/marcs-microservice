@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class VacationController {
 
 	@Autowired
-	private VacationService vacationSerivce;
+	private VacationService service;
 
 	/**
 	 * Get list of vacations for the current request.
@@ -33,7 +33,7 @@ public class VacationController {
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	public List<Vacation> getVacations(VacationRequest request) throws Exception {
-		return vacationSerivce.getVacations(request);
+		return service.getVacations(request);
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class VacationController {
 	 */
 	@GetMapping(path = "/current-user", produces = APPLICATION_JSON_VALUE)
 	public List<Vacation> getCurrentUserVacations() throws Exception {
-		return vacationSerivce.getCurrentUserVacations();
+		return service.getCurrentUserVacations();
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class VacationController {
 	 */
 	@GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public Vacation getVacationById(@PathVariable int id) throws Exception {
-		return vacationSerivce.getVacationById(id);
+		return service.getVacationById(id);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class VacationController {
 	 */
 	@GetMapping(path = "/{userId}/user", produces = APPLICATION_JSON_VALUE)
 	public List<Vacation> getVacationsByUserId(@PathVariable int userId) throws Exception {
-		return vacationSerivce.getVacationsByUserId(userId);
+		return service.getVacationsByUserId(userId);
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class VacationController {
 	 */
 	@GetMapping(path = "/report", produces = APPLICATION_JSON_VALUE)
 	public List<Vacation> getVacationsForReport(VacationRequest request) throws Exception {
-		return vacationSerivce.getVacationsForReport(request);
+		return service.getVacationsForReport(request);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class VacationController {
 	 */
 	@PostMapping(path = "/{id}/user", produces = APPLICATION_JSON_VALUE)
 	public Vacation createVacation(@PathVariable int id, @RequestBody Vacation vac) throws Exception {
-		return vacationSerivce.createVacation(id, vac);
+		return service.createVacation(id, vac);
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class VacationController {
 	 */
 	@PostMapping(path = "/request", produces = APPLICATION_JSON_VALUE)
 	public Vacation requestVacation(@RequestBody Vacation vac) throws Exception {
-		return vacationSerivce.requestVacation(vac);
+		return service.requestVacation(vac);
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class VacationController {
 	@PostMapping(path = "/{id}/user/batch", produces = APPLICATION_JSON_VALUE)
 	public List<Vacation> createBatchVacations(@PathVariable int id, @RequestBody List<Vacation> vacs)
 			throws Exception {
-		return vacationSerivce.createBatchVacations(id, vacs);
+		return service.createBatchVacations(id, vacs);
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class VacationController {
 	 */
 	@PostMapping("/mark-expired")
 	public void markExpiredVacations() {
-		vacationSerivce.markExpiredVacations();
+		service.markExpiredVacations();
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class VacationController {
 	 */
 	@PutMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public Vacation updateVacationDatesById(@PathVariable int id, @RequestBody Vacation vac) throws Exception {
-		return vacationSerivce.updateVacationDatesById(id, vac);
+		return service.updateVacationDatesById(id, vac);
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class VacationController {
 	 */
 	@PutMapping(path = "/{id}/info", produces = APPLICATION_JSON_VALUE)
 	public Vacation updateVacationInfoById(@PathVariable int id, @RequestBody Vacation vac) throws Exception {
-		return vacationSerivce.updateVacationInfoById(id, vac);
+		return service.updateVacationInfoById(id, vac);
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class VacationController {
 	 */
 	@DeleteMapping()
 	public void deleteAllCurrentUserVacations() throws Exception {
-		vacationSerivce.deleteAllCurrentUserVacations();
+		service.deleteAllCurrentUserVacations();
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class VacationController {
 	 */
 	@DeleteMapping("/{id}")
 	public void deleteVacationById(@PathVariable int id) throws Exception {
-		vacationSerivce.deleteVacationById(id);
+		service.deleteVacationById(id);
 	}
 
 	/**
@@ -191,6 +191,6 @@ public class VacationController {
 	 */
 	@DeleteMapping("/{userId}/user")
 	public void deleteAllVacationsByUserId(@PathVariable int userId) throws Exception {
-		vacationSerivce.deleteAllVacationsByUserId(userId);
+		service.deleteAllVacationsByUserId(userId);
 	}
 }

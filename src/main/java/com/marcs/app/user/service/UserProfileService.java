@@ -33,16 +33,16 @@ public class UserProfileService {
 	private UserProfileDao dao;
 
 	@Autowired
+	private JwtHolder jwtHolder;
+
+	@Autowired
 	private UserCredentialsClient userCredentialsClient;
 
 	@Autowired
-	private UserStatusClient UserStatusClient;
+	private UserStatusClient userStatusClient;
 
 	@Autowired
 	private EmailClient emailClient;
-
-	@Autowired
-	private JwtHolder jwtHolder;
 
 	@Autowired
 	private NotificationClient notificationClient;
@@ -127,7 +127,7 @@ public class UserProfileService {
 		User newUser = dao.insertUser(user);
 
 		userCredentialsClient.insertUserPassword(newUser.getId(), user.getPassword());
-		UserStatusClient.insertUserStatus(new UserStatus(newUser.getId(), accountStatus, false));
+		userStatusClient.insertUserStatus(new UserStatus(newUser.getId(), accountStatus, false));
 		notificationClient.createNotificationForUser(newUser);
 		return getUserById(newUser.getId());
 	}
@@ -145,9 +145,8 @@ public class UserProfileService {
 		user.setAppAccess(true);
 
 		User newUser = dao.insertUser(user);
-
 		userCredentialsClient.insertUserPassword(newUser.getId(), user.getPassword());
-		UserStatusClient.insertUserStatus(new UserStatus(newUser.getId(), AccountStatus.APPROVED, user.isAppAccess()));
+		userStatusClient.insertUserStatus(new UserStatus(newUser.getId(), AccountStatus.APPROVED, user.isAppAccess()));
 
 		return getUserById(newUser.getId());
 	}

@@ -95,12 +95,13 @@ public class UserProfileDao extends BaseDao {
 	/**
 	 * End point to a get a list of users apps that they have access too
 	 * 
+	 * @param userId The user id to get the apps for.
 	 * @return List of Application objects {@link Application}
 	 * @throws Exception
 	 * @since May 13, 2020
 	 */
-	public List<Application> getUserApps(int id) throws Exception {
-		MapSqlParameterSource params = parameterSource("id", id);
+	public List<Application> getUserApps(int userId) throws Exception {
+		MapSqlParameterSource params = parameterSource("userId", userId);
 		return getPage(getSql("getApplications", params), params, APPLICATION_MAPPER);
 	}
 

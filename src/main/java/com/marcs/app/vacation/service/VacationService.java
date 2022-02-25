@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 public class VacationService {
 
 	@Autowired
-	private VacationDao vacationDao;
+	private VacationDao dao;
 
 	@Autowired
 	private JwtHolder jwtHolder;
@@ -42,7 +42,7 @@ public class VacationService {
 	 * @throws Exception
 	 */
 	public List<Vacation> getVacations(VacationRequest request) throws Exception {
-		return vacationDao.getVacations(request);
+		return dao.getVacations(request);
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class VacationService {
 	 * Get a list of vacations for the given user id.
 	 * 
 	 * @param userId The user id to get vacations for.
-	 * @return {@link Lst<Vacation>} for the user.
+	 * @return {@link List<Vacation>} for the user.
 	 * @throws Exception
 	 */
 	public List<Vacation> getVacationsByUserId(int userId) throws Exception {
@@ -84,11 +84,11 @@ public class VacationService {
 	/**
 	 * Get vacations for a report based on the current day.
 	 * 
-	 * @return {@link Lst<Vacation>} for the user.
+	 * @return {@link List<Vacation>} for the user.
 	 * @throws Exception
 	 */
 	public List<Vacation> getVacationsForReport(VacationRequest request) throws Exception {
-		return vacationDao.getVacationsForReport(request);
+		return dao.getVacationsForReport(request);
 	}
 
 	/**
@@ -96,12 +96,12 @@ public class VacationService {
 	 * 
 	 * @param id  The user id to get vacations for.
 	 * @param vac The vacation to be inserted.
-	 * @return {@link Lst<Vacation>} for the user.
+	 * @return {@link List<Vacation>} for the user.
 	 * @throws Exception
 	 */
 	public Vacation createVacation(int id, Vacation vac) throws Exception {
 		userClient.getUserById(id);
-		return getVacationById(vacationDao.createVacation(id, vac));
+		return getVacationById(dao.createVacation(id, vac));
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class VacationService {
 	 * already passed.
 	 */
 	public void markExpiredVacations() {
-		vacationDao.markExpiredVacations();
+		dao.markExpiredVacations();
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class VacationService {
 		vac.setStartDate(vac.getStartDate() == null ? currentVac.getStartDate() : vac.getStartDate());
 		vac.setEndDate(vac.getEndDate() == null ? currentVac.getEndDate() : vac.getEndDate());
 
-		vacationDao.updateVacationDatesById(id, vac);
+		dao.updateVacationDatesById(id, vac);
 		return getVacationById(id);
 	}
 
@@ -175,7 +175,7 @@ public class VacationService {
 		vac.setNotes(vac.getNotes() == null ? currentVac.getNotes() : vac.getNotes());
 		vac.setStatus(vac.getStatus() == null ? currentVac.getStatus() : vac.getStatus());
 
-		vacationDao.updateVacationInfoById(id, vac);
+		dao.updateVacationInfoById(id, vac);
 		return getVacationById(id);
 	}
 
@@ -198,7 +198,7 @@ public class VacationService {
 	 * @throws Exception
 	 */
 	public void deleteVacationById(int id) throws Exception {
-		vacationDao.deleteVacationById(id);
+		dao.deleteVacationById(id);
 	}
 
 	/**
@@ -209,6 +209,6 @@ public class VacationService {
 	 * @throws Exception
 	 */
 	public void deleteAllVacationsByUserId(int userId) throws Exception {
-		vacationDao.deleteAllVacationsByUserId(userId);
+		dao.deleteAllVacationsByUserId(userId);
 	}
 }
