@@ -101,9 +101,9 @@ public class EmailController {
      * @return The list of admins the email was sent too.
      * @throws Exception
      */
-    @PostMapping("/{userId}/contact")
-    public List<User> sendContactAdminEmail(@PathVariable int userId, @RequestBody String email) throws Exception {
-        return service.sendContactAdminEmail(userId, email);
+    @PostMapping("/contact")
+    public List<User> sendContactAdminEmail(@RequestBody String email) throws Exception {
+        return service.sendContactAdminEmail(email);
     }
 
     /**

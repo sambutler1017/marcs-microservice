@@ -184,8 +184,8 @@ public class EmailService {
      * @return The user email that was sent to the admin.
      * @throws Exception
      */
-    public List<User> sendContactAdminEmail(int userId, String email) throws Exception {
-        User emailUser = userClient.getUserById(userId);
+    public List<User> sendContactAdminEmail(String email) throws Exception {
+        User emailUser = userClient.getCurrentUser();
         String filePath = String.format("%s/ContactAdminEmail.html", BASE_HTML_PATH);
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         String emailContent = br.lines().collect(Collectors.joining(" "));
