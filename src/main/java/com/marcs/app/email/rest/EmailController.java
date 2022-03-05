@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RestApiController
 public class EmailController {
     @Autowired
-    private EmailService emailService;
+    private EmailService service;
 
     /**
      * {@link UserEmail} object to send a email too. Default from user will be the
@@ -37,7 +37,7 @@ public class EmailController {
     @PostMapping()
     public UserEmail sendEmail(@RequestBody UserEmail userEmail) throws Exception {
         userEmail.setFrom("marcsapp@outlook.com");
-        return emailService.sendEmail(userEmail, false);
+        return service.sendEmail(userEmail, false);
     }
 
     /**
@@ -49,7 +49,7 @@ public class EmailController {
      */
     @PostMapping("/forgot-password")
     public void forgotPassword(@RequestBody String email) throws Exception {
-        emailService.forgotPassword(email);
+        service.forgotPassword(email);
     }
 
     /**
@@ -61,7 +61,7 @@ public class EmailController {
      */
     @PostMapping("/report")
     public List<User> sendVacationReport() throws Exception {
-        return emailService.sendVacationReport();
+        return service.sendVacationReport();
     }
 
     /**
@@ -76,7 +76,7 @@ public class EmailController {
      */
     @PostMapping("/new-user")
     public void sendNewUserEmail(User newUser) throws Exception {
-        emailService.sendNewUserEmail(newUser);
+        service.sendNewUserEmail(newUser);
     }
 
     /**
@@ -89,6 +89,33 @@ public class EmailController {
     @PostMapping("/{id}/user/{status}/account-update")
     public User sendUserAccountUpdateStatusEmail(@PathVariable int id, @PathVariable AccountStatus status)
             throws Exception {
-        return emailService.sendUserAccountUpdateStatusEmail(id, status);
+        return service.sendUserAccountUpdateStatusEmail(id, status);
+    }
+
+    /**
+     * Email to contact the admin of the website with any questions or concerns that
+     * there may be.
+     * 
+     * @param userId The user id of the person sending the email.
+     * @param email  The email to be sent.
+     * @return The list of admins the email was sent too.
+     * @throws Exception
+     */
+    @PostMapping("/{userId}/contact")
+    public List<User> sendContactAdminEmail(@PathVariable int userId, @RequestBody String email) throws Exception {
+        return service.sendContactAdminEmail(userId, email);
+    }
+
+    /**
+     * Admin replying to a user that originally sent them an email.
+     * 
+     * @param userId The userId the message is going too.
+     * @param email  The email to be sent.
+     * @return The User who the message was sent too.
+     * @throws Exception
+     */
+    @PostMapping("/contact/{userId}/reply")
+    public User contactReplyToUserEmail(@PathVariable int userId, @RequestBody String email) throws Exception {
+        return service.contactReplyToUserEmail(userId, email);
     }
 }

@@ -177,6 +177,64 @@ public class EmailService {
     }
 
     /**
+     * Email to contact the admin of the website with any questions or concerns that
+     * there may be.
+     * 
+     * @param email The email to be sent.
+     * @return The user email that was sent to the admin.
+     * @throws Exception
+     */
+    public List<User> sendContactAdminEmail(int userId, String email) throws Exception {
+        User emailUser = userClient.getUserById(userId);
+        String filePath = String.format("%s/ContactAdminEmail.html", BASE_HTML_PATH);
+        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        String emailContent = br.lines().collect(Collectors.joining(" "));
+        br.close();
+
+        UserGetRequest request = new UserGetRequest();
+        request.setWebRole(Sets.newHashSet(WebRole.ADMIN));
+        List<User> adminUsers = userClient.getUsers(request);
+
+        for (User user : adminUsers) {
+            sendEmail(buildUserEmail(user.getEmail(), "New Message",
+                    emailContent
+                            .replace("::USER_NAME::",
+                                    String.format("%s %s (%s)", emailUser.getFirstName().trim(),
+                                            emailUser.getLastName().trim(), emailUser.getWebRole().toString()))
+                            .replace("::EMAIL_BODY::", email)),
+                    true);
+        }
+
+        return adminUsers;
+    }
+
+    /**
+     * Admin replying to a user that originally sent them an email.
+     * 
+     * @param userId The userId the message is going too.
+     * @param email  The email to be sent.
+     * @return The User who the message was sent too.
+     * @throws Exception
+     */
+    public User contactReplyToUserEmail(int userId, String email) throws Exception {
+        User emailUser = userClient.getCurrentUser();
+        String filePath = String.format("%s/ContactUserReplyEmail.html", BASE_HTML_PATH);
+        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        String emailContent = br.lines().collect(Collectors.joining(" "));
+        br.close();
+
+        User receipentUser = userClient.getUserById(userId);
+        sendEmail(buildUserEmail(receipentUser.getEmail(), "Message Reply from Admin",
+                emailContent
+                        .replace("::USER_NAME::",
+                                String.format("%s %s (%s)", emailUser.getFirstName().trim(),
+                                        emailUser.getLastName().trim(), emailUser.getWebRole().toString()))
+                        .replace("::EMAIL_BODY::", email)),
+                true);
+        return receipentUser;
+    }
+
+    /**
      * Builds out a {@link UserEmail} object.
      * 
      * @param to      Who the email is going too.
