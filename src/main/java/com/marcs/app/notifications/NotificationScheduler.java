@@ -22,8 +22,8 @@ public class NotificationScheduler {
     private EmailController emailController;
 
     /**
-     * Scheduler that gets run every Monday at 8:00 AM for sending a vacation report
-     * every who has it enabled.
+     * Scheduler that gets run every Monday at 8:00 AM (UTC) for sending a vacation
+     * report every who has it enabled.
      * 
      * @throws Exception If the reports were not able to be sent.
      */
