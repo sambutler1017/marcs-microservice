@@ -21,7 +21,13 @@ public class NotificationScheduler {
     @Autowired
     private EmailController emailController;
 
-    @Scheduled(cron = "0 0 13 * * MON", zone = "UTC")
+    /**
+     * Scheduler that gets run every Monday at 8:00 AM for sending a vacation report
+     * every who has it enabled.
+     * 
+     * @throws Exception If the reports were not able to be sent.
+     */
+    @Scheduled(cron = "0 0 12 * * MON", zone = "UTC")
     public void create() throws Exception {
         LOGGER.info("Sending Vacation Reports...");
         emailController.sendVacationReport();

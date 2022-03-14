@@ -89,7 +89,7 @@ public class VacationDao extends BaseDao {
 	 */
 	public void markExpiredVacations() {
 		MapSqlParameterSource params = SqlParamBuilder.with().build();
-		delete(getSql("markExpiredVacations", params), params);
+		update(getSql("markExpiredVacations", params), params);
 	}
 
 	/**

@@ -21,9 +21,15 @@ public class VacationScheduler {
     @Autowired
     private VacationClient vacationClient;
 
-    @Scheduled(cron = "0 0 13 * * *", zone = "UTC")
+    /**
+     * Scheduler that gets run every day at 12:00 AM (Midnight) for marking
+     * vacations as expired.
+     * 
+     * @throws Exception If the reports were not able to be sent.
+     */
+    @Scheduled(cron = "0 0 0 * * *", zone = "UTC")
     public void create() throws Exception {
-        LOGGER.info("Running Expired Vacation Script");
+        LOGGER.info("Running Expired Vacation Script...");
         vacationClient.markExpiredVacations();
         LOGGER.info("Vacations Marked Expired Complete!");
     }
