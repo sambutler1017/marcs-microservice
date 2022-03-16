@@ -33,13 +33,18 @@ public class JwtTokenValidator {
 
     /**
      * Checks to see if the token on the request is valid. If it is not valid then
-     * it wil throw an exception, otherwise it wil continue.
+     * it wil throw an exception, otherwise it wil continue. It will confirm that
+     * the token is in the right environment, check that it has the correct fields,
+     * that it is not expired, and the token signature is valid.
      *
      * @param request - The request that is being made to the endpint
-     * @return boolean saying if it is a valid token or not
-     * @throws IOException
+     * @throws IOException If the jwt token is not valid.
      */
-    public void isValidJwt(HttpServletRequest request) throws IOException {
+    public void validate(HttpServletRequest request) throws IOException {
+        if (isVoidEndpoint(request.getRequestURI(), request.getMethod())) {
+            return;
+        }
+
         final String tokenHeader = request.getHeader("Authorization");
 
         if (tokenHeader != null && tokenHeader.startsWith("Bearer: ")) {
