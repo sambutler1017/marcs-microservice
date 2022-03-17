@@ -1,10 +1,6 @@
 package com.marcs.jwt.config;
 
-import static com.marcs.jwt.config.JwtGlobals.VOID_ENDPOINTS;
-
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * JWT token validator class
+ * JWT token validator for confirming a token on a request header.
  *
  * @author Sam butler
  * @since Dec 5, 2020
@@ -41,10 +37,6 @@ public class JwtTokenValidator {
      * @throws IOException If the jwt token is not valid.
      */
     public void validate(HttpServletRequest request) throws IOException {
-        if (isVoidEndpoint(request.getRequestURI(), request.getMethod())) {
-            return;
-        }
-
         final String tokenHeader = request.getHeader("Authorization");
 
         if (tokenHeader != null && tokenHeader.startsWith("Bearer: ")) {
@@ -57,29 +49,6 @@ public class JwtTokenValidator {
         } else {
             doesTokenExist(tokenHeader);
         }
-    }
-
-    /**
-     * Checks to see if the endpoint that was called is a void endpoint or not.
-     *
-     * @param URI  - URI of the endpoint that was called
-     * @param type - What type of request was made (GET, POST, etc.)
-     * @return boolean based on if it is a void endpoint or not
-     */
-    public boolean isVoidEndpoint(String URI, String type) {
-        for (Map.Entry<String, List<String>> entry : VOID_ENDPOINTS.entrySet()) {
-            if (entry.getKey().equals(URI)) {
-                for (String endpointType : entry.getValue()) {
-                    if (endpointType.equals("ANY")) {
-                        return true;
-                    }
-                    if (endpointType.equals(type)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     /**
