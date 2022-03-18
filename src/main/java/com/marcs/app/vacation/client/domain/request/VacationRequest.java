@@ -21,6 +21,8 @@ public class VacationRequest implements CommonParam {
 
     private Set<VacationStatus> status;
 
+    private Set<String> storeId;
+
     public Set<Integer> getId() {
         return id;
     }
@@ -51,5 +53,13 @@ public class VacationRequest implements CommonParam {
 
     public void setStatus(Set<VacationStatus> status) {
         this.status = status;
+    }
+
+    public Set<String> getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Set<String> storeId) {
+        this.storeId = storeId;
     }
 }

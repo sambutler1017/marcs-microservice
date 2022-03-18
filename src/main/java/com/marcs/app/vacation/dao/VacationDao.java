@@ -41,7 +41,7 @@ public class VacationDao extends BaseDao {
 	public List<Vacation> getVacations(VacationRequest request) throws Exception {
 		SqlParamBuilder builder = SqlParamBuilder.with(request).withParam("id", request.getId())
 				.withParam("userId", request.getUserId())
-				.withParam("regionalId", request.getRegionalId())
+				.withParam("regionalId", request.getRegionalId()).withParam("storeId", request.getStoreId())
 				.withParamTextEnumCollection("status", request.getStatus());
 		MapSqlParameterSource params = builder.build();
 		return getPage(getSql("getVacations", params), params, VACATION_MAPPER);
