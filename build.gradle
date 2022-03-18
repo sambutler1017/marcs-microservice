@@ -25,6 +25,7 @@ dependencies {
 	implementation 'com.google.code.findbugs:jsr305:3.0.2'
 	implementation 'com.opengamma:elsql:1.2'
 	implementation 'com.sendgrid:sendgrid-java:4.0.1'
+	implementation 'org.apache.commons:commons-csv:1.5'
 }
 
 test {
