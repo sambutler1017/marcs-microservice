@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.vacation.client.domain.Vacation;
-import com.marcs.app.vacation.client.domain.request.VacationRequest;
+import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.app.vacation.rest.VacationController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class VacationClient {
 	 * @return {@link Vacation} object.
 	 * @throws Exception
 	 */
-	public List<Vacation> getVacations(VacationRequest request) throws Exception {
+	public List<Vacation> getVacations(VacationGetRequest request) throws Exception {
 		return controller.getVacations(request);
 	}
 

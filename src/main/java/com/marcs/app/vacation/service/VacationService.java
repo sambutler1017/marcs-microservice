@@ -6,7 +6,7 @@ import com.google.common.collect.Sets;
 import com.marcs.app.notifications.client.NotificationClient;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.vacation.client.domain.Vacation;
-import com.marcs.app.vacation.client.domain.request.VacationRequest;
+import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.app.vacation.dao.VacationDao;
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.jwt.utility.JwtHolder;
@@ -41,7 +41,7 @@ public class VacationService {
 	 * @return {@link Vacation} object.
 	 * @throws Exception
 	 */
-	public List<Vacation> getVacations(VacationRequest request) throws Exception {
+	public List<Vacation> getVacations(VacationGetRequest request) throws Exception {
 		return dao.getVacations(request);
 	}
 
@@ -63,7 +63,7 @@ public class VacationService {
 	 * @throws Exception
 	 */
 	public Vacation getVacationById(int id) throws Exception {
-		VacationRequest request = new VacationRequest();
+		VacationGetRequest request = new VacationGetRequest();
 		request.setId(Sets.newHashSet(id));
 		return getVacations(request).get(0);
 	}
@@ -76,7 +76,7 @@ public class VacationService {
 	 * @throws Exception
 	 */
 	public List<Vacation> getVacationsByUserId(int userId) throws Exception {
-		VacationRequest request = new VacationRequest();
+		VacationGetRequest request = new VacationGetRequest();
 		request.setUserId(Sets.newHashSet(userId));
 		return getVacations(request);
 	}
@@ -87,7 +87,7 @@ public class VacationService {
 	 * @return {@link List<Vacation>} for the user.
 	 * @throws Exception
 	 */
-	public List<Vacation> getVacationsForReport(VacationRequest request) throws Exception {
+	public List<Vacation> getVacationsForReport(VacationGetRequest request) throws Exception {
 		return dao.getVacationsForReport(request);
 	}
 

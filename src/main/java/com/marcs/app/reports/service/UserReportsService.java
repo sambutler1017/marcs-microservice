@@ -1,10 +1,10 @@
-package com.marcs.app.user.service;
+package com.marcs.app.reports.service;
 
 import java.util.List;
 
+import com.marcs.app.reports.dao.UserReportsDao;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
-import com.marcs.app.user.dao.UserReportsDao;
 import com.marcs.common.csv.CSVBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;

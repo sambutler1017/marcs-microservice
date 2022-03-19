@@ -19,7 +19,7 @@ import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.app.vacation.client.domain.Vacation;
-import com.marcs.app.vacation.client.domain.request.VacationRequest;
+import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.app.vacation.rest.VacationController;
 import com.marcs.common.enums.AccountStatus;
 import com.marcs.common.enums.VacationStatus;
@@ -123,7 +123,7 @@ public class EmailService {
 
         List<User> usersWithNotifications = getUsersWithEmailReportsEnabled();
         for (User user : usersWithNotifications) {
-            VacationRequest vRequest = new VacationRequest();
+            VacationGetRequest vRequest = new VacationGetRequest();
             vRequest.setStatus(Sets.newHashSet(VacationStatus.APPROVED));
             if (user.getWebRole().equals(WebRole.REGIONAL) || user.getWebRole().equals(WebRole.DISTRICT_MANAGER)) {
                 vRequest.setRegionalId(Sets.newHashSet(user.getId()));

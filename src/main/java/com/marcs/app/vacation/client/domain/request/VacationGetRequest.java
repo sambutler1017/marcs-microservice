@@ -11,7 +11,7 @@ import com.marcs.common.search.CommonParam;
  * @author Sam Butler
  * @since September 21, 2021
  */
-public class VacationRequest implements CommonParam {
+public class VacationGetRequest implements CommonParam {
 
     private Set<Integer> id;
 
