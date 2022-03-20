@@ -7,7 +7,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import com.marcs.app.vacation.client.domain.Vacation;
-import com.marcs.app.vacation.client.domain.request.VacationRequest;
+import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.sql.SqlParamBuilder;
@@ -38,10 +38,10 @@ public class VacationDao extends BaseDao {
 	 * @return {@link Vacation} object.
 	 * @throws Exception
 	 */
-	public List<Vacation> getVacations(VacationRequest request) throws Exception {
+	public List<Vacation> getVacations(VacationGetRequest request) throws Exception {
 		SqlParamBuilder builder = SqlParamBuilder.with(request).withParam("id", request.getId())
 				.withParam("userId", request.getUserId())
-				.withParam("regionalId", request.getRegionalId())
+				.withParam("regionalId", request.getRegionalId()).withParam("storeId", request.getStoreId())
 				.withParamTextEnumCollection("status", request.getStatus());
 		MapSqlParameterSource params = builder.build();
 		return getPage(getSql("getVacations", params), params, VACATION_MAPPER);
@@ -53,7 +53,7 @@ public class VacationDao extends BaseDao {
 	 * @return {@link Lst<Vacation>} for the user.
 	 * @throws Exception
 	 */
-	public List<Vacation> getVacationsForReport(VacationRequest request) throws Exception {
+	public List<Vacation> getVacationsForReport(VacationGetRequest request) throws Exception {
 		SqlParamBuilder builder = SqlParamBuilder.with(request).withParam("id", request.getId())
 				.withParam("userId", request.getUserId())
 				.withParam("regionalId", request.getRegionalId())

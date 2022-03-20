@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.marcs.annotations.interfaces.RestApiController;
 import com.marcs.app.vacation.client.domain.Vacation;
-import com.marcs.app.vacation.client.domain.request.VacationRequest;
+import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.app.vacation.service.VacationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class VacationController {
 	 * @throws Exception
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
-	public List<Vacation> getVacations(VacationRequest request) throws Exception {
+	public List<Vacation> getVacations(VacationGetRequest request) throws Exception {
 		return service.getVacations(request);
 	}
 
@@ -79,7 +79,7 @@ public class VacationController {
 	 * @throws Exception
 	 */
 	@GetMapping(path = "/report", produces = APPLICATION_JSON_VALUE)
-	public List<Vacation> getVacationsForReport(VacationRequest request) throws Exception {
+	public List<Vacation> getVacationsForReport(VacationGetRequest request) throws Exception {
 		return service.getVacationsForReport(request);
 	}
 

@@ -24,7 +24,18 @@ public class UserProfileClient {
 	private UserProfileController controller;
 
 	/**
-	 * Get users based on given request filter
+	 * Get users with no filters.
+	 * 
+	 * @param request of the user
+	 * @return User profile object {@link User}
+	 * @throws Exception
+	 */
+	public List<User> getUsers() throws Exception {
+		return controller.getUsers(new UserGetRequest());
+	}
+
+	/**
+	 * Get users based on given request filter.
 	 * 
 	 * @param request of the user
 	 * @return User profile object {@link User}

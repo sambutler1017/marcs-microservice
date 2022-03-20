@@ -11,7 +11,7 @@ import com.marcs.common.search.CommonParam;
  * @author Sam Butler
  * @since September 21, 2021
  */
-public class VacationRequest implements CommonParam {
+public class VacationGetRequest implements CommonParam {
 
     private Set<Integer> id;
 
@@ -20,6 +20,8 @@ public class VacationRequest implements CommonParam {
     private Set<Integer> userId;
 
     private Set<VacationStatus> status;
+
+    private Set<String> storeId;
 
     public Set<Integer> getId() {
         return id;
@@ -51,5 +53,13 @@ public class VacationRequest implements CommonParam {
 
     public void setStatus(Set<VacationStatus> status) {
         this.status = status;
+    }
+
+    public Set<String> getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Set<String> storeId) {
+        this.storeId = storeId;
     }
 }

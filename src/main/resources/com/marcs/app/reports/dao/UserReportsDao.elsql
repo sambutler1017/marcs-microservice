@@ -1,0 +1,39 @@
+@NAME(userProfileFields)
+  up.id, up.first_name, up.last_name, up.email, up.web_role_id, up.email_reports_enabled, up.hire_date, up.insert_date
+
+@NAME(storeFields)
+  st.id AS 'store_id', st.name AS 'store_name', st.regional_id, st.manager_id
+
+@NAME(userStatusFields)
+  us.request_id, us.app_access, us.account_status, us.updated_user_id
+
+@NAME(userFilters)
+  @WHERE
+    @AND(:id)
+      up.id IN (:id)
+    @AND(:excludedUserIds)
+      up.id NOT IN (:excludedUserIds)
+    @AND(:storeId)
+      st.id IN (:storeId)
+    @AND(:regionalId)
+      st.regional_id IN (:regionalId)
+    @AND(:email)
+      up.email IN (:email)
+    @AND(:webRole)
+      wr.text_id IN (:webRole)
+    @AND(:emailReportsEnabled)
+      up.email_reports_enabled = :emailReportsEnabled
+    @AND(:accountStatus)
+      us.account_status IN (:accountStatus)
+    @AND(:searchEnabled = true)
+      @INCLUDE(search)
+
+@NAME(getUsers)
+  SELECT @INCLUDE(userProfileFields), @INCLUDE(storeFields), @INCLUDE(userStatusFields)
+  FROM
+    user_profile up
+    JOIN web_role wr ON up.web_role_id = wr.id
+    LEFT JOIN stores st ON up.store_id = st.id
+    JOIN user_status us ON up.id = us.user_id
+  @INCLUDE(userFilters)
+  ORDER BY up.id
