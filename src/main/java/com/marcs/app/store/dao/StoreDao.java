@@ -14,6 +14,7 @@ import com.marcs.common.abstracts.BaseDao;
 import com.marcs.sql.SqlParamBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
@@ -54,7 +55,11 @@ public class StoreDao extends BaseDao {
 	 * @throws Exception
 	 */
 	public User getRegionalOfStoreById(String storeId) throws Exception {
-		return get(getSql("getRegionalOfStore"), parameterSource("storeId", storeId), USER_MAPPER);
+		try {
+			return get(getSql("getRegionalOfStore"), parameterSource("storeId", storeId), USER_MAPPER);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	/**
@@ -64,7 +69,11 @@ public class StoreDao extends BaseDao {
 	 * @throws Exception
 	 */
 	public User getManagerOfStoreById(String storeId) throws Exception {
-		return get(getSql("getManagerOfStoreById"), parameterSource("storeId", storeId), USER_MAPPER);
+		try {
+			return get(getSql("getManagerOfStoreById"), parameterSource("storeId", storeId), USER_MAPPER);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	/**
