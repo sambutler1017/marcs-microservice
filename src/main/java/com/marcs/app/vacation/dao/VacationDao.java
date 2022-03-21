@@ -42,6 +42,7 @@ public class VacationDao extends BaseDao {
 		SqlParamBuilder builder = SqlParamBuilder.with(request).withParam("id", request.getId())
 				.withParam("userId", request.getUserId())
 				.withParam("regionalId", request.getRegionalId()).withParam("storeId", request.getStoreId())
+				.withParamTextEnumCollection("webRole", request.getWebRole())
 				.withParamTextEnumCollection("status", request.getStatus());
 		MapSqlParameterSource params = builder.build();
 		return getPage(getSql("getVacations", params), params, VACATION_MAPPER);

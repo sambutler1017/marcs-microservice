@@ -3,6 +3,7 @@ package com.marcs.app.vacation.client.domain.request;
 import java.util.Set;
 
 import com.marcs.common.enums.VacationStatus;
+import com.marcs.common.enums.WebRole;
 import com.marcs.common.search.CommonParam;
 
 /**
@@ -22,6 +23,8 @@ public class VacationGetRequest implements CommonParam {
     private Set<VacationStatus> status;
 
     private Set<String> storeId;
+
+    private Set<WebRole> webRole;
 
     public Set<Integer> getId() {
         return id;
@@ -61,5 +64,13 @@ public class VacationGetRequest implements CommonParam {
 
     public void setStoreId(Set<String> storeId) {
         this.storeId = storeId;
+    }
+
+    public Set<WebRole> getWebRole() {
+        return webRole;
+    }
+
+    public void setWebRole(Set<WebRole> webRole) {
+        this.webRole = webRole;
     }
 }
