@@ -1,6 +1,6 @@
 @NAME(vacationFields)
   v.id, v.user_id, v.start_date, v.end_date, v.insert_date, v.status, v.notes,
-  st.id AS 'store_id', st.regional_id, CONCAT(up.first_name, ' ', up.last_name) AS name
+  st.id AS 'store_id', st.regional_id, CONCAT(up.first_name, ' ', up.last_name) AS name, up.web_role_id
 
 @NAME(getVacations)
   SELECT 
