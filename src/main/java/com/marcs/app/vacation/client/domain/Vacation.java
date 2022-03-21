@@ -3,6 +3,7 @@ package com.marcs.app.vacation.client.domain;
 import java.time.LocalDate;
 
 import com.marcs.common.enums.VacationStatus;
+import com.marcs.common.enums.WebRole;
 
 /**
  * Class to create a vacation object
@@ -12,23 +13,25 @@ import com.marcs.common.enums.VacationStatus;
  */
 public class Vacation {
 
-	public int id;
+	private int id;
 
-	public int userId;
+	private int userId;
 
-	public String fullName;
+	private String fullName;
 
-	public String storeId;
+	private WebRole webRole;
 
-	public LocalDate startDate;
+	private String storeId;
 
-	public LocalDate endDate;
+	private LocalDate startDate;
 
-	public String notes;
+	private LocalDate endDate;
 
-	public LocalDate insertDate;
+	private String notes;
 
-	public VacationStatus status;
+	private LocalDate insertDate;
+
+	private VacationStatus status;
 
 	public int getId() {
 		return id;
@@ -52,6 +55,14 @@ public class Vacation {
 
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+
+	public WebRole getWebRole() {
+		return webRole;
+	}
+
+	public void setWebRole(WebRole webRole) {
+		this.webRole = webRole;
 	}
 
 	public String getStoreId() {

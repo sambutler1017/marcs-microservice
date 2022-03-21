@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.common.enums.VacationStatus;
+import com.marcs.common.enums.WebRole;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -25,6 +26,7 @@ public class VacationMapper implements RowMapper<Vacation> {
 		vacation.setStatus(VacationStatus.valueOf(rs.getString("status")));
 		vacation.setInsertDate(LocalDate.parse(rs.getDate("insert_date").toString()));
 		vacation.setFullName(rs.getString("name").trim());
+		vacation.setWebRole(WebRole.getRole(rs.getInt("web_role_id")));
 		vacation.setStoreId(rs.getString("store_id"));
 		vacation.setNotes(rs.getString("notes"));
 		try {
