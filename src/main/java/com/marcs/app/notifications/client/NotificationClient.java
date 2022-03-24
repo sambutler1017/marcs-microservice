@@ -125,7 +125,7 @@ public class NotificationClient {
         } else if (userRequesting.getWebRole().equals(WebRole.EMPLOYEE)) {
             n.setReceiverId(storeClient.getManagerOfStoreById(userRequesting.getStoreId()).getId());
         } else {
-            n.setReceiverId(-1); // Notification to only site admin and admins
+            n.setReceiverId(0); // Notification to only site admin and admins
         }
 
         createNotification(n);
@@ -147,7 +147,7 @@ public class NotificationClient {
         } else if (user.getWebRole().equals(WebRole.EMPLOYEE)) {
             n.setReceiverId(storeClient.getManagerOfStoreById(user.getStoreId()).getId());
         } else {
-            n.setReceiverId(-1); // Notification to only site admin and admins
+            n.setReceiverId(0); // Notification to only site admin and admins
         }
 
         emailClient.sendNewUserEmail(user);

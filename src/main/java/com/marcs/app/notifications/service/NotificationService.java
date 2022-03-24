@@ -97,8 +97,8 @@ public class NotificationService {
      * @throws Exception
      */
     public Notification createNotification(Notification n) throws Exception {
-        if (n.getLinkId() == 0 || n.getReceiverId() == 0 || n.getType() == null) {
-            throw new Exception("Link ID, Receiver ID, and Type are required fields");
+        if (n.getLinkId() == 0 || n.getType() == null) {
+            throw new Exception("Link ID, and Type are required fields");
         }
         return dao.createNotification(n);
     }
