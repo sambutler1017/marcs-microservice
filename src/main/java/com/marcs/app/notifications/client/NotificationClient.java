@@ -102,8 +102,9 @@ public class NotificationClient {
      * @throws Exception
      */
     public Notification createNotification(Notification n) throws Exception {
-        websocketClient.sendWebNotification(n);
-        return controller.createNotification(n);
+        Notification generatedNotification = controller.createNotification(n);
+        websocketClient.sendWebNotification(generatedNotification);
+        return generatedNotification;
     }
 
     /**
