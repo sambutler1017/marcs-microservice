@@ -6,6 +6,13 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+/**
+ * Websocket config for setting ws endpoints and defining the handshake handler
+ * that should be used on new session connections.
+ * 
+ * @author Sam Butler
+ * @since March 24, 2022
+ */
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
@@ -17,6 +24,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/api/websocket").setAllowedOrigins("*");
+        registry.addEndpoint("/api/websocket").setHandshakeHandler(new UserHandshakeHandler()).setAllowedOrigins("*");
     }
 }
