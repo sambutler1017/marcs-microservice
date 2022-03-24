@@ -40,7 +40,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         List<HttpMethod> voidEndpointMethodList = VOID_ENDPOINTS.get(request.getRequestURI());
         HttpMethod requestMethodType = HttpMethod.valueOf(request.getMethod());
-        boolean isWebsocketEndpoint = request.getRequestURI().contains("web-notification-app");
+        boolean isWebsocketEndpoint = request.getRequestURI().contains("websocket");
 
         return voidEndpointMethodList != null && voidEndpointMethodList.contains(requestMethodType)
                 || isWebsocketEndpoint;

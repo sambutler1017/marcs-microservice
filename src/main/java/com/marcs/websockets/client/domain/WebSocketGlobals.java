@@ -7,5 +7,5 @@ package com.marcs.websockets.client.domain;
  * @since Dec 14, 2020
  */
 public class WebSocketGlobals {
-    public static final String NOTIFICATIONS = "/notifications";
+    public static final String NOTIFICATIONS = "/topic/notifications";
 }
