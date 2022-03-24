@@ -13,6 +13,7 @@ import com.marcs.app.user.client.domain.User;
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.common.enums.NotificationType;
 import com.marcs.common.enums.WebRole;
+import com.marcs.websockets.client.WebSocketClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -37,6 +38,9 @@ public class NotificationClient {
 
     @Autowired
     private EmailClient emailClient;
+
+    @Autowired
+    private WebSocketClient websocketClient;
 
     /**
      * This will get a list of notifications that the user has. The request will be
@@ -98,11 +102,8 @@ public class NotificationClient {
      * @throws Exception
      */
     public Notification createNotification(Notification n) throws Exception {
+        websocketClient.sendWebNotification(n);
         return controller.createNotification(n);
-    }
-
-    public void baseNotificationCreation() {
-
     }
 
     /**
