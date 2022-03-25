@@ -2,12 +2,10 @@ package com.marcs.websockets.service;
 
 import static com.marcs.websockets.client.domain.WebSocketGlobals.NOTIFICATIONS;
 
-import com.google.common.collect.Sets;
 import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
-import com.marcs.common.enums.WebRole;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -42,7 +40,7 @@ public class WebSocketService {
         if (receiver != null) {
             sendNotificationToUser(notification, receiver);
         }
-        sendNotificationToAdmins(notification);
+        sendNotificationToRecevierRoles(notification);
     }
 
     /**
@@ -52,9 +50,13 @@ public class WebSocketService {
      * @param notification The notification to be sent.
      * @throws Exception
      */
-    private void sendNotificationToAdmins(Notification notification) throws Exception {
+    private void sendNotificationToRecevierRoles(Notification notification) throws Exception {
+        if (notification.getReceiverRoles() == null) {
+            return;
+        }
+
         UserGetRequest request = new UserGetRequest();
-        request.setWebRole(Sets.newHashSet(WebRole.ADMIN, WebRole.SITE_ADMIN));
+        request.setWebRole(notification.getReceiverRoles());
 
         for (User u : userProfileClient.getUsers(request)) {
             if (u.getId() != notification.getReceiverId()) {

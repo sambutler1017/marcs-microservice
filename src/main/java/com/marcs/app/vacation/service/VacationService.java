@@ -4,12 +4,15 @@ import java.util.List;
 
 import com.google.common.collect.Sets;
 import com.marcs.app.notifications.client.NotificationClient;
+import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.app.vacation.dao.VacationDao;
+import com.marcs.common.enums.NotificationType;
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.jwt.utility.JwtHolder;
+import com.marcs.websockets.client.WebSocketClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,6 +37,9 @@ public class VacationService {
 
 	@Autowired
 	private NotificationClient notificationClient;
+
+	@Autowired
+	private WebSocketClient websocketClient;
 
 	/**
 	 * Get list of vacations for the current request.
@@ -176,6 +182,7 @@ public class VacationService {
 		vac.setStatus(vac.getStatus() == null ? currentVac.getStatus() : vac.getStatus());
 
 		dao.updateVacationInfoById(id, vac);
+		notifyUserBeingUpdated(currentVac.getUserId());
 		return getVacationById(id);
 	}
 
@@ -210,5 +217,18 @@ public class VacationService {
 	 */
 	public void deleteAllVacationsByUserId(int userId) throws Exception {
 		dao.deleteAllVacationsByUserId(userId);
+	}
+
+	/**
+	 * Method for sending web notification to the user that is being updated.
+	 * 
+	 * @param userId The userId to the notification too.
+	 * @throws Exception
+	 */
+	private void notifyUserBeingUpdated(int userId) throws Exception {
+		Notification n = new Notification();
+		n.setReceiverId(userId);
+		n.setType(NotificationType.REQUEST_TRACKER);
+		websocketClient.sendWebNotification(n);
 	}
 }

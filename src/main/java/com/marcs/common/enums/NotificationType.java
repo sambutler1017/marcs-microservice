@@ -7,16 +7,23 @@ package com.marcs.common.enums;
  * @since December 21, 2021
  */
 public enum NotificationType implements TextEnum {
-    USER("USER"), VACATION("VACATION");
+    USER("USER", "User"), VACATION("VACATION", "Vacation"), REQUEST_TRACKER("REQUEST_TRACKER", "Request Tracker");
 
     private String textId;
 
-    NotificationType(String textId) {
+    private String translation;
+
+    NotificationType(String textId, String translation) {
         this.textId = textId;
+        this.translation = translation;
     }
 
     @Override
     public String getTextId() {
         return textId;
+    }
+
+    public String getTranslation() {
+        return translation;
     }
 }
