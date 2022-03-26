@@ -21,6 +21,14 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final long DEFAULT_HEARTBEAT = 20000;
 
+    @Bean
+    public TaskScheduler heartBeatScheduler() {
+        ThreadPoolTaskScheduler ts = new ThreadPoolTaskScheduler();
+        ts.setPoolSize(10);
+        ts.initialize();
+        return ts;
+    }
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.setUserDestinationPrefix("/user").enableSimpleBroker("/topic").setTaskScheduler(heartBeatScheduler())
@@ -30,13 +38,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/api/websocket").setHandshakeHandler(new UserHandshakeHandler()).setAllowedOrigins("*");
-    }
-
-    @Bean
-    public TaskScheduler heartBeatScheduler() {
-        ThreadPoolTaskScheduler ts = new ThreadPoolTaskScheduler();
-        ts.setPoolSize(10);
-        ts.initialize();
-        return ts;
     }
 }

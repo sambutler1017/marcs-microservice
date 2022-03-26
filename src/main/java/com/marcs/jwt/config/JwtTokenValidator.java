@@ -36,7 +36,7 @@ public class JwtTokenValidator {
      * @param request - The request that is being made to the endpint
      * @throws IOException If the jwt token is not valid.
      */
-    public void validateRequest(HttpServletRequest request) throws IOException {
+    public boolean validateRequest(HttpServletRequest request) throws IOException {
         final String tokenHeader = request.getHeader("Authorization");
 
         if (tokenHeader != null && tokenHeader.startsWith("Bearer: ")) {
@@ -46,7 +46,27 @@ public class JwtTokenValidator {
             isReauthenticating(request.getRequestURI(), jwtToken);
 
         } else {
-            doesTokenExist(tokenHeader);
+            if (isWebSocketConnection(request)) {
+                return validateSocketSession(request.getQueryString());
+            } else {
+                doesTokenExist(tokenHeader);
+            }
+        }
+        return true; // No errors and not websocket connection.
+    }
+
+    /**
+     * Validates the called socket session to confirm the passed in token is valid.
+     * 
+     * @param token The token to authenticate.
+     * @return The status of the session validation.
+     */
+    private boolean validateSocketSession(String token) {
+        try {
+            validateToken(token);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -70,7 +90,7 @@ public class JwtTokenValidator {
      * @return Boolean of the validation status.
      * @throws IOException
      */
-    public boolean isWebSocketValidation(HttpServletRequest request) throws IOException {
+    public boolean isWebSocketConnection(HttpServletRequest request) throws IOException {
         return request.getRequestURI().contains("/api/websocket");
     }
 
