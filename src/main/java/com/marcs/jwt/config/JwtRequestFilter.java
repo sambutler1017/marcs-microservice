@@ -32,17 +32,37 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     public void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws ServletException, IOException {
-        JWTValidator.validate(req);
-        chain.doFilter(req, res);
+
+        if (JWTValidator.isWebSocketValidation(req)) {
+            if (validSocketSession(req.getQueryString())) {
+                chain.doFilter(req, res);
+            }
+        } else {
+            JWTValidator.validateRequest(req);
+            chain.doFilter(req, res);
+        }
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         List<HttpMethod> voidEndpointMethodList = VOID_ENDPOINTS.get(request.getRequestURI());
         HttpMethod requestMethodType = HttpMethod.valueOf(request.getMethod());
-        boolean isWebsocketEndpoint = request.getRequestURI().contains("websocket");
 
-        return voidEndpointMethodList != null && voidEndpointMethodList.contains(requestMethodType)
-                || isWebsocketEndpoint;
+        return voidEndpointMethodList != null && voidEndpointMethodList.contains(requestMethodType);
+    }
+
+    /**
+     * Validates the called socket session to confirm the passed in token is valid.
+     * 
+     * @param token The token to authenticate.
+     * @return The status of the session validation.
+     */
+    private boolean validSocketSession(String token) {
+        try {
+            JWTValidator.validateToken(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
