@@ -128,8 +128,8 @@ public class VacationController {
 	 * already passed.
 	 */
 	@PostMapping("/mark-expired")
-	public void markExpiredVacations() {
-		service.markExpiredVacations();
+	public int markExpiredVacations() {
+		return service.markExpiredVacations();
 	}
 
 	/**

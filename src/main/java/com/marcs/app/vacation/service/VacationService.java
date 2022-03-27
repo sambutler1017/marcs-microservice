@@ -145,8 +145,8 @@ public class VacationService {
 	 * Simple helper method to mark the vacations stored as expired if the date has
 	 * already passed.
 	 */
-	public void markExpiredVacations() {
-		dao.markExpiredVacations();
+	public int markExpiredVacations() {
+		return dao.markExpiredVacations();
 	}
 
 	/**

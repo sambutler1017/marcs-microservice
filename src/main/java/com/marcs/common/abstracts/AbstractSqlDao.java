@@ -97,8 +97,8 @@ public abstract class AbstractSqlDao {
      * @param params    Params to be inserted into the query.
      * @param keyHolder used to get the auto increment id.
      */
-    public void post(String sql, MapSqlParameterSource params, KeyHolder keyHolder) {
-        getTemplate().update(sql, params, keyHolder);
+    public int post(String sql, MapSqlParameterSource params, KeyHolder keyHolder) {
+        return getTemplate().update(sql, params, keyHolder);
     }
 
     /**
@@ -107,8 +107,8 @@ public abstract class AbstractSqlDao {
      * @param sql    The sql to run against the database.
      * @param params Params to be inserted into the query.
      */
-    public void post(String sql, MapSqlParameterSource params) {
-        getTemplate().update(sql, params);
+    public int post(String sql, MapSqlParameterSource params) {
+        return getTemplate().update(sql, params);
     }
 
     /**
@@ -117,8 +117,8 @@ public abstract class AbstractSqlDao {
      * @param sql    The sql to run against the database.
      * @param params Params to be inserted into the query.
      */
-    public void delete(String sql, MapSqlParameterSource params) {
-        getTemplate().update(sql, params);
+    public int delete(String sql, MapSqlParameterSource params) {
+        return getTemplate().update(sql, params);
     }
 
     /**
@@ -127,8 +127,8 @@ public abstract class AbstractSqlDao {
      * @param sql    The sql to run against the database.
      * @param params Params to be inserted into the query.
      */
-    public void update(String sql, MapSqlParameterSource params) {
-        getTemplate().update(sql, params);
+    public int update(String sql, MapSqlParameterSource params) {
+        return getTemplate().update(sql, params);
     }
 
     /**

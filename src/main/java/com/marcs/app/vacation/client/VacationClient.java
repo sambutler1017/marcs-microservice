@@ -47,7 +47,7 @@ public class VacationClient {
 	 * Simple helper method to mark the vacations stored as expired if the date has
 	 * already passed.
 	 */
-	public void markExpiredVacations() {
-		controller.markExpiredVacations();
+	public int markExpiredVacations() {
+		return controller.markExpiredVacations();
 	}
 }

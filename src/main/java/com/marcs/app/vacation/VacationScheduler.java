@@ -30,7 +30,7 @@ public class VacationScheduler {
     @Scheduled(cron = "0 0 7 * * MON", zone = "UTC")
     public void create() throws Exception {
         LOGGER.info("Running Expired Vacation Script...");
-        vacationClient.markExpiredVacations();
-        LOGGER.info("Vacations Marked Expired Complete!");
+        int affectedRows = vacationClient.markExpiredVacations();
+        LOGGER.info("Vacations Marked Expired Complete! '{}' rows updated.", affectedRows);
     }
 }
