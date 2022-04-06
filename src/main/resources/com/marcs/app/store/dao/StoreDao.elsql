@@ -18,7 +18,7 @@
       st.id IN (:id)
     @AND(:regional_id)
       st.regional_id IN (:regional_id)
-    @AND(:manamanager_idgerId) 
+    @AND(:manager_id) 
       st.manager_id IN (:manager_id)
     @AND(:searchEnabled = true)
       @INCLUDE(search)
