@@ -10,7 +10,7 @@ public abstract class AbstractSqlGlobals {
     public static final String INSERT_DATE = "insert_date";
     public static final String FEATURE_APPLICATION_TEXT = "feature_application_text";
     public static final String FEATURE_NAME_TEXT = "feature_name_text";
-    public static final String NOTIFICATION_TYPE = "NOTIFICATION_TYPE";
+    public static final String NOTIFICATION_TYPE = "notification_type";
     public static final String RECEIVER_ID = "receiver_id";
     public static final String READ_FLAG = "read_flag";
     public static final String LINK_ID = "link_id";
