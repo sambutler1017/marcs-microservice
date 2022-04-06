@@ -43,10 +43,11 @@ public class NotificationDao extends BaseDao {
      * @throws Exception If no data is returned
      */
     public List<Notification> getNotifications(NotificationGetRequest request) throws Exception {
-        SqlParamBuilder builder = SqlParamBuilder.with(request).withParam("notificationId", request.getId())
-                .withParamTextEnumCollection("type", request.getType()).withParam("receiverId", request.getReceiverId())
-                .withParam("read", request.getRead());
-        MapSqlParameterSource params = builder.build();
+        MapSqlParameterSource params = SqlParamBuilder.with(request)
+                .withParam(ID, request.getId())
+                .withParam(RECEIVER_ID, request.getReceiverId())
+                .withParam(READ_FLAG, request.getRead())
+                .withParamTextEnumCollection(NOTIFICATION_TYPE, request.getType()).build();
 
         return getPage(getSql("getNotifications", params), params, NOTIFICATION_MAPPER);
     }
@@ -60,8 +61,7 @@ public class NotificationDao extends BaseDao {
      * @throws Exception
      */
     public void markNotificationRead(int id) throws Exception {
-        SqlParamBuilder builder = SqlParamBuilder.with().withParam("read", true).withParam("id", id);
-        MapSqlParameterSource params = builder.build();
+        MapSqlParameterSource params = SqlParamBuilder.with().withParam(READ_FLAG, true).withParam(ID, id).build();
         update(getSql("markNotificationRead"), params);
     }
 
@@ -75,9 +75,11 @@ public class NotificationDao extends BaseDao {
      */
     public Notification createNotification(Notification n) throws Exception {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        SqlParamBuilder builder = SqlParamBuilder.with().withParam("type", n.getType())
-                .withParam("receiverId", n.getReceiverId()).withParam("linkId", n.getLinkId());
-        MapSqlParameterSource params = builder.build();
+        MapSqlParameterSource params = SqlParamBuilder.with()
+                .withParam(NOTIFICATION_TYPE, n.getType())
+                .withParam(RECEIVER_ID, n.getReceiverId())
+                .withParam(LINK_ID, n.getLinkId()).build();
+
         post(getSql("createNotification"), params, keyHolder);
 
         n.setId(keyHolder.getKey().intValue());
@@ -93,6 +95,6 @@ public class NotificationDao extends BaseDao {
      * @throws Exception
      */
     public void deleteNotification(int id) throws Exception {
-        delete(getSql("deleteNotification"), parameterSource("id", id));
+        delete(getSql("deleteNotification"), parameterSource(ID, id));
     }
 }

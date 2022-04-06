@@ -4,23 +4,23 @@
   FROM
     notifications
   @WHERE
-    @AND(:notificationId)
-      id IN (:notificationId)
-    @AND(:receiverId)
-      receiver_id IN (:receiverId)
-    @AND(:read)
-      read_flag = :read
-    @AND(:type)
-      notification_type IN (:type)
+    @AND(:id)
+      id IN (:id)
+    @AND(:receiver_id)
+      receiver_id IN (:receiver_id)
+    @AND(:read_flag)
+      read_flag = :read_flag
+    @AND(:notification_type)
+      notification_type IN (:notification_type)
   ORDER BY read_flag, insert_date DESC
 
 @NAME(markNotificationRead)
-  UPDATE notifications SET read_flag = :read
+  UPDATE notifications SET read_flag = :read_flag
   WHERE id = :id
 
 @NAME(createNotification)
-  INSERT INTO notifications (`notification_type`,`receiver_id`,`link_id`)
-  VALUES (:type, :receiverId, :linkId)
+  INSERT INTO notifications (notification_type, receiver_id, link_id)
+  VALUES (:notification_type, :receiver_id, :link_id)
 
 @NAME(deleteNotification)
   DELETE FROM notifications

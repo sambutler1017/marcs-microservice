@@ -38,7 +38,7 @@ public class FeatureAccessDao extends BaseDao {
      * @throws Exception
      */
     public Map<String, List<Map<String, String>>> getFeatureAccess(int roleId) throws Exception {
-        MapSqlParameterSource params = parameterSource("webRole", roleId);
+        MapSqlParameterSource params = parameterSource(WEB_ROLE_ID, roleId);
         return mapSingleton(
                 getPage(getSql("getFeatureAccess", params), params, FEATURE_ACCESS_MAPPER));
     }

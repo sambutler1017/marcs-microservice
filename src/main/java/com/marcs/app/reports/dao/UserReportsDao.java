@@ -37,18 +37,18 @@ public class UserReportsDao extends BaseDao {
          * @throws Exception
          */
         public List<User> getUsers(UserGetRequest request) throws Exception {
-                SqlParamBuilder builder = SqlParamBuilder.with(request).useAllParams().withParam("id", request.getId())
-                                .withParam("email", request.getEmail()).withParam("storeId",
-                                                request.getStoreId())
-                                .withParam("regionalId", request.getRegionalId()).withParam("firstName",
-                                                request.getFirstName())
-                                .withParam("lastName", request.getLastName()).withParam("storeName",
-                                                request.getStoreName())
-                                .withParam("emailReportsEnabled", request.getEmailReportsEnabled())
-                                .withParamTextEnumCollection("accountStatus", request.getAccountStatus())
+                MapSqlParameterSource params = SqlParamBuilder.with(request).useAllParams()
+                                .withParam(ID, request.getId())
+                                .withParam(EMAIL, request.getEmail())
+                                .withParam(STORE_ID, request.getStoreId())
+                                .withParam(REGIONAL_ID, request.getRegionalId())
+                                .withParam(FIRST_NAME, request.getFirstName())
+                                .withParam(LAST_NAME, request.getLastName())
+                                .withParam(STORE_NAME, request.getStoreName())
+                                .withParam(EMAIL_REPORTS_ENABLED, request.getEmailReportsEnabled())
                                 .withParam("excludedUserIds", request.getExcludedUserIds())
-                                .withParamTextEnumCollection("webRole", request.getWebRole());
-                MapSqlParameterSource params = builder.build();
+                                .withParamTextEnumCollection(ACCOUNT_STATUS, request.getAccountStatus())
+                                .withParamTextEnumCollection(WEB_ROLE_TEXT_ID, request.getWebRole()).build();
                 return getPage(getSql("getUsers", params), params, USER_MAPPER);
         }
 }

@@ -39,12 +39,14 @@ public class VacationDao extends BaseDao {
 	 * @throws Exception
 	 */
 	public List<Vacation> getVacations(VacationGetRequest request) throws Exception {
-		SqlParamBuilder builder = SqlParamBuilder.with(request).withParam("id", request.getId())
-				.withParam("userId", request.getUserId())
-				.withParam("regionalId", request.getRegionalId()).withParam("storeId", request.getStoreId())
-				.withParamTextEnumCollection("webRole", request.getWebRole())
-				.withParamTextEnumCollection("status", request.getStatus());
-		MapSqlParameterSource params = builder.build();
+		MapSqlParameterSource params = SqlParamBuilder.with(request)
+				.withParam(ID, request.getId())
+				.withParam(USER_ID, request.getUserId())
+				.withParam(REGIONAL_ID, request.getRegionalId())
+				.withParam(STORE_ID, request.getStoreId())
+				.withParamTextEnumCollection(WEB_ROLE_TEXT_ID, request.getWebRole())
+				.withParamTextEnumCollection(STATUS, request.getStatus()).build();
+
 		return getPage(getSql("getVacations", params), params, VACATION_MAPPER);
 	}
 
@@ -55,12 +57,13 @@ public class VacationDao extends BaseDao {
 	 * @throws Exception
 	 */
 	public List<Vacation> getVacationsForReport(VacationGetRequest request) throws Exception {
-		SqlParamBuilder builder = SqlParamBuilder.with(request).withParam("id", request.getId())
-				.withParam("userId", request.getUserId())
-				.withParam("regionalId", request.getRegionalId())
-				.withParamTextEnumCollection("status", request.getStatus())
-				.withParam("reportFilter", true);
-		MapSqlParameterSource params = builder.build();
+		MapSqlParameterSource params = SqlParamBuilder.with(request)
+				.withParam(ID, request.getId())
+				.withParam(USER_ID, request.getUserId())
+				.withParam(REGIONAL_ID, request.getRegionalId())
+				.withParam("reportFilter", true)
+				.withParamTextEnumCollection(STATUS, request.getStatus()).build();
+
 		return getPage(getSql("getVacations", params), params, VACATION_MAPPER);
 	}
 
@@ -74,11 +77,12 @@ public class VacationDao extends BaseDao {
 	 */
 	public int createVacation(int id, Vacation vac) throws Exception {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		SqlParamBuilder builder = SqlParamBuilder.with().withParam("userId", id)
-				.withParam("startDate", vac.getStartDate()).withParam("endDate", vac.getEndDate())
-				.withParam("status", vac.getStatus() == null ? VacationStatus.APPROVED : vac.getStatus())
-				.withParam("notes", vac.getNotes());
-		MapSqlParameterSource params = builder.build();
+		MapSqlParameterSource params = SqlParamBuilder.with()
+				.withParam(USER_ID, id)
+				.withParam(START_DATE, vac.getStartDate())
+				.withParam(END_DATE, vac.getEndDate())
+				.withParam(STATUS, vac.getStatus() == null ? VacationStatus.APPROVED : vac.getStatus())
+				.withParam(NOTES, vac.getNotes()).build();
 
 		post(getSql("insertVacation"), params, keyHolder);
 		return keyHolder.getKey().intValue();
@@ -102,9 +106,10 @@ public class VacationDao extends BaseDao {
 	 * @throws Exception
 	 */
 	public void updateVacationDatesById(int id, Vacation vac) throws Exception {
-		SqlParamBuilder builder = SqlParamBuilder.with().withParam("startDate", vac.getStartDate()).withParam("id", id)
-				.withParam("endDate", vac.getEndDate());
-		MapSqlParameterSource params = builder.build();
+		MapSqlParameterSource params = SqlParamBuilder.with()
+				.withParam(ID, id)
+				.withParam(START_DATE, vac.getStartDate())
+				.withParam(END_DATE, vac.getEndDate()).build();
 
 		update(getSql("updateVacationDatesById"), params);
 	}
@@ -118,9 +123,11 @@ public class VacationDao extends BaseDao {
 	 * @throws Exception
 	 */
 	public void updateVacationInfoById(int id, Vacation vac) throws Exception {
-		SqlParamBuilder builder = SqlParamBuilder.with().withParam("status", vac.getStatus()).withParam("id", id)
-				.withParam("notes", vac.getNotes());
-		MapSqlParameterSource params = builder.build();
+		MapSqlParameterSource params = SqlParamBuilder.with()
+				.withParam(ID, id)
+				.withParam(STATUS, vac.getStatus())
+				.withParam(NOTES, vac.getNotes()).build();
+
 		update(getSql("updateVacationInfoById"), params);
 	}
 
@@ -132,8 +139,8 @@ public class VacationDao extends BaseDao {
 	 * @throws Exception
 	 */
 	public void deleteVacationById(int id) throws Exception {
-		SqlParamBuilder builder = SqlParamBuilder.with().withParam("id", id);
-		MapSqlParameterSource params = builder.build();
+		MapSqlParameterSource params = SqlParamBuilder.with().withParam(ID, id).build();
+
 		delete(getSql("deleteVacations", params), params);
 	}
 
@@ -145,8 +152,8 @@ public class VacationDao extends BaseDao {
 	 * @throws Exception
 	 */
 	public void deleteAllVacationsByUserId(int userId) throws Exception {
-		SqlParamBuilder builder = SqlParamBuilder.with().withParam("userId", userId);
-		MapSqlParameterSource params = builder.build();
+		MapSqlParameterSource params = SqlParamBuilder.with().withParam(USER_ID, userId).build();
+
 		delete(getSql("deleteVacations", params), params);
 	}
 }

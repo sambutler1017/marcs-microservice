@@ -31,7 +31,7 @@ public class AuthenticationDao extends BaseDao {
      */
     public String getUserAuthPassword(String email) throws Exception {
         try {
-            return get(getSql("getUserHashedPassword"), parameterSource("email", email), String.class);
+            return get(getSql("getUserHashedPassword"), parameterSource(EMAIL, email), String.class);
         } catch (Exception e) {
             throw new UserNotFoundException(String.format("User not found for email: %s", email));
         }

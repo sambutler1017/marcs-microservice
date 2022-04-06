@@ -16,10 +16,10 @@
   @WHERE
     @AND(:id)
       st.id IN (:id)
-    @AND(:regionalId)
-      st.regional_id IN (:regionalId)
-    @AND(:managerId) 
-      st.manager_id IN (:managerId)
+    @AND(:regional_id)
+      st.regional_id IN (:regional_id)
+    @AND(:manamanager_idgerId) 
+      st.manager_id IN (:manager_id)
     @AND(:searchEnabled = true)
       @INCLUDE(search)
   ORDER BY st.name
@@ -33,7 +33,7 @@
     JOIN web_role wr ON up.web_role_id = wr.id
     JOIN user_status us ON up.id = us.user_id
   WHERE
-    st.id = :storeId
+    st.id = :id
 
 @NAME(getManagerOfStoreById)
   SELECT 
@@ -44,35 +44,35 @@
     JOIN web_role wr ON up.web_role_id = wr.id
     JOIN user_status us ON up.id = us.user_id
   WHERE
-    st.id = :storeId
+    st.id = :id
 
 @NAME(updateStore)
   UPDATE stores
   SET
-    id = :newId,
-    name = :storeName
+    id   = :newId,
+    name = :name
   WHERE 
     id = :oldId
 
 @NAME(updateStoreManagerByStoreId)
   UPDATE stores
   SET
-    manager_id = :managerId
-  WHERE id = :storeId
+    manager_id = :manager_id
+  WHERE id = :id
 
 @NAME(updateRegionalOfStore)
   UPDATE stores
   SET
-    regional_id = :regionalId
-  WHERE id = :storeId
+    regional_id = :regional_id
+  WHERE id = :id
 
 @NAME(insertStore)
   INSERT INTO stores (id, name, regional_id)
-  VALUES (:storeId, :storeName, :regionalId)
+  VALUES (:id, :name, :regional_id)
 
 @NAME(deleteStore)
   DELETE FROM stores
-  WHERE id = :storeId
+  WHERE id = :id
 
 @NAME(search)
   (@VALUE(:searchContent))

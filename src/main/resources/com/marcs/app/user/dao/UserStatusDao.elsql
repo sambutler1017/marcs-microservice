@@ -2,16 +2,16 @@
   SELECT *
   FROM
     user_status
-  WHERE user_id = :userId
+  WHERE user_id = :user_id
 
 @NAME(insertUserStatus)
   INSERT INTO user_status (`user_id`,`account_status`,`app_access`, `updated_user_id`)
-  VALUES(:userId, :accountStatus, :appAccess, :updatedUserId)
+  VALUES(:user_id, :account_status, :app_access, :updated_user_id)
 
 @NAME(updateUserStatus)
   UPDATE user_status
   SET
-    updated_user_id = :updatedUserId,
-    account_status = :accountStatus,
-    app_access = :appAccess
-  WHERE user_id = :userId
+    updated_user_id = :updated_user_id,
+    account_status  = :account_status,
+    app_access      = :app_access
+  WHERE user_id = :user_id

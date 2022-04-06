@@ -13,18 +13,18 @@
       up.id IN (:id)
     @AND(:excludedUserIds)
       up.id NOT IN (:excludedUserIds)
-    @AND(:storeId)
-      st.id IN (:storeId)
-    @AND(:regionalId)
-      st.regional_id IN (:regionalId)
+    @AND(:store_id)
+      st.id IN (:store_id)
+    @AND(:regional_id)
+      st.regional_id IN (:regional_id)
     @AND(:email)
       up.email IN (:email)
-    @AND(:webRole)
-      wr.text_id IN (:webRole)
-    @AND(:emailReportsEnabled)
-      up.email_reports_enabled = :emailReportsEnabled
-    @AND(:accountStatus)
-      us.account_status IN (:accountStatus)
+    @AND(:web_role_text_id)
+      wr.text_id IN (:web_role_text_id)
+    @AND(:email_reports_enabled)
+      up.email_reports_enabled = :email_reports_enabled
+    @AND(:account_status)
+      us.account_status IN (:account_status)
     @AND(:searchEnabled = true)
       @INCLUDE(search)
 
@@ -51,13 +51,13 @@
       JOIN
     application a ON wraa.app_id = a.id
   @WHERE
-    @AND(:userId)
-      up.id = :userId
+    @AND(:user_id)
+      up.id = :user_id
   ORDER BY a.id
 
 @NAME(insertUser)
   INSERT INTO user_profile (`first_name`,`last_name`,`email`,`store_id`,`web_role_id`,`hire_date`)
-  VALUES (:firstName, :lastName, :email, :storeId, :webRoleId, :hireDate)
+  VALUES (:first_name, :last_name, :email, :store_id, :web_role_id, :hire_date)
 
 @NAME(deleteUser)
   DELETE FROM user_profile
@@ -68,12 +68,12 @@
   UPDATE user_profile 
   SET
     email = :email,
-    store_id = :storeId,
-    first_name = :firstName,
-    last_name = :lastName,
-    web_role_id = :webRoleId,
-    email_reports_enabled = :emailReportsEnabled,
-    hire_date = :hireDate
+    store_id = :store_id,
+    first_name = :first_name,
+    last_name = :last_name,
+    web_role_id = :web_role_id,
+    email_reports_enabled = :email_reports_enabled,
+    hire_date = :hire_date
   WHERE
     id = :id
 

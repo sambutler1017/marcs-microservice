@@ -6,24 +6,22 @@
   @WHERE
     @AND(:id)
       id = :id
-    @AND(:insertUserId)
-      insert_user_id = :insertUserId
+    @AND(:insert_user_id)
+      insert_user_id = :insert_user_id
 
 @NAME(insertBlockOutDate)
   INSERT INTO block_out_dates (start_date, end_date, insert_user_id)
-  VALUES(:startDate, :endDate, :insertUserId)
-
-@NAME(deleteBlockOutDate)
-  DELETE FROM block_out_dates 
-  WHERE
-    id = :id
+  VALUES(:start_date, :end_date, :insert_user_id)
 
 @NAME(updateBlockOutDateById)
   UPDATE block_out_dates 
   SET 
-    start_date = :startDate,
-    end_date = :endDate,
-    insert_user_id = :insertUserId
+    start_date     = :start_date,
+    end_date       = :end_date,
+    insert_user_id = :insert_user_id
   WHERE
     id = :id
 
+@NAME(deleteBlockOutDate)
+  DELETE FROM block_out_dates 
+  WHERE id = :id

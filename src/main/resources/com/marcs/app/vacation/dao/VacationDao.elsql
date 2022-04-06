@@ -16,16 +16,16 @@
   @WHERE
     @AND(:id)
       v.id IN (:id)
-    @AND(:userId)
-      v.user_id IN (:userId)
-    @AND(:regionalId)
-      st.regional_id IN (:regionalId)
+    @AND(:user_id)
+      v.user_id IN (:user_id)
+    @AND(:regional_id)
+      st.regional_id IN (:regional_id)
     @AND(:status)
       v.status IN (:status)
-    @AND(:storeId)
-      up.store_id IN (:storeId)
-    @AND(:webRole)
-      wr.text_id IN (:webRole)
+    @AND(:store_id)
+      up.store_id IN (:store_id)
+    @AND(:web_role_text_id)
+      wr.web_role_text_id IN (:web_role_text_id)
     @AND(:reportFilter)
       start_date >= (DATE_ADD(CURDATE(), INTERVAL 5 DAY) - WEEKDAY(CURDATE()))
       AND start_date <= DATE_ADD((DATE_ADD(CURDATE(), INTERVAL 5 DAY) - WEEKDAY(CURDATE())), INTERVAL 6 DAY)
@@ -36,12 +36,12 @@
   @WHERE
     @AND(:id)
       id = :id
-    @AND(:userId)
-      user_id = :userId
+    @AND(:user_id)
+      user_id = :user_id
 
 @NAME(insertVacation)
   INSERT INTO user_vacations (user_id, start_date, end_date, status, notes)
-  VALUES (:userId, :startDate, :endDate, :status, :notes)
+  VALUES (:user_id, :start_date, :end_date, :status, :notes)
 
 @NAME(updateVacationInfoById)
   UPDATE user_vacations
@@ -53,8 +53,8 @@
 @NAME(updateVacationDatesById)
   UPDATE user_vacations
   SET
-    start_date = :startDate,
-    end_date = :endDate
+    start_date = :start_date,
+    end_date   = :end_date
   WHERE id = :id
 
 @NAME(markExpiredVacations)

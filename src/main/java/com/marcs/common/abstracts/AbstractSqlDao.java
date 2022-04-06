@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Scope("prototype")
-public abstract class AbstractSqlDao {
+public abstract class AbstractSqlDao extends AbstractSqlGlobals {
 
     private final NamedParameterJdbcTemplate template;
     private final ElSqlBundle bundle;

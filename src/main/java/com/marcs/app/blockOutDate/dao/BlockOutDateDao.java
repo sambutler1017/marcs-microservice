@@ -40,8 +40,8 @@ public class BlockOutDateDao extends BaseDao {
 	 * @throws Exception
 	 */
 	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) throws Exception {
-		SqlParamBuilder builder = SqlParamBuilder.with(request).withParam("id", request.getId())
-				.withParam("insertUserId", request.getInsertUserId());
+		SqlParamBuilder builder = SqlParamBuilder.with(request).withParam(ID, request.getId())
+				.withParam(INSERT_USER_ID, request.getInsertUserId());
 
 		MapSqlParameterSource params = builder.build();
 
@@ -62,9 +62,11 @@ public class BlockOutDateDao extends BaseDao {
 
 		blockDate = mapNonNullBlockOutDateFields(blockDate, currentBlockOutDate);
 
-		SqlParamBuilder builder = SqlParamBuilder.with().withParam("startDate", blockDate.getStartDate())
-				.withParam("endDate", blockDate.getEndDate())
-				.withParam("insertUserId", blockDate.getInsertUserId()).withParam("id", id);
+		SqlParamBuilder builder = SqlParamBuilder.with().withParam(ID, id)
+				.withParam(START_DATE, blockDate.getStartDate())
+				.withParam(END_DATE, blockDate.getEndDate())
+				.withParam(INSERT_USER_ID, blockDate.getInsertUserId());
+
 		MapSqlParameterSource params = builder.build();
 		update(getSql("updateBlockOutDateById", params), params);
 
@@ -81,9 +83,9 @@ public class BlockOutDateDao extends BaseDao {
 	 */
 	public BlockOutDate createBlockOutDate(BlockOutDate blockDate) throws Exception {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		SqlParamBuilder builder = SqlParamBuilder.with().withParam("startDate", blockDate.getStartDate())
-				.withParam("endDate", blockDate.getEndDate())
-				.withParam("insertUserId", blockDate.getInsertUserId());
+		SqlParamBuilder builder = SqlParamBuilder.with().withParam(START_DATE, blockDate.getStartDate())
+				.withParam(END_DATE, blockDate.getEndDate())
+				.withParam(INSERT_USER_ID, blockDate.getInsertUserId());
 
 		MapSqlParameterSource params = builder.build();
 
@@ -98,7 +100,7 @@ public class BlockOutDateDao extends BaseDao {
 	 * @throws Exception
 	 */
 	public void deleteBlockOutDate(int id) throws Exception {
-		delete(getSql("deleteBlockOutDate"), parameterSource("id", id));
+		delete(getSql("deleteBlockOutDate"), parameterSource(ID, id));
 	}
 
 	/**

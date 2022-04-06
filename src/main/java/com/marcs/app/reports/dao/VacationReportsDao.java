@@ -36,13 +36,13 @@ public class VacationReportsDao extends BaseDao {
          * @throws Exception
          */
         public List<Vacation> getVacations(VacationGetRequest request) throws Exception {
-                SqlParamBuilder builder = SqlParamBuilder.with(request).withParam("id", request.getId())
-                                .withParam("userId", request.getUserId())
-                                .withParam("regionalId", request.getRegionalId())
-                                .withParam("storeId", request.getStoreId())
-                                .withParamTextEnumCollection("webRole", request.getWebRole())
-                                .withParamTextEnumCollection("status", request.getStatus());
-                MapSqlParameterSource params = builder.build();
+                MapSqlParameterSource params = SqlParamBuilder.with(request)
+                                .withParam(ID, request.getId())
+                                .withParam(USER_ID, request.getUserId())
+                                .withParam(REGIONAL_ID, request.getRegionalId())
+                                .withParam(STORE_ID, request.getStoreId())
+                                .withParamTextEnumCollection(WEB_ROLE_TEXT_ID, request.getWebRole())
+                                .withParamTextEnumCollection(STATUS, request.getStatus()).build();
                 return getPage(getSql("getVacations", params), params, VACATION_MAPPER);
         }
 }

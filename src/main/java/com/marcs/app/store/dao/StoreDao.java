@@ -41,10 +41,11 @@ public class StoreDao extends BaseDao {
 	 * @since May 13, 2020
 	 */
 	public List<Store> getStores(StoreGetRequest request) throws Exception {
-		SqlParamBuilder builder = SqlParamBuilder.with(request).useAllParams().withParam("id", request.getId())
-				.withParam("regionalId", request.getRegionalId())
-				.withParam("managerId", request.getManagerId()).withParam("name", request.getName());
-		MapSqlParameterSource params = builder.build();
+		MapSqlParameterSource params = SqlParamBuilder.with(request).useAllParams()
+				.withParam(ID, request.getId())
+				.withParam(REGIONAL_ID, request.getRegionalId())
+				.withParam(MANAGER_ID, request.getManagerId())
+				.withParam(NAME, request.getName()).build();
 		return getPage(getSql("getStores", params), params, STORE_MAPPER);
 	}
 
@@ -56,7 +57,7 @@ public class StoreDao extends BaseDao {
 	 */
 	public User getRegionalOfStoreById(String storeId) throws Exception {
 		try {
-			return get(getSql("getRegionalOfStore"), parameterSource("storeId", storeId), USER_MAPPER);
+			return get(getSql("getRegionalOfStore"), parameterSource(ID, storeId), USER_MAPPER);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -70,7 +71,7 @@ public class StoreDao extends BaseDao {
 	 */
 	public User getManagerOfStoreById(String storeId) throws Exception {
 		try {
-			return get(getSql("getManagerOfStoreById"), parameterSource("storeId", storeId), USER_MAPPER);
+			return get(getSql("getManagerOfStoreById"), parameterSource(ID, storeId), USER_MAPPER);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -87,7 +88,7 @@ public class StoreDao extends BaseDao {
 	 */
 	public void updateStore(String storeId, Store store) throws Exception {
 		update(getSql("updateStore"), parameterSource("oldId", storeId).addValue("newId", store.getId())
-				.addValue("storeName", store.getName()));
+				.addValue(NAME, store.getName()));
 	}
 
 	/**
@@ -102,7 +103,7 @@ public class StoreDao extends BaseDao {
 	 */
 	public void updateStoreManagerOfStore(int userId, String storeId) throws Exception {
 		update(getSql("updateStoreManagerByStoreId"),
-				parameterSource("storeId", storeId).addValue("managerId", userId));
+				parameterSource(ID, storeId).addValue(MANAGER_ID, userId));
 	}
 
 	/**
@@ -115,7 +116,7 @@ public class StoreDao extends BaseDao {
 	 */
 	public void updateRegionalOfStore(int userId, String storeId) throws Exception {
 		update(getSql("updateRegionalOfStore"),
-				parameterSource("storeId", storeId).addValue("regionalId", userId));
+				parameterSource(ID, storeId).addValue(REGIONAL_ID, userId));
 	}
 
 	/**
@@ -127,11 +128,10 @@ public class StoreDao extends BaseDao {
 	 * @throws Exception
 	 */
 	public Store createStore(Store store) throws Exception {
-		SqlParamBuilder builder = SqlParamBuilder.with().useAllParams().withParam("storeId", store.getId())
-				.withParam("storeName", store.getName())
-				.withParam("regionalId", store.getRegionalId());
-
-		MapSqlParameterSource params = builder.build();
+		MapSqlParameterSource params = SqlParamBuilder.with().useAllParams()
+				.withParam(ID, store.getId())
+				.withParam(NAME, store.getName())
+				.withParam(REGIONAL_ID, store.getRegionalId()).build();
 
 		post(getSql("insertStore", params), params);
 		return store;
@@ -143,6 +143,6 @@ public class StoreDao extends BaseDao {
 	 * @param storeId The store id of the store to be deleted.
 	 */
 	public void deleteStoreById(String storeId) {
-		delete(getSql("deleteStore"), parameterSource("storeId", storeId));
+		delete(getSql("deleteStore"), parameterSource(ID, storeId));
 	}
 }

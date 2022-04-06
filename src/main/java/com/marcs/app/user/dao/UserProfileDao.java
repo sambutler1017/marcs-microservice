@@ -48,18 +48,19 @@ public class UserProfileDao extends BaseDao {
 	 * @throws Exception
 	 */
 	public List<User> getUsers(UserGetRequest request) throws Exception {
-		SqlParamBuilder builder = SqlParamBuilder.with(request).useAllParams().withParam("id", request.getId())
-				.withParam("email", request.getEmail()).withParam("storeId",
-						request.getStoreId())
-				.withParam("regionalId", request.getRegionalId()).withParam("firstName",
-						request.getFirstName())
-				.withParam("lastName", request.getLastName()).withParam("storeName",
-						request.getStoreName())
-				.withParam("emailReportsEnabled", request.getEmailReportsEnabled())
-				.withParamTextEnumCollection("accountStatus", request.getAccountStatus())
+		MapSqlParameterSource params = SqlParamBuilder.with(request).useAllParams()
+				.withParam(ID, request.getId())
+				.withParam(EMAIL, request.getEmail())
+				.withParam(STORE_ID, request.getStoreId())
+				.withParam(REGIONAL_ID, request.getRegionalId())
+				.withParam(FIRST_NAME, request.getFirstName())
+				.withParam(LAST_NAME, request.getLastName())
+				.withParam(STORE_NAME, request.getStoreName())
+				.withParam(EMAIL_REPORTS_ENABLED, request.getEmailReportsEnabled())
 				.withParam("excludedUserIds", request.getExcludedUserIds())
-				.withParamTextEnumCollection("webRole", request.getWebRole());
-		MapSqlParameterSource params = builder.build();
+				.withParamTextEnumCollection(ACCOUNT_STATUS, request.getAccountStatus())
+				.withParamTextEnumCollection(WEB_ROLE_TEXT_ID, request.getWebRole()).build();
+
 		return getPage(getSql("getUsers", params), params, USER_MAPPER);
 	}
 
@@ -101,7 +102,7 @@ public class UserProfileDao extends BaseDao {
 	 * @since May 13, 2020
 	 */
 	public List<Application> getUserApps(int userId) throws Exception {
-		MapSqlParameterSource params = parameterSource("userId", userId);
+		MapSqlParameterSource params = parameterSource(USER_ID, userId);
 		return getPage(getSql("getApplications", params), params, APPLICATION_MAPPER);
 	}
 
@@ -114,11 +115,13 @@ public class UserProfileDao extends BaseDao {
 	 */
 	public User insertUser(User user) throws Exception {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		SqlParamBuilder builder = SqlParamBuilder.with().useAllParams().withParam("firstName", user.getFirstName())
-				.withParam("lastName", user.getLastName()).withParam("email", user.getEmail())
-				.withParam("webRoleId", user.getWebRole().getRank())
-				.withParam("storeId", user.getStoreId().trim() == "" ? null : user.getStoreId())
-				.withParam("hireDate",
+		SqlParamBuilder builder = SqlParamBuilder.with().useAllParams()
+				.withParam(FIRST_NAME, user.getFirstName())
+				.withParam(LAST_NAME, user.getLastName())
+				.withParam(EMAIL, user.getEmail())
+				.withParam(WEB_ROLE_ID, user.getWebRole().getRank())
+				.withParam(STORE_ID, user.getStoreId().trim() == "" ? null : user.getStoreId())
+				.withParam(HIRE_DATE,
 						user.getHireDate() == null ? LocalDate.now().toString() : user.getHireDate().toString());
 
 		MapSqlParameterSource params = builder.build();
@@ -144,15 +147,16 @@ public class UserProfileDao extends BaseDao {
 		user.setPassword(null);
 		user = mapNonNullUserFields(user, userProfile);
 
-		SqlParamBuilder builder = SqlParamBuilder.with().withParam("firstName", user.getFirstName())
-				.withParam("lastName", user.getLastName())
-				.withParam("email", user.getEmail())
-				.withParam("storeId", user.getStoreId().trim() == "" ? null : user.getStoreId())
-				.withParam("webRoleId", user.getWebRole().getRank())
-				.withParam("hireDate", user.getHireDate())
-				.withParam("id", userId)
-				.withParam("emailReportsEnabled", user.isEmailReportsEnabled());
-		MapSqlParameterSource params = builder.build();
+		MapSqlParameterSource params = SqlParamBuilder.with()
+				.withParam(FIRST_NAME, user.getFirstName())
+				.withParam(LAST_NAME, user.getLastName())
+				.withParam(EMAIL, user.getEmail())
+				.withParam(STORE_ID, user.getStoreId().trim() == "" ? null : user.getStoreId())
+				.withParam(WEB_ROLE_ID, user.getWebRole().getRank())
+				.withParam(HIRE_DATE, user.getHireDate())
+				.withParam(ID, userId)
+				.withParam(EMAIL_REPORTS_ENABLED, user.isEmailReportsEnabled()).build();
+
 		update(getSql("updateUserProfile", params), params);
 
 		return getUserById(userId);
@@ -164,7 +168,7 @@ public class UserProfileDao extends BaseDao {
 	 * @param id The id of the user being deleted
 	 */
 	public void deleteUser(int id) throws Exception {
-		delete(getSql("deleteUser"), parameterSource("id", id));
+		delete(getSql("deleteUser"), parameterSource(ID, id));
 	}
 
 	/**

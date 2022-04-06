@@ -36,7 +36,7 @@ public class UserStatusDao extends BaseDao {
      * @throws Exception
      */
     public UserStatus getUserStatusById(int userId) throws Exception {
-        return get(getSql("getUserStatusById"), parameterSource("userId", userId), USER_STATUS_MAPPER);
+        return get(getSql("getUserStatusById"), parameterSource(USER_ID, userId), USER_STATUS_MAPPER);
     }
 
     /**
@@ -49,10 +49,10 @@ public class UserStatusDao extends BaseDao {
      */
     public UserStatus insertUserStatus(UserStatus userStatus, int updatingUserId) throws Exception {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        SqlParamBuilder builder = SqlParamBuilder.with().withParam("userId", userStatus.getUserId())
-                .withParam("accountStatus", userStatus.getAccountStatus())
-                .withParam("appAccess", userStatus.isAppAccess())
-                .withParam("updatedUserId", updatingUserId == -1 ? null : updatingUserId);
+        SqlParamBuilder builder = SqlParamBuilder.with().withParam(USER_ID, userStatus.getUserId())
+                .withParam(ACCOUNT_STATUS, userStatus.getAccountStatus())
+                .withParam(APP_ACCESS, userStatus.isAppAccess())
+                .withParam(UPDATE_USER_ID, updatingUserId == -1 ? null : updatingUserId);
 
         MapSqlParameterSource params = builder.build();
         post(getSql("insertUserStatus", params), params, keyHolder);
@@ -72,10 +72,10 @@ public class UserStatusDao extends BaseDao {
         UserStatus currentStatus = getUserStatusById(id);
         userStatus = mapNonNullUserStatusFields(userStatus, currentStatus);
 
-        SqlParamBuilder builder = SqlParamBuilder.with().withParam("userId", id)
-                .withParam("accountStatus", userStatus.getAccountStatus())
-                .withParam("appAccess", userStatus.isAppAccess())
-                .withParam("updatedUserId", userStatus.getUpdatedUserId());
+        SqlParamBuilder builder = SqlParamBuilder.with().withParam(USER_ID, id)
+                .withParam(ACCOUNT_STATUS, userStatus.getAccountStatus())
+                .withParam(APP_ACCESS, userStatus.isAppAccess())
+                .withParam(UPDATE_USER_ID, userStatus.getUpdatedUserId());
 
         MapSqlParameterSource params = builder.build();
         update(getSql("updateUserStatus", params), params);

@@ -11,5 +11,5 @@
       JOIN
     web_role_feature_access wrfa ON fa.id = wrfa.feature_id
   @WHERE
-    @AND(:webRole)
-      wrfa.web_role_id = :webRole
+    @AND(:web_role_id)
+      wrfa.web_role_id = :web_role_id

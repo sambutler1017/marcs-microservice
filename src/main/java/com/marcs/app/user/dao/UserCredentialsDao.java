@@ -36,7 +36,7 @@ public class UserCredentialsDao extends BaseDao {
      * @throws Exception
      */
     public void insertUserPassword(int userId, String hashedPass) throws Exception {
-        MapSqlParameterSource params = parameterSource("userId", userId).addValue("password", hashedPass);
+        MapSqlParameterSource params = parameterSource(USER_ID, userId).addValue(PASSWORD, hashedPass);
         post(getSql("insertUserPassword", params), params);
     }
 
@@ -52,7 +52,7 @@ public class UserCredentialsDao extends BaseDao {
     public User updateUserPassword(int userId, String hashedPass) throws Exception {
         User userProfile = userProfileDao.getUserById(userId);
 
-        MapSqlParameterSource params = parameterSource("password", hashedPass).addValue("id", userProfile.getId());
+        MapSqlParameterSource params = parameterSource(PASSWORD, hashedPass).addValue(USER_ID, userProfile.getId());
         update(getSql("updateUserPassword", params), params);
         return userProfile;
     }
