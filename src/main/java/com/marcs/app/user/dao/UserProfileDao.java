@@ -14,7 +14,6 @@ import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.common.exceptions.UserNotFoundException;
-import com.marcs.jwt.utility.JwtHolder;
 import com.marcs.sql.SqlParamBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +30,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class UserProfileDao extends BaseDao {
-
-	@Autowired
-	private JwtHolder jwtHolder;
 
 	@Autowired
 	public UserProfileDao(DataSource source) {
@@ -80,17 +76,6 @@ public class UserProfileDao extends BaseDao {
 		} catch (Exception e) {
 			throw new UserNotFoundException(String.format("User not found for id: %d", id));
 		}
-	}
-
-	/**
-	 * Gets a list of applications a user has access to
-	 * 
-	 * @return List of managers
-	 * @throws Exception
-	 * @since May 13, 2020
-	 */
-	public List<Application> getUserApps() throws Exception {
-		return getUserApps(jwtHolder.getRequiredUserId());
 	}
 
 	/**

@@ -86,7 +86,7 @@ public class UserProfileService {
 	 * @throws Exception
 	 */
 	public List<Application> getUserApps() throws Exception {
-		return dao.getUserApps();
+		return getUserAppsById(jwtHolder.getRequiredUserId());
 	}
 
 	/**
