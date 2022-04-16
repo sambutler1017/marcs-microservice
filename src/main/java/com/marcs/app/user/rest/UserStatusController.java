@@ -3,6 +3,7 @@ package com.marcs.app.user.rest;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.marcs.app.user.client.domain.UserStatus;
+import com.marcs.app.user.service.ManageUserStatusService;
 import com.marcs.app.user.service.UserStatusService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserStatusController {
 
     @Autowired
-    private UserStatusService service;
+    private UserStatusService userStatusService;
+
+    @Autowired
+    private ManageUserStatusService manageUserStatusService;
 
     /**
      * Gets the status for the given user id.
@@ -30,7 +34,7 @@ public class UserStatusController {
      */
     @GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
     public UserStatus getUserStatusById(@PathVariable int id) throws Exception {
-        return service.getUserStatusById(id);
+        return userStatusService.getUserStatusById(id);
     }
 
     /**
@@ -42,7 +46,7 @@ public class UserStatusController {
      */
     @PostMapping(produces = APPLICATION_JSON_VALUE)
     public UserStatus insertUserStatus(@RequestBody UserStatus userStatus) throws Exception {
-        return service.insertUserStatus(userStatus);
+        return manageUserStatusService.insertUserStatus(userStatus);
     }
 
     /**
@@ -55,7 +59,7 @@ public class UserStatusController {
     @PutMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
     public UserStatus updateUserStatusByUserId(@PathVariable int id, @RequestBody UserStatus userStatus)
             throws Exception {
-        return service.updateUserStatusByUserId(id, userStatus);
+        return manageUserStatusService.updateUserStatusByUserId(id, userStatus);
     }
 
     /**
@@ -69,6 +73,6 @@ public class UserStatusController {
     @PutMapping(path = "/{id}/access/{appAccess}", produces = APPLICATION_JSON_VALUE)
     public UserStatus updateUserAppAccessByUserId(@PathVariable int id, @PathVariable Boolean appAccess)
             throws Exception {
-        return service.updateUserAppAccessByUserId(id, appAccess);
+        return manageUserStatusService.updateUserAppAccessByUserId(id, appAccess);
     }
 }

@@ -6,8 +6,6 @@ import com.google.common.collect.Sets;
 import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
 import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
 import com.marcs.app.blockOutDate.dao.BlockOutDateDao;
-import com.marcs.common.enums.WebRole;
-import com.marcs.jwt.utility.JwtHolder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,9 +21,6 @@ public class BlockOutDateService {
 
 	@Autowired
 	private BlockOutDateDao dao;
-
-	@Autowired
-	private JwtHolder jwtHolder;
 
 	/**
 	 * Endpoint to get a list of block out dates based on the filter request
@@ -52,49 +47,5 @@ public class BlockOutDateService {
 			throw new Exception(String.format("Block out date id '%d' does not exist!", id));
 		}
 
-	}
-
-	/**
-	 * Method to update the given block out date with the passed in body and the
-	 * given id.
-	 * 
-	 * @param id        The id of the block out date to update.
-	 * @param blockDate The block out date body to be updated.
-	 * @return {@link BlockOutDate} with the updated fields.
-	 * @throws Exception
-	 */
-	public BlockOutDate updateBlockOutDateById(int id, BlockOutDate blockDate)
-			throws Exception {
-		blockDate.setInsertUserId(jwtHolder.getRequiredUserId());
-		blockDate.setId(id);
-		return dao.updateBlockOutDateById(id, getBlockOutDateById(id), blockDate);
-	}
-
-	/**
-	 * This will create a new block out date with the passed in request body
-	 * 
-	 * @param blockDate The block out date that needs to be created.
-	 * @return The block out date with the insert time stamp and unique id.
-	 * @throws Exception
-	 */
-	public BlockOutDate createBlockOutDate(BlockOutDate blockDate) throws Exception {
-		if (jwtHolder.getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
-			throw new Exception(String.format("User with role '%s' does not have permission to create block out dates!",
-					jwtHolder.getWebRole().toString()));
-		}
-
-		blockDate.setInsertUserId(jwtHolder.getRequiredUserId());
-		return dao.createBlockOutDate(blockDate);
-	}
-
-	/**
-	 * Delete a block out date for the given id.
-	 * 
-	 * @param id The id of the block out date to be deleted.
-	 * @throws Exception
-	 */
-	public void deleteBlockOutDate(int id) throws Exception {
-		getBlockOutDateById(id);
-		dao.deleteBlockOutDate(id);
 	}
 }

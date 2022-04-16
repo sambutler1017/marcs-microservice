@@ -7,6 +7,7 @@ import java.util.List;
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
+import com.marcs.app.user.service.ManageUserProfileService;
 import com.marcs.app.user.service.UserProfileService;
 import com.marcs.common.enums.AccountStatus;
 
@@ -26,7 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserProfileController {
 
 	@Autowired
-	private UserProfileService service;
+	private UserProfileService userProfileService;
+
+	@Autowired
+	private ManageUserProfileService manageUserProfileService;
 
 	/**
 	 * Gets a list of users based of the request filter
@@ -37,7 +41,7 @@ public class UserProfileController {
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	public List<User> getUsers(UserGetRequest request) throws Exception {
-		return service.getUsers(request);
+		return userProfileService.getUsers(request);
 	}
 
 	/**
@@ -48,7 +52,7 @@ public class UserProfileController {
 	 */
 	@GetMapping(path = "/current-user", produces = APPLICATION_JSON_VALUE)
 	public User getCurrentUser() throws Exception {
-		return service.getCurrentUser();
+		return userProfileService.getCurrentUser();
 	}
 
 	/**
@@ -60,7 +64,7 @@ public class UserProfileController {
 	 */
 	@GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public User getUserById(@PathVariable int id) throws Exception {
-		return service.getUserById(id);
+		return userProfileService.getUserById(id);
 	}
 
 	/**
@@ -71,7 +75,7 @@ public class UserProfileController {
 	 */
 	@GetMapping(path = "/application-access", produces = APPLICATION_JSON_VALUE)
 	public List<Application> getUserApps() throws Exception {
-		return service.getUserApps();
+		return userProfileService.getUserApps();
 	}
 
 	/**
@@ -82,7 +86,7 @@ public class UserProfileController {
 	 */
 	@GetMapping(path = "/{id}/application-access", produces = APPLICATION_JSON_VALUE)
 	public List<Application> getUserAppsById(@PathVariable int id) throws Exception {
-		return service.getUserAppsById(id);
+		return userProfileService.getUserAppsById(id);
 	}
 
 	/**
@@ -95,7 +99,7 @@ public class UserProfileController {
 	 */
 	@GetMapping("/check-email")
 	public boolean doesEmailExist(@RequestParam String email) throws Exception {
-		return service.doesEmailExist(email);
+		return userProfileService.doesEmailExist(email);
 	}
 
 	/**
@@ -107,7 +111,7 @@ public class UserProfileController {
 	 */
 	@PostMapping(produces = APPLICATION_JSON_VALUE)
 	public User createUser(@RequestBody User user) throws Exception {
-		return service.createUser(user, AccountStatus.PENDING);
+		return manageUserProfileService.createUser(user, AccountStatus.PENDING);
 	}
 
 	/**
@@ -120,7 +124,7 @@ public class UserProfileController {
 	 */
 	@PostMapping(path = "/add-user", produces = APPLICATION_JSON_VALUE)
 	public User addNewUser(@RequestBody User user) throws Exception {
-		return service.addNewUser(user);
+		return manageUserProfileService.addNewUser(user);
 	}
 
 	/**
@@ -133,7 +137,7 @@ public class UserProfileController {
 	 */
 	@PostMapping(path = "/forgot-password", produces = APPLICATION_JSON_VALUE)
 	public User forgotPassword(@RequestBody String email) throws Exception {
-		return service.forgotPassword(email);
+		return userProfileService.forgotPassword(email);
 	}
 
 	/**
@@ -146,7 +150,7 @@ public class UserProfileController {
 	 */
 	@PutMapping(produces = APPLICATION_JSON_VALUE)
 	public User updateUserProfile(@RequestBody User user) throws Exception {
-		return service.updateUserProfile(user);
+		return manageUserProfileService.updateUserProfile(user);
 	}
 
 	/**
@@ -158,7 +162,7 @@ public class UserProfileController {
 	 */
 	@PutMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public User updateUserProfileById(@PathVariable int id, @RequestBody User user) throws Exception {
-		return service.updateUserProfileById(id, user);
+		return manageUserProfileService.updateUserProfileById(id, user);
 	}
 
 	/**
@@ -169,6 +173,6 @@ public class UserProfileController {
 	 */
 	@DeleteMapping("/{id}")
 	public void deleteUser(@PathVariable int id) throws Exception {
-		service.deleteUser(id);
+		manageUserProfileService.deleteUser(id);
 	}
 }

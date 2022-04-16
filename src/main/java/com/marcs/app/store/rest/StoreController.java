@@ -7,6 +7,7 @@ import java.util.List;
 import com.marcs.annotations.interfaces.RestApiController;
 import com.marcs.app.store.client.domain.Store;
 import com.marcs.app.store.client.domain.request.StoreGetRequest;
+import com.marcs.app.store.service.ManageStoreService;
 import com.marcs.app.store.service.StoreService;
 import com.marcs.app.user.client.domain.User;
 
@@ -24,7 +25,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class StoreController {
 
 	@Autowired
-	private StoreService service;
+	private StoreService storeService;
+
+	@Autowired
+	private ManageStoreService manageStoreService;
 
 	/**
 	 * Endpoint to get a list of stores based on the given request
@@ -35,7 +39,7 @@ public class StoreController {
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	public List<Store> getStores(StoreGetRequest request) throws Exception {
-		return service.getStores(request);
+		return storeService.getStores(request);
 	}
 
 	/**
@@ -47,7 +51,7 @@ public class StoreController {
 	 */
 	@GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public Store getStoreById(@PathVariable String id) throws Exception {
-		return service.getStoreById(id);
+		return storeService.getStoreById(id);
 	}
 
 	/**
@@ -58,7 +62,7 @@ public class StoreController {
 	 */
 	@GetMapping(path = "/regional/{storeId}", produces = APPLICATION_JSON_VALUE)
 	public User getRegionalOfStoreById(@PathVariable String storeId) throws Exception {
-		return service.getRegionalOfStoreById(storeId);
+		return storeService.getRegionalOfStoreById(storeId);
 	}
 
 	/**
@@ -69,7 +73,7 @@ public class StoreController {
 	 */
 	@GetMapping(path = "/manager/{storeId}", produces = APPLICATION_JSON_VALUE)
 	public User getManagerOfStoreById(@PathVariable String storeId) throws Exception {
-		return service.getManagerOfStoreById(storeId);
+		return storeService.getManagerOfStoreById(storeId);
 	}
 
 	/**
@@ -83,7 +87,7 @@ public class StoreController {
 	 */
 	@PutMapping(path = "/{storeId}", produces = APPLICATION_JSON_VALUE)
 	public Store updateStore(@PathVariable String storeId, @RequestBody Store store) throws Exception {
-		return service.updateStore(storeId, store);
+		return manageStoreService.updateStore(storeId, store);
 	}
 
 	/**
@@ -98,7 +102,7 @@ public class StoreController {
 	 */
 	@PutMapping(path = "{userId}/manager/{storeId}", produces = APPLICATION_JSON_VALUE)
 	public Store updateStoreManagerOfStore(@PathVariable int userId, @PathVariable String storeId) throws Exception {
-		return service.updateStoreManagerOfStore(userId, storeId);
+		return manageStoreService.updateStoreManagerOfStore(userId, storeId);
 	}
 
 	/**
@@ -111,7 +115,7 @@ public class StoreController {
 	 */
 	@PutMapping(path = "{userId}/regional/{storeId}", produces = APPLICATION_JSON_VALUE)
 	public Store updateRegionalOfStore(@PathVariable int userId, @PathVariable String storeId) throws Exception {
-		return service.updateRegionalOfStore(userId, storeId);
+		return manageStoreService.updateRegionalOfStore(userId, storeId);
 	}
 
 	/**
@@ -124,7 +128,7 @@ public class StoreController {
 	 */
 	@PostMapping(produces = APPLICATION_JSON_VALUE)
 	public Store createStore(@RequestBody Store store) throws Exception {
-		return service.createStore(store);
+		return manageStoreService.createStore(store);
 	}
 
 	/**
@@ -135,6 +139,6 @@ public class StoreController {
 	 */
 	@DeleteMapping(path = "/{storeId}")
 	public void deleteStoreById(@PathVariable String storeId) throws Exception {
-		service.deleteStoreById(storeId);
+		manageStoreService.deleteStoreById(storeId);
 	}
 }

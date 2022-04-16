@@ -7,6 +7,7 @@ import java.util.List;
 import com.marcs.annotations.interfaces.RestApiController;
 import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.app.notifications.client.domain.request.NotificationGetRequest;
+import com.marcs.app.notifications.service.ManageNotificationService;
 import com.marcs.app.notifications.service.NotificationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class NotificationController {
 
     @Autowired
-    private NotificationService service;
+    private NotificationService notificationService;
+
+    @Autowired
+    private ManageNotificationService manageNotificationService;
 
     /**
      * This will get a list of notifications that the user has. The request will be
@@ -37,7 +41,7 @@ public class NotificationController {
      */
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public List<Notification> getNotifications(NotificationGetRequest request) throws Exception {
-        return service.getNotifications(request);
+        return notificationService.getNotifications(request);
     }
 
     /**
@@ -51,7 +55,7 @@ public class NotificationController {
      */
     @GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
     public Notification getNotificationById(@PathVariable int id) throws Exception {
-        return service.getNotificationById(id);
+        return notificationService.getNotificationById(id);
     }
 
     /**
@@ -64,7 +68,7 @@ public class NotificationController {
      */
     @GetMapping(path = "/current-user", produces = APPLICATION_JSON_VALUE)
     public List<Notification> getCurrentUserNotifications(NotificationGetRequest req) throws Exception {
-        return service.getCurrentUserNotifications(req);
+        return notificationService.getCurrentUserNotifications(req);
     }
 
     /**
@@ -77,7 +81,7 @@ public class NotificationController {
      */
     @PutMapping(path = "/{id}/read", produces = APPLICATION_JSON_VALUE)
     public Notification markNotificationRead(@PathVariable int id) throws Exception {
-        return service.markNotificationRead(id);
+        return manageNotificationService.markNotificationRead(id);
     }
 
     /**
@@ -90,7 +94,7 @@ public class NotificationController {
      */
     @PostMapping(produces = APPLICATION_JSON_VALUE)
     public Notification createNotification(@RequestBody Notification n) throws Exception {
-        return service.createNotification(n);
+        return manageNotificationService.createNotification(n);
     }
 
     /**
@@ -102,6 +106,6 @@ public class NotificationController {
      */
     @DeleteMapping(path = "/{id}")
     public void deleteNotification(@PathVariable int id) throws Exception {
-        service.deleteNotification(id);
+        manageNotificationService.deleteNotification(id);
     }
 }

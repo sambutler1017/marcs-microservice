@@ -100,19 +100,17 @@ public class UserProfileDao extends BaseDao {
 	 */
 	public User insertUser(User user) throws Exception {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		SqlParamBuilder builder = SqlParamBuilder.with().useAllParams()
+		MapSqlParameterSource params = SqlParamBuilder.with().useAllParams()
 				.withParam(FIRST_NAME, user.getFirstName())
 				.withParam(LAST_NAME, user.getLastName())
 				.withParam(EMAIL, user.getEmail())
 				.withParam(WEB_ROLE_ID, user.getWebRole().getRank())
 				.withParam(STORE_ID, user.getStoreId().trim() == "" ? null : user.getStoreId())
 				.withParam(HIRE_DATE,
-						user.getHireDate() == null ? LocalDate.now().toString() : user.getHireDate().toString());
-
-		MapSqlParameterSource params = builder.build();
+						user.getHireDate() == null ? LocalDate.now().toString() : user.getHireDate().toString())
+				.build();
 
 		post(getSql("insertUser", params), params, keyHolder);
-
 		user.setId(keyHolder.getKey().intValue());
 		return user;
 	}
@@ -128,7 +126,6 @@ public class UserProfileDao extends BaseDao {
 	 */
 	public User updateUserProfile(int userId, User user) throws Exception {
 		User userProfile = getUserById(userId);
-
 		user.setPassword(null);
 		user = mapNonNullUserFields(user, userProfile);
 

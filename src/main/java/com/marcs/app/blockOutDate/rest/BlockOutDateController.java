@@ -8,6 +8,7 @@ import com.marcs.annotations.interfaces.RestApiController;
 import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
 import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
 import com.marcs.app.blockOutDate.service.BlockOutDateService;
+import com.marcs.app.blockOutDate.service.ManageBlockOutDateService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class BlockOutDateController {
 
 	@Autowired
-	private BlockOutDateService service;
+	private BlockOutDateService blockOutDateService;
+
+	@Autowired
+	private ManageBlockOutDateService manageBlockOutDateService;
 
 	/**
 	 * Endpoint to get a list of block out dates based on the filter request
@@ -34,7 +38,7 @@ public class BlockOutDateController {
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) throws Exception {
-		return service.getBlockOutDates(request);
+		return blockOutDateService.getBlockOutDates(request);
 	}
 
 	/**
@@ -46,7 +50,7 @@ public class BlockOutDateController {
 	 */
 	@GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public BlockOutDate getBlockOutDateById(@PathVariable int id) throws Exception {
-		return service.getBlockOutDateById(id);
+		return blockOutDateService.getBlockOutDateById(id);
 	}
 
 	/**
@@ -61,7 +65,7 @@ public class BlockOutDateController {
 	@PutMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public BlockOutDate updateBlockOutDateById(@PathVariable int id, @RequestBody BlockOutDate blockDate)
 			throws Exception {
-		return service.updateBlockOutDateById(id, blockDate);
+		return manageBlockOutDateService.updateBlockOutDateById(id, blockDate);
 	}
 
 	/**
@@ -73,7 +77,7 @@ public class BlockOutDateController {
 	 */
 	@PostMapping(produces = APPLICATION_JSON_VALUE)
 	public BlockOutDate createBlockOutDate(@RequestBody BlockOutDate blockDate) throws Exception {
-		return service.createBlockOutDate(blockDate);
+		return manageBlockOutDateService.createBlockOutDate(blockDate);
 	}
 
 	/**
@@ -84,6 +88,6 @@ public class BlockOutDateController {
 	 */
 	@DeleteMapping(path = "/{id}")
 	public void deleteBlockOutDate(@PathVariable int id) throws Exception {
-		service.deleteBlockOutDate(id);
+		manageBlockOutDateService.deleteBlockOutDate(id);
 	}
 }

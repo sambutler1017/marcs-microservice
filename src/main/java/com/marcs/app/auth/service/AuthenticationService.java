@@ -45,7 +45,6 @@ public class AuthenticationService {
         } else {
             throw new InvalidCredentialsException("Invalid Credentials!");
         }
-
     }
 
     /**
