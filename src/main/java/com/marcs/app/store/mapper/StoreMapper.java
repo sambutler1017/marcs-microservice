@@ -4,8 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.marcs.app.store.client.domain.Store;
-
-import org.springframework.jdbc.core.RowMapper;
+import com.marcs.common.abstracts.AbstractMapper;
 
 /**
  * Mapper class to map a Store Object {@link Store}
@@ -13,15 +12,15 @@ import org.springframework.jdbc.core.RowMapper;
  * @author Sam Butler
  * @since June 25, 2020
  */
-public class StoreMapper implements RowMapper<Store> {
+public class StoreMapper extends AbstractMapper<Store> {
 	public static StoreMapper STORE_MAPPER = new StoreMapper();
 
 	public Store mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Store store = new Store();
-		store.setId(rs.getString("store_id"));
-		store.setRegionalId(rs.getInt("regional_id"));
-		store.setName(rs.getString("store_name"));
-		store.setManagerId(rs.getInt("manager_id"));
+		store.setId(rs.getString(STORE_ID));
+		store.setRegionalId(rs.getInt(REGIONAL_ID));
+		store.setName(rs.getString(STORE_NAME));
+		store.setManagerId(rs.getInt(MANAGER_ID));
 
 		return store;
 	}

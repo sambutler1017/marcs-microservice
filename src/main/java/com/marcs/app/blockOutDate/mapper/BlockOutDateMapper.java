@@ -4,8 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
-
-import org.springframework.jdbc.core.RowMapper;
+import com.marcs.common.abstracts.AbstractMapper;
 
 /**
  * Mapper class to map a Block Out Date Object {@link BlockOutDate}
@@ -13,16 +12,16 @@ import org.springframework.jdbc.core.RowMapper;
  * @author Sam Butler
  * @since June 25, 2020
  */
-public class BlockOutDateMapper implements RowMapper<BlockOutDate> {
+public class BlockOutDateMapper extends AbstractMapper<BlockOutDate> {
 	public static BlockOutDateMapper BLOCK_OUT_DATE_MAPPER = new BlockOutDateMapper();
 
 	public BlockOutDate mapRow(ResultSet rs, int rowNum) throws SQLException {
 		BlockOutDate blockOutDate = new BlockOutDate();
-		blockOutDate.setId(rs.getInt("id"));
-		blockOutDate.setInsertUserId(rs.getInt("insert_user_id"));
-		blockOutDate.setStartDate(rs.getTimestamp("start_date").toLocalDateTime());
-		blockOutDate.setEndDate(rs.getTimestamp("end_date").toLocalDateTime());
-		blockOutDate.setInsertDate(rs.getTimestamp("insert_date").toLocalDateTime());
+		blockOutDate.setId(rs.getInt(ID));
+		blockOutDate.setInsertUserId(rs.getInt(INSERT_USER_ID));
+		blockOutDate.setStartDate(rs.getTimestamp(START_DATE).toLocalDateTime());
+		blockOutDate.setEndDate(rs.getTimestamp(END_DATE).toLocalDateTime());
+		blockOutDate.setInsertDate(rs.getTimestamp(INSERT_DATE).toLocalDateTime());
 		return blockOutDate;
 	}
 }
