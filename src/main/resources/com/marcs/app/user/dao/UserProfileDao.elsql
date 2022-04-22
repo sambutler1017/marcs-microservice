@@ -1,5 +1,5 @@
 @NAME(userProfileFields)
-  up.id, up.first_name, up.last_name, up.email, up.web_role_id, up.email_reports_enabled, up.hire_date, up.insert_date
+  up.id, up.first_name, up.last_name, up.email, up.web_role_id, up.email_reports_enabled, up.hire_date, up.insert_date, up.last_login_date
 
 @NAME(storeFields)
   st.id AS 'store_id', st.name AS 'store_name', st.regional_id, st.manager_id
@@ -74,6 +74,13 @@
     web_role_id = :web_role_id,
     email_reports_enabled = :email_reports_enabled,
     hire_date = :hire_date
+  WHERE
+    id = :id
+
+@NAME(updateUserLastLoginToNow)
+  UPDATE user_profile 
+  SET
+    last_login_date = :last_login_date
   WHERE
     id = :id
 

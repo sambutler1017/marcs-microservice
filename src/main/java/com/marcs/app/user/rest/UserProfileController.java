@@ -166,6 +166,18 @@ public class UserProfileController {
 	}
 
 	/**
+	 * Method that will update the user's last login time to current date and time;
+	 * 
+	 * @param userId The user Id to be updated.
+	 * @return The user object with the updated information.
+	 * @throws Exception
+	 */
+	@PutMapping(path = "/{id}/last-login", produces = APPLICATION_JSON_VALUE)
+	public User updateUserLastLoginToNow(@PathVariable int id) throws Exception {
+		return manageUserProfileService.updateUserLastLoginToNow(id);
+	}
+
+	/**
 	 * Delete the user for the given id.
 	 * 
 	 * @param id The id of the user being deleted

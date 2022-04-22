@@ -3,7 +3,8 @@ package com.marcs.app.user.dao;
 import static com.marcs.app.user.mapper.ApplicationMapper.APPLICATION_MAPPER;
 import static com.marcs.app.user.mapper.UserProfileMapper.USER_MAPPER;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -14,6 +15,7 @@ import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.common.exceptions.UserNotFoundException;
+import com.marcs.common.util.CommonUtil;
 import com.marcs.sql.SqlParamBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +109,7 @@ public class UserProfileDao extends BaseDao {
 				.withParam(WEB_ROLE_ID, user.getWebRole().getRank())
 				.withParam(STORE_ID, user.getStoreId().trim() == "" ? null : user.getStoreId())
 				.withParam(HIRE_DATE,
-						user.getHireDate() == null ? LocalDate.now().toString() : user.getHireDate().toString())
+						user.getHireDate() == null ? LocalDateTime.now().toString() : user.getHireDate().toString())
 				.build();
 
 		post(getSql("insertUser", params), params, keyHolder);
@@ -140,6 +142,23 @@ public class UserProfileDao extends BaseDao {
 				.withParam(EMAIL_REPORTS_ENABLED, user.isEmailReportsEnabled()).build();
 
 		update(getSql("updateUserProfile", params), params);
+
+		return getUserById(userId);
+	}
+
+	/**
+	 * Method that will update the user's last login time to current date and time;
+	 * 
+	 * @param userId The user Id to be updated.
+	 * @return The user object with the updated information.
+	 * @throws Exception
+	 */
+	public User updateUserLastLoginToNow(int userId) throws Exception {
+		MapSqlParameterSource params = SqlParamBuilder.with()
+				.withParam(LAST_LOGIN_DATE, CommonUtil.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"))
+				.withParam(ID, userId).build();
+
+		update(getSql("updateUserLastLoginToNow", params), params);
 
 		return getUserById(userId);
 	}

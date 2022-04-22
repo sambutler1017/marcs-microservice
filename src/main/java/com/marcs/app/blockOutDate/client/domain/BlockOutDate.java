@@ -1,6 +1,6 @@
 package com.marcs.app.blockOutDate.client.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Class to represent a block out date object
@@ -11,13 +11,13 @@ import java.time.LocalDate;
 public class BlockOutDate {
     private int id;
 
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     private int insertUserId;
 
-    private LocalDate insertDate;
+    private LocalDateTime insertDate;
 
     public int getId() {
         return id;
@@ -27,19 +27,19 @@ public class BlockOutDate {
         this.id = id;
     }
 
-    public LocalDate getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
@@ -51,11 +51,11 @@ public class BlockOutDate {
         this.insertUserId = insertUserId;
     }
 
-    public LocalDate getInsertDate() {
+    public LocalDateTime getInsertDate() {
         return insertDate;
     }
 
-    public void setInsertDate(LocalDate insertDate) {
+    public void setInsertDate(LocalDateTime insertDate) {
         this.insertDate = insertDate;
     }
 }

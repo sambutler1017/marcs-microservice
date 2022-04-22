@@ -2,7 +2,6 @@ package com.marcs.app.user.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 import com.marcs.app.user.client.domain.User;
 import com.marcs.common.enums.AccountStatus;
@@ -38,8 +37,9 @@ public class UserProfileMapper implements RowMapper<User> {
 			user.setPassword(null);
 		}
 
-		user.setHireDate(LocalDate.parse(rs.getDate("hire_date").toString()));
-		user.setInsertDate(LocalDate.parse(rs.getDate("insert_date").toString()));
+		user.setLastLoginDate(rs.getTimestamp("last_login_date").toLocalDateTime());
+		user.setHireDate(rs.getTimestamp("hire_date").toLocalDateTime());
+		user.setInsertDate(rs.getTimestamp("insert_date").toLocalDateTime());
 		return user;
 	}
 }

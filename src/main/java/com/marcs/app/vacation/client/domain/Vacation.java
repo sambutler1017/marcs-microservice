@@ -1,6 +1,6 @@
 package com.marcs.app.vacation.client.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.common.enums.WebRole;
@@ -23,13 +23,13 @@ public class Vacation {
 
 	private String storeId;
 
-	private LocalDate startDate;
+	private LocalDateTime startDate;
 
-	private LocalDate endDate;
+	private LocalDateTime endDate;
 
 	private String notes;
 
-	private LocalDate insertDate;
+	private LocalDateTime insertDate;
 
 	private VacationStatus status;
 
@@ -73,19 +73,19 @@ public class Vacation {
 		this.storeId = storeId;
 	}
 
-	public LocalDate getStartDate() {
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(LocalDate startString) {
+	public void setStartDate(LocalDateTime startString) {
 		this.startDate = startString;
 	}
 
-	public LocalDate getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(LocalDate endString) {
+	public void setEndDate(LocalDateTime endString) {
 		this.endDate = endString;
 	}
 
@@ -105,11 +105,11 @@ public class Vacation {
 		this.status = status;
 	}
 
-	public LocalDate getInsertDate() {
+	public LocalDateTime getInsertDate() {
 		return insertDate;
 	}
 
-	public void setInsertDate(LocalDate insertDate) {
+	public void setInsertDate(LocalDateTime insertDate) {
 		this.insertDate = insertDate;
 	}
 }

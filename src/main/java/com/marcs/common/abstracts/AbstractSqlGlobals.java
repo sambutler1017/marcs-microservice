@@ -27,6 +27,7 @@ public abstract class AbstractSqlGlobals {
     public static final String WEB_ROLE_ID = "web_role_id";
     public static final String WEB_ROLE_TEXT_ID = "web_role_text_id";
     public static final String EMAIL_REPORTS_ENABLED = "email_reports_enabled";
+    public static final String LAST_LOGIN_DATE = "last_login_date";
     public static final String HIRE_DATE = "hire_date";
     public static final String REQUEST_ID = "request_id";
     public static final String ACCOUNT_STATUS = "account_status";

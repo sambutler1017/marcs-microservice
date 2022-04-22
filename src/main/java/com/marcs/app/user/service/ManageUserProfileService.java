@@ -105,6 +105,17 @@ public class ManageUserProfileService {
 	}
 
 	/**
+	 * Method that will update the user's last login time to current date and time;
+	 * 
+	 * @param userId The user Id to be updated.
+	 * @return The user object with the updated information.
+	 * @throws Exception
+	 */
+	public User updateUserLastLoginToNow(int userId) throws Exception {
+		return dao.updateUserLastLoginToNow(userId);
+	}
+
+	/**
 	 * Delete the user for the given id.
 	 * 
 	 * @param id The id of the user being deleted

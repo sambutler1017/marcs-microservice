@@ -2,7 +2,6 @@ package com.marcs.app.vacation.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.common.enums.VacationStatus;
@@ -24,14 +23,14 @@ public class VacationMapper implements RowMapper<Vacation> {
 		vacation.setId(rs.getInt("id"));
 		vacation.setUserId(rs.getInt("user_id"));
 		vacation.setStatus(VacationStatus.valueOf(rs.getString("status")));
-		vacation.setInsertDate(LocalDate.parse(rs.getDate("insert_date").toString()));
+		vacation.setInsertDate(rs.getTimestamp("insert_date").toLocalDateTime());
 		vacation.setFullName(rs.getString("name").trim());
 		vacation.setWebRole(WebRole.getRole(rs.getInt("web_role_id")));
 		vacation.setStoreId(rs.getString("store_id"));
 		vacation.setNotes(rs.getString("notes"));
 		try {
-			vacation.setStartDate(LocalDate.parse(rs.getDate("start_date").toString()));
-			vacation.setEndDate(LocalDate.parse(rs.getDate("end_date").toString()));
+			vacation.setStartDate(rs.getTimestamp("start_date").toLocalDateTime());
+			vacation.setEndDate(rs.getTimestamp("end_date").toLocalDateTime());
 		} catch (Exception e) {
 			vacation.setStartDate(null);
 			vacation.setEndDate(null);

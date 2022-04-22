@@ -41,7 +41,8 @@ public class AuthenticationService {
      */
     public User verifyUser(String email, String password) throws Exception {
         if (BCrypt.checkpw(password, authDao.getUserAuthPassword(email))) {
-            return getAuthenticatedUser(email);
+            User authUser = getAuthenticatedUser(email);
+            return userClient.updateUserLastLoginToNow(authUser.getId());
         } else {
             throw new InvalidCredentialsException("Invalid Credentials!");
         }
