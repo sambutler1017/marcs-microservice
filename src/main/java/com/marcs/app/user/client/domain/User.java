@@ -1,6 +1,6 @@
 package com.marcs.app.user.client.domain;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -36,11 +36,11 @@ public class User {
 
 	private AccountStatus accountStatus;
 
-	private LocalDateTime lastLoginDate;
+	private Date lastLoginDate;
 
-	private LocalDateTime hireDate;
+	private Date hireDate;
 
-	private LocalDateTime insertDate;
+	private Date insertDate;
 
 	@JsonInclude(Include.NON_DEFAULT)
 	private long salt;
@@ -133,27 +133,27 @@ public class User {
 		this.accountStatus = accountStatus;
 	}
 
-	public LocalDateTime getLastLoginDate() {
+	public Date getLastLoginDate() {
 		return lastLoginDate;
 	}
 
-	public void setLastLoginDate(LocalDateTime lastLoginDate) {
+	public void setLastLoginDate(Date lastLoginDate) {
 		this.lastLoginDate = lastLoginDate;
 	}
 
-	public LocalDateTime getHireDate() {
+	public Date getHireDate() {
 		return hireDate;
 	}
 
-	public void setHireDate(LocalDateTime hireDate) {
+	public void setHireDate(Date hireDate) {
 		this.hireDate = hireDate;
 	}
 
-	public LocalDateTime getInsertDate() {
+	public Date getInsertDate() {
 		return insertDate;
 	}
 
-	public void setInsertDate(LocalDateTime insertDate) {
+	public void setInsertDate(Date insertDate) {
 		this.insertDate = insertDate;
 	}
 

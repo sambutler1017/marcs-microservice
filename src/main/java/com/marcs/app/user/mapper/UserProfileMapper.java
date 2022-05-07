@@ -36,9 +36,9 @@ public class UserProfileMapper extends AbstractMapper<User> {
 			user.setPassword(null);
 		}
 
-		user.setLastLoginDate(rs.getTimestamp(LAST_LOGIN_DATE).toLocalDateTime());
-		user.setHireDate(rs.getTimestamp(HIRE_DATE).toLocalDateTime());
-		user.setInsertDate(rs.getTimestamp(INSERT_DATE).toLocalDateTime());
+		user.setLastLoginDate(rs.getDate(LAST_LOGIN_DATE));
+		user.setHireDate(rs.getDate(HIRE_DATE));
+		user.setInsertDate(rs.getDate(INSERT_DATE));
 		return user;
 	}
 }

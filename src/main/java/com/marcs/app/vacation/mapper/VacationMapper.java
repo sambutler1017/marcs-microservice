@@ -22,14 +22,14 @@ public class VacationMapper extends AbstractMapper<Vacation> {
 		vacation.setId(rs.getInt(ID));
 		vacation.setUserId(rs.getInt(USER_ID));
 		vacation.setStatus(VacationStatus.valueOf(rs.getString(STATUS)));
-		vacation.setInsertDate(rs.getTimestamp(INSERT_DATE).toLocalDateTime());
+		vacation.setInsertDate(rs.getDate(INSERT_DATE));
 		vacation.setFullName(rs.getString(NAME).trim());
 		vacation.setWebRole(WebRole.getRole(rs.getInt(WEB_ROLE_ID)));
 		vacation.setStoreId(rs.getString(STORE_ID));
 		vacation.setNotes(rs.getString(NOTES));
 		try {
-			vacation.setStartDate(rs.getTimestamp(START_DATE).toLocalDateTime());
-			vacation.setEndDate(rs.getTimestamp(END_DATE).toLocalDateTime());
+			vacation.setStartDate(rs.getDate(START_DATE));
+			vacation.setEndDate(rs.getDate(END_DATE));
 		} catch (Exception e) {
 			vacation.setStartDate(null);
 			vacation.setEndDate(null);

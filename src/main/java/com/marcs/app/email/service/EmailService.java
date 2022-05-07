@@ -25,6 +25,7 @@ import com.marcs.common.enums.AccountStatus;
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.common.enums.WebRole;
 import com.marcs.common.exceptions.SqlFragmentNotFoundException;
+import com.marcs.common.util.CommonUtil;
 import com.marcs.jwt.utility.JwtTokenUtil;
 import com.marcs.service.activeProfile.ActiveProfile;
 import com.sendgrid.Content;
@@ -309,8 +310,10 @@ public class EmailService {
         for (Vacation vac : vacs) {
             String replacementValueName = String.format("%s (%s)", vac.getFullName(), vac.getStoreId());
             String replacementValueDate = String.format("%s - %s",
-                    vac.getStartDate().format(DateTimeFormatter.ofPattern("MMMM d, yyyy")),
-                    vac.getEndDate().format(DateTimeFormatter.ofPattern("MMMM d, yyyy")));
+                    CommonUtil.convertDateToLocalDate(vac.getStartDate())
+                            .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")),
+                    CommonUtil.convertDateToLocalDate(vac.getEndDate())
+                            .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")));
 
             htmlCards += defaultCard.replace("::DATA_NAME::", replacementValueName).replace("::DATA_DATE::",
                     replacementValueDate);

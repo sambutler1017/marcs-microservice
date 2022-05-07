@@ -1,9 +1,12 @@
 package com.marcs.app.vacation.client.domain;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.common.enums.WebRole;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Class to create a vacation object
@@ -23,13 +26,17 @@ public class Vacation {
 
 	private String storeId;
 
-	private LocalDateTime startDate;
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private Date startDate;
 
-	private LocalDateTime endDate;
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private Date endDate;
 
 	private String notes;
 
-	private LocalDateTime insertDate;
+	private Date insertDate;
 
 	private VacationStatus status;
 
@@ -73,19 +80,19 @@ public class Vacation {
 		this.storeId = storeId;
 	}
 
-	public LocalDateTime getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(LocalDateTime startString) {
+	public void setStartDate(Date startString) {
 		this.startDate = startString;
 	}
 
-	public LocalDateTime getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(LocalDateTime endString) {
+	public void setEndDate(Date endString) {
 		this.endDate = endString;
 	}
 
@@ -105,11 +112,11 @@ public class Vacation {
 		this.status = status;
 	}
 
-	public LocalDateTime getInsertDate() {
+	public Date getInsertDate() {
 		return insertDate;
 	}
 
-	public void setInsertDate(LocalDateTime insertDate) {
+	public void setInsertDate(Date insertDate) {
 		this.insertDate = insertDate;
 	}
 }
