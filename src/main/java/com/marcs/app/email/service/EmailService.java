@@ -310,10 +310,8 @@ public class EmailService {
         for (Vacation vac : vacs) {
             String replacementValueName = String.format("%s (%s)", vac.getFullName(), vac.getStoreId());
             String replacementValueDate = String.format("%s - %s",
-                    CommonUtil.convertDateToLocalDate(vac.getStartDate())
-                            .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")),
-                    CommonUtil.convertDateToLocalDate(vac.getEndDate())
-                            .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")));
+                    CommonUtil.formatDate(vac.getStartDate(), "MMMM d, yyyy"),
+                    CommonUtil.formatDate(vac.getEndDate(), "MMMM d, yyyy"));
 
             htmlCards += defaultCard.replace("::DATA_NAME::", replacementValueName).replace("::DATA_DATE::",
                     replacementValueDate);
