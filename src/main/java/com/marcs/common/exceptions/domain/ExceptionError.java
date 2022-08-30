@@ -1,4 +1,4 @@
-package com.marcs.common.exceptions.helper;
+package com.marcs.common.exceptions.domain;
 
 import java.util.Date;
 
@@ -19,8 +19,7 @@ public class ExceptionError {
 
     private String message;
 
-    public ExceptionError() {
-    }
+    public ExceptionError() {}
 
     public ExceptionError(String message) {
         this.status = HttpStatus.BAD_REQUEST.value();

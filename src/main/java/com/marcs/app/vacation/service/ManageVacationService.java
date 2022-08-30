@@ -2,6 +2,9 @@ package com.marcs.app.vacation.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.marcs.app.notifications.client.NotificationClient;
 import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.app.user.client.UserProfileClient;
@@ -11,9 +14,6 @@ import com.marcs.common.enums.NotificationType;
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.jwt.utility.JwtHolder;
 import com.marcs.websockets.client.WebSocketClient;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * Vacation Service class that handles all service calls to the dao
@@ -65,7 +65,7 @@ public class ManageVacationService {
 	 */
 	public Vacation requestVacation(Vacation vac) throws Exception {
 		vac.setStatus(VacationStatus.PENDING);
-		Vacation returnVac = createVacation(jwtHolder.getRequiredUserId(), vac);
+		Vacation returnVac = createVacation(jwtHolder.getUserId(), vac);
 		notificationClient.createNotificationForVacation(returnVac);
 		return returnVac;
 	}
@@ -80,7 +80,7 @@ public class ManageVacationService {
 	 */
 	public List<Vacation> createBatchVacations(int id, List<Vacation> vacs) throws Exception {
 		userClient.getUserById(id);
-		for (Vacation vac : vacs) {
+		for(Vacation vac : vacs) {
 			createVacation(id, vac);
 		}
 		return vacationService.getVacationsByUserId(id);
@@ -139,7 +139,7 @@ public class ManageVacationService {
 	 * @throws Exception
 	 */
 	public void deleteAllCurrentUserVacations() throws Exception {
-		deleteAllVacationsByUserId(jwtHolder.getRequiredUserId());
+		deleteAllVacationsByUserId(jwtHolder.getUserId());
 	}
 
 	/**

@@ -1,0 +1,1 @@
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar build/libs/marcs-microservice.jar --spring.profiles.active=$APP_ENVIRONMENT

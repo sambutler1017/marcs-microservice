@@ -1,5 +1,7 @@
 package com.marcs.websockets.stomp;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -19,7 +21,10 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketConfig.class);
     private final long DEFAULT_HEARTBEAT = 20000;
+    private final String SOCKET_URI = "/subscription/socket";
 
     @Bean
     public TaskScheduler taskScheduler() {
@@ -32,11 +37,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.setUserDestinationPrefix("/user").enableSimpleBroker("/topic").setTaskScheduler(taskScheduler())
-                .setHeartbeatValue(new long[] { DEFAULT_HEARTBEAT, DEFAULT_HEARTBEAT });
+                .setHeartbeatValue(new long[] {DEFAULT_HEARTBEAT, DEFAULT_HEARTBEAT});
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/api/websocket").setHandshakeHandler(new UserHandshakeHandler()).setAllowedOrigins("*");
+        LOGGER.info("Websocket connection opened on uri '{}'", SOCKET_URI);
+        registry.addEndpoint(SOCKET_URI).setHandshakeHandler(new UserHandshakeHandler()).setAllowedOrigins("*");
     }
 }

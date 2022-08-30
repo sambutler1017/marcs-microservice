@@ -2,6 +2,9 @@ package com.marcs.app.user.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.google.common.collect.Sets;
 import com.marcs.app.email.client.EmailClient;
 import com.marcs.app.user.client.domain.Application;
@@ -10,9 +13,6 @@ import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.app.user.dao.UserProfileDao;
 import com.marcs.common.exceptions.BaseException;
 import com.marcs.jwt.utility.JwtHolder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * User Service class that handles all service calls to the dao
@@ -50,7 +50,7 @@ public class UserProfileService {
 	 * @throws Exception
 	 */
 	public User getCurrentUser() throws Exception {
-		return getUserById(jwtHolder.getRequiredUserId());
+		return getUserById(jwtHolder.getUserId());
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class UserProfileService {
 	 * @throws Exception
 	 */
 	public List<Application> getUserApps() throws Exception {
-		return getUserAppsById(jwtHolder.getRequiredUserId());
+		return getUserAppsById(jwtHolder.getUserId());
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class UserProfileService {
 		request.setEmail(Sets.newHashSet(email));
 		List<User> users = getUsers(request);
 
-		if (users.size() == 0) {
+		if(users.size() == 0) {
 			throw new BaseException(String.format("User not found for email '%s'", email));
 		}
 

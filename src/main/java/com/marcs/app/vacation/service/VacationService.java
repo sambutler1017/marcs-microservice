@@ -2,14 +2,14 @@ package com.marcs.app.vacation.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.google.common.collect.Sets;
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.app.vacation.dao.VacationDao;
 import com.marcs.jwt.utility.JwtHolder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * Vacation Service class that handles all service calls to the dao
@@ -43,7 +43,7 @@ public class VacationService {
 	 * @throws Exception
 	 */
 	public List<Vacation> getCurrentUserVacations() throws Exception {
-		return getVacationsByUserId(jwtHolder.getRequiredUserId());
+		return getVacationsByUserId(jwtHolder.getUserId());
 	}
 
 	/**

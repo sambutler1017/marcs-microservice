@@ -1,164 +1,155 @@
 package com.marcs.jwt.utility;
 
-import javax.servlet.http.HttpServletRequest;
-
-import com.marcs.common.enums.WebRole;
-import com.marcs.service.activeProfile.ActiveProfile;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
+import com.marcs.app.user.client.domain.User;
+import com.marcs.common.enums.Environment;
+import com.marcs.common.enums.WebRole;
+import com.marcs.environment.AppEnvironmentService;
+import com.marcs.jwt.domain.JwtPair;
+import com.marcs.jwt.domain.JwtType;
+import com.marcs.jwt.domain.UserJwtClaims;
+
+import io.jsonwebtoken.Claims;
 
 /**
- * JwtHolder class to get common information from token
+ * JwtHolder class to store authentication token in a thread local instance to
+ * be accessed. Although the JWT is held in a static thread local, the methods
+ * are non-static so that JwtHolder can be mocked in tests.
  * 
  * @author Sam Butler
- * @since 8/04/2020
+ * @since August 8, 2020
  */
-@Service("JwtHolder")
+@Service
 public class JwtHolder {
+	private static final ThreadLocal<JwtPair> TOKEN = new ThreadLocal<>();
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(JwtHolder.class);
+	@Autowired
+	private AppEnvironmentService activeProfile;
 
-	private JwtParser jwtParser;
-
-	private ActiveProfile activeProfile;
-
-	public JwtHolder(ActiveProfile profile) {
-		activeProfile = profile;
-		jwtParser = Jwts.parser().setSigningKey(activeProfile.getSigningKey());
+	/**
+	 * Set the token on the current thread local instance.
+	 * 
+	 * @param token The token to store.
+	 */
+	public void setToken(String token) {
+		JwtPair pair = new JwtPair(token, activeProfile);
+		TOKEN.set(pair);
 	}
 
 	/**
-	 * Get the current userId from the request headers token
+	 * Clears the token from the current thread local instance.
+	 */
+	public void clearToken() {
+		TOKEN.remove();
+	}
+
+	/**
+	 * Gets the current JwtPair from the thread local instance.
+	 * 
+	 * @return {@link JwtPair} of the thread local.
+	 */
+	public JwtPair getPair() {
+		return TOKEN.get();
+	}
+
+	/**
+	 * Gets the claims from the token.
+	 * 
+	 * @return {@link Claims} object.
+	 */
+	public Claims getClaims() {
+		return getPair().getClaimSet();
+	}
+
+	/**
+	 * Parse the claims from the given token and for the given key value pair.
+	 * 
+	 * @param key The key to find.
+	 * @return {@link Object} of the found key.
+	 */
+	public Object parse(String key) {
+		return getClaims().get(key);
+	}
+
+	/**
+	 * Checks to see if the token is stored locally on the current instance. It will
+	 * check if the jwt pair is null to confirm this.
+	 * 
+	 * @return Boolean of the token status.
+	 */
+	public boolean isTokenAvaiable() {
+		JwtPair pair = TOKEN.get();
+		return pair != null;
+	}
+
+	/**
+	 * Will get the environment from the instance token.
+	 * 
+	 * @return {@link Environment} object.
+	 */
+	public Environment getEnvironment() {
+		return Environment.valueOf(parse(UserJwtClaims.ENVIRONMENT).toString());
+	}
+
+	/**
+	 * Gets the jwt type of the token.
+	 * 
+	 * @return {@link JwtType} of the token.
+	 */
+	public JwtType getJwtType() {
+		return JwtType.valueOf(parse(UserJwtClaims.JWT_TYPE).toString());
+	}
+
+	/**
+	 * Get the current user Id.
 	 * 
 	 * @return int of the userId from the current token
 	 */
-	public int getRequiredUserId() {
-		try {
-			return Integer.parseInt(jwtParser.parseClaimsJws(getToken()).getBody().get("userId").toString());
-		} catch (Exception e) {
-			LOGGER.warn("Invalid or no Token given.");
-			return -1;
-		}
+	public int getUserId() {
+		return Integer.parseInt(parse(UserJwtClaims.USER_ID).toString());
 	}
 
 	/**
-	 * Get the userId from the passed in token
-	 * 
-	 * @param token - String of the token to decode
-	 * @return int of the userId from the current token
-	 */
-	public int getRequiredUserId(String token) {
-		try {
-			return Integer.parseInt(jwtParser.parseClaimsJws(token).getBody().get("userId").toString());
-		} catch (Exception e) {
-			LOGGER.warn("Invalid or no Token given.");
-			return -1;
-		}
-	}
-
-	/**
-	 * Get the current email from the request headers token
+	 * Get the current email.
 	 * 
 	 * @return String of the email from the current token
 	 */
-	public String getRequiredEmail() {
-		try {
-			return jwtParser.parseClaimsJws(getToken()).getBody().get("email").toString();
-		} catch (Exception e) {
-			LOGGER.warn("Invalid or no Token given.");
-			return "";
-		}
+	public String getEmail() {
+		return parse(UserJwtClaims.EMAIL).toString();
 	}
 
 	/**
-	 * Get the email from the passed in token
-	 * 
-	 * @param token - String of the token to decode
-	 * @return String of the email from the current token
-	 */
-	public String getRequiredEmail(String token) {
-		try {
-			return jwtParser.parseClaimsJws(token).getBody().get("email").toString();
-		} catch (Exception e) {
-			LOGGER.warn("Invalid or no Token given.");
-			return "";
-		}
-	}
-
-	/**
-	 * Gets the reset password status from the request headers token.
-	 * 
-	 * @return int of the userId from the current token
-	 */
-	public boolean getRequiredResetPassword() {
-		try {
-			return Boolean.parseBoolean(jwtParser.parseClaimsJws(getToken()).getBody().get("passwordReset").toString());
-		} catch (Exception e) {
-			LOGGER.warn("Invalid or no Token given.");
-			return false;
-		}
-	}
-
-	/**
-	 * Gets the reset password status from the token.
-	 * 
-	 * @param token - String of the token to decode
-	 * @return int of the userId from the current token
-	 */
-	public boolean getRequiredResetPassword(String token) {
-		try {
-			return Boolean.parseBoolean(jwtParser.parseClaimsJws(token).getBody().get("passwordReset").toString());
-		} catch (Exception e) {
-			LOGGER.warn("Invalid or no Token given.");
-			return false;
-		}
-	}
-
-	/**
-	 * Get the current webRole from the request headers token
+	 * Get the current webRole.
 	 * 
 	 * @return String of the webRole from the current token
 	 */
 	public WebRole getWebRole() {
-		try {
-			return WebRole.valueOf(jwtParser.parseClaimsJws(getToken()).getBody().get("webRole").toString());
-		} catch (Exception e) {
-			LOGGER.warn("Invalid or no Token given.");
-			return WebRole.EMPLOYEE;
-		}
+		return WebRole.valueOf(parse(UserJwtClaims.WEB_ROLE).toString());
 	}
 
 	/**
-	 * Get the webRole from the passed in token
+	 * Gets the reset password status.
 	 * 
-	 * @param token - String of the token to decode
-	 * @return String of the webRole from the current token
+	 * @return int of the userId from the current token
 	 */
-	public WebRole getWebRole(String token) {
-		try {
-			return WebRole.valueOf(jwtParser.parseClaimsJws(token).getBody().get("webRole").toString());
-		} catch (Exception e) {
-			LOGGER.warn("Invalid or no Token given.");
-			return WebRole.EMPLOYEE;
-		}
+	public boolean getResetPassword() {
+		return Boolean.parseBoolean(parse(UserJwtClaims.PASSWORD_RESET).toString());
 	}
 
 	/**
-	 * Get the current token passed in with the request
+	 * Will get a user object from the current user jwt.
 	 * 
-	 * @return String of the token from the request headers
+	 * @return {@link User} object.
 	 */
-	public String getToken() {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-				.getRequest();
-
-		return request.getHeader("Authorization") == null ? null : request.getHeader("Authorization").split(" ")[1];
+	public User getUser() {
+		User currentUser = new User();
+		currentUser.setId(getUserId());
+		currentUser.setEmail(getEmail());
+		currentUser.setWebRole(getWebRole());
+		currentUser.setFirstName(parse(UserJwtClaims.FIRST_NAME).toString());
+		currentUser.setLastName(parse(UserJwtClaims.LAST_NAME).toString());
+		return currentUser;
 	}
 }

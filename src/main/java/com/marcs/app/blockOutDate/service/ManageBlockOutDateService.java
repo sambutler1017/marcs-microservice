@@ -1,12 +1,12 @@
 package com.marcs.app.blockOutDate.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
 import com.marcs.app.blockOutDate.dao.BlockOutDateDao;
 import com.marcs.common.enums.WebRole;
 import com.marcs.jwt.utility.JwtHolder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * Block out date Service class that handles all service calls to the dao
@@ -35,9 +35,8 @@ public class ManageBlockOutDateService {
 	 * @return {@link BlockOutDate} with the updated fields.
 	 * @throws Exception
 	 */
-	public BlockOutDate updateBlockOutDateById(int id, BlockOutDate blockDate)
-			throws Exception {
-		blockDate.setInsertUserId(jwtHolder.getRequiredUserId());
+	public BlockOutDate updateBlockOutDateById(int id, BlockOutDate blockDate) throws Exception {
+		blockDate.setInsertUserId(jwtHolder.getUserId());
 		blockDate.setId(id);
 		return dao.updateBlockOutDateById(id, blockOutDateService.getBlockOutDateById(id), blockDate);
 	}
@@ -50,12 +49,12 @@ public class ManageBlockOutDateService {
 	 * @throws Exception
 	 */
 	public BlockOutDate createBlockOutDate(BlockOutDate blockDate) throws Exception {
-		if (jwtHolder.getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
-			throw new Exception(String.format("User with role '%s' does not have permission to create block out dates!",
-					jwtHolder.getWebRole().toString()));
+		if(jwtHolder.getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
+			throw new Exception(String.format(	"User with role '%s' does not have permission to create block out dates!",
+												jwtHolder.getWebRole().toString()));
 		}
 
-		blockDate.setInsertUserId(jwtHolder.getRequiredUserId());
+		blockDate.setInsertUserId(jwtHolder.getUserId());
 		return dao.createBlockOutDate(blockDate);
 	}
 

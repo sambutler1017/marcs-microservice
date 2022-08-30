@@ -1,12 +1,12 @@
 package com.marcs.app.user.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.marcs.app.email.client.EmailClient;
 import com.marcs.app.user.client.domain.UserStatus;
 import com.marcs.app.user.dao.UserStatusDao;
 import com.marcs.jwt.utility.JwtHolder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * Class for handling the service calls to the dao.
@@ -34,7 +34,7 @@ public class ManageUserStatusService {
      * @throws Exception
      */
     public UserStatus insertUserStatus(UserStatus userStatus) throws Exception {
-        return dao.insertUserStatus(userStatus, jwtHolder.getRequiredUserId());
+        return dao.insertUserStatus(userStatus, jwtHolder.getUserId());
     }
 
     /**
@@ -45,7 +45,7 @@ public class ManageUserStatusService {
      * @throws Exception
      */
     public UserStatus updateUserStatusByUserId(int id, UserStatus userStatus) throws Exception {
-        userStatus.setUpdatedUserId(this.jwtHolder.getRequiredUserId());
+        userStatus.setUpdatedUserId(jwtHolder.getUserId());
         emailClient.sendUserAccountUpdateStatusEmail(id, userStatus.getAccountStatus());
         return dao.updateUserStatusByUserId(id, userStatus);
     }
@@ -58,8 +58,7 @@ public class ManageUserStatusService {
      * @return {@link UserStatus} object
      * @throws Exception
      */
-    public UserStatus updateUserAppAccessByUserId(int id, Boolean appAccess)
-            throws Exception {
-        return dao.updateUserStatusByUserId(id, new UserStatus(this.jwtHolder.getRequiredUserId(), null, appAccess));
+    public UserStatus updateUserAppAccessByUserId(int id, Boolean appAccess) throws Exception {
+        return dao.updateUserStatusByUserId(id, new UserStatus(jwtHolder.getUserId(), null, appAccess));
     }
 }

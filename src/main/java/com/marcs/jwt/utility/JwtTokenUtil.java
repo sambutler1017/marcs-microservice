@@ -7,14 +7,15 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.marcs.app.featureAccess.client.FeatureAccessClient;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
-import com.marcs.service.activeProfile.ActiveProfile;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.marcs.environment.AppEnvironmentService;
+import com.marcs.jwt.domain.UserJwtClaims;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -29,24 +30,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class JwtTokenUtil implements Serializable {
 
-    public long JWT_TOKEN_VALIDITY;
+    public static final long JWT_TOKEN_VALIDITY = 18000000;
 
-    private String secret;
-
-    private ActiveProfile activeProfile;
+    @Autowired
+    private AppEnvironmentService activeProfile;
 
     @Autowired
     private UserProfileClient userClient;
 
     @Autowired
     private FeatureAccessClient featureAccessClient;
-
-    @Autowired
-    public JwtTokenUtil(ActiveProfile profile) {
-        activeProfile = profile;
-        secret = activeProfile.getSigningKey();
-        JWT_TOKEN_VALIDITY = 18000000; // 5 hours
-    }
 
     /**
      * Pulls the email (Subject Field) from the token
@@ -88,7 +81,7 @@ public class JwtTokenUtil implements Serializable {
      * @return Claims object is returned
      */
     public Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(activeProfile.getSigningKey()).parseClaimsJws(token).getBody();
     }
 
     /**
@@ -124,18 +117,18 @@ public class JwtTokenUtil implements Serializable {
      */
     public String generateToken(User user, boolean reset) throws Exception {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", user.getId());
-        claims.put("firstName", user.getFirstName());
-        claims.put("lastName", user.getLastName());
-        claims.put("email", user.getEmail());
-        claims.put("webRole", user.getWebRole());
-        claims.put("env", activeProfile.getEnvironment());
-        claims.put("apps", userClient.getUserAppsById(user.getId()).stream()
+        claims.put(UserJwtClaims.USER_ID, user.getId());
+        claims.put(UserJwtClaims.FIRST_NAME, user.getFirstName());
+        claims.put(UserJwtClaims.LAST_NAME, user.getLastName());
+        claims.put(UserJwtClaims.EMAIL, user.getEmail());
+        claims.put(UserJwtClaims.WEB_ROLE, user.getWebRole());
+        claims.put(UserJwtClaims.ENVIRONMENT, activeProfile.getEnvironment());
+        claims.put(UserJwtClaims.APPS, userClient.getUserAppsById(user.getId()).stream()
                 .filter(v -> (v.isAccess() && v.isEnabled())).map(Application::getName).collect(Collectors.toList()));
-        claims.put("access", featureAccessClient.getFeatureAccess(user.getWebRole().getRank()));
-        claims.put("passwordReset", reset);
+        claims.put(UserJwtClaims.ACCESS, featureAccessClient.getFeatureAccess(user.getWebRole().getRank()));
+        claims.put(UserJwtClaims.PASSWORD_RESET, reset);
 
-        if (user.getStoreId() != null) {
+        if(user.getStoreId() != null) {
             claims.put("storeId", user.getStoreId());
         }
 
@@ -152,6 +145,6 @@ public class JwtTokenUtil implements Serializable {
     private String doGenerateToken(Map<String, Object> claims) {
         return Jwts.builder().setClaims(claims).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
-                .signWith(SignatureAlgorithm.HS512, secret).compact();
+                .signWith(SignatureAlgorithm.HS512, activeProfile.getSigningKey()).compact();
     }
 }

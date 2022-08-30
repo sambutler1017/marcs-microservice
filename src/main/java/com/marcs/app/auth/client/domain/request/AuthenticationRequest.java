@@ -1,26 +1,29 @@
-package com.marcs.jwt.model;
+package com.marcs.app.auth.client.domain.request;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
+import javax.annotation.Nonnull;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * AuthenticationRequest for authenticating and updating user credentials.
  *
- * @author Seth Hancock
+ * @author Sam Butler
  * @since August 1, 2020
  */
+@Schema(description = "Authentication Request")
 public class AuthenticationRequest implements Serializable {
-    private static final long serialVersionUID = 5926468583005169420L;
 
-    @NotNull
+    @Schema(description = "The email to authenticate with.")
+    @Nonnull
     private String email;
 
-    @NotNull
+    @Schema(description = "The password associated with the email.")
+    @Nonnull
     private String password;
 
-    public AuthenticationRequest() {
-    }
+    public AuthenticationRequest() {}
 
     public AuthenticationRequest(String email, String password) {
         this.email = email;

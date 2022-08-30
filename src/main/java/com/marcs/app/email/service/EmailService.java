@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.google.common.collect.Sets;
 import com.marcs.app.email.client.domain.UserEmail;
 import com.marcs.app.user.client.UserProfileClient;
@@ -26,17 +29,14 @@ import com.marcs.common.enums.VacationStatus;
 import com.marcs.common.enums.WebRole;
 import com.marcs.common.exceptions.SqlFragmentNotFoundException;
 import com.marcs.common.util.CommonUtil;
+import com.marcs.environment.AppEnvironmentService;
 import com.marcs.jwt.utility.JwtTokenUtil;
-import com.marcs.service.activeProfile.ActiveProfile;
 import com.sendgrid.Content;
 import com.sendgrid.Email;
 import com.sendgrid.Mail;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.SendGrid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * Service class for doing all the dirty work for sending a message.
@@ -60,7 +60,7 @@ public class EmailService {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private ActiveProfile activeProfile;
+    private AppEnvironmentService activeProfile;
 
     /**
      * {@link UserEmail} object to send a email too. Default from user will be the
@@ -103,9 +103,10 @@ public class EmailService {
     public void forgotPassword(String email) throws MessagingException, Exception {
         String content = getForgotPasswordContent(email);
 
-        if ("".equals(content)) {
+        if("".equals(content)) {
             return;
-        } else {
+        }
+        else {
             sendEmail(buildUserEmail(email, "Forgot Password", content), true);
         }
     }
@@ -123,20 +124,21 @@ public class EmailService {
         String emailContent = br.lines().collect(Collectors.joining(" "));
 
         List<User> usersWithNotifications = getUsersWithEmailReportsEnabled();
-        for (User user : usersWithNotifications) {
+        for(User user : usersWithNotifications) {
             VacationGetRequest vRequest = new VacationGetRequest();
             vRequest.setStatus(Sets.newHashSet(VacationStatus.APPROVED));
-            if (user.getWebRole().equals(WebRole.REGIONAL) || user.getWebRole().equals(WebRole.DISTRICT_MANAGER)) {
+            if(user.getWebRole().equals(WebRole.REGIONAL) || user.getWebRole().equals(WebRole.DISTRICT_MANAGER)) {
                 vRequest.setRegionalId(Sets.newHashSet(user.getId()));
             }
 
             sendEmail(buildUserEmail(user.getEmail(), "Weekly Report",
-                    emailContent
-                            .replace("::REPLACE_CARDS::",
-                                    buildHTMLCard(vcationController.getVacationsForReport(vRequest)))
-                            .replace("::DATE_TODAY::", LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
-                                    .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")))),
-                    true);
+                                     emailContent
+                                             .replace("::REPLACE_CARDS::",
+                                                      buildHTMLCard(vcationController.getVacationsForReport(vRequest)))
+                                             .replace("::DATE_TODAY::",
+                                                      LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
+                                                              .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")))),
+                      true);
         }
         br.close();
         return usersWithNotifications;
@@ -155,7 +157,8 @@ public class EmailService {
         String emailContent = br.lines().collect(Collectors.joining(" "));
 
         sendEmail(buildUserEmail(newUser.getEmail(), "Welcome to Marc's!",
-                emailContent.replace("::USER_NAME::", newUser.getFirstName())), true);
+                                 emailContent.replace("::USER_NAME::", newUser.getFirstName())),
+                  true);
         br.close();
     }
 
@@ -172,7 +175,8 @@ public class EmailService {
         String emailContent = br.lines().collect(Collectors.joining(" "));
 
         sendEmail(buildUserEmail(emailUser.getEmail(), "Marc's Account Update!",
-                emailContent.replace("::USER_NAME::", emailUser.getFirstName())), true);
+                                 emailContent.replace("::USER_NAME::", emailUser.getFirstName())),
+                  true);
         br.close();
         return emailUser;
     }
@@ -196,14 +200,12 @@ public class EmailService {
         request.setWebRole(Sets.newHashSet(WebRole.ADMIN));
         List<User> adminUsers = userClient.getUsers(request);
 
-        for (User user : adminUsers) {
-            sendEmail(buildUserEmail(user.getEmail(), "New Message",
-                    emailContent
-                            .replace("::USER_NAME::",
-                                    String.format("%s %s (%s)", emailUser.getFirstName().trim(),
-                                            emailUser.getLastName().trim(), emailUser.getWebRole().toString()))
-                            .replace("::EMAIL_BODY::", email)),
-                    true);
+        for(User user : adminUsers) {
+            sendEmail(buildUserEmail(user.getEmail(), "New Message", emailContent
+                    .replace("::USER_NAME::",
+                             String.format("%s %s (%s)", emailUser.getFirstName().trim(),
+                                           emailUser.getLastName().trim(), emailUser.getWebRole().toString()))
+                    .replace("::EMAIL_BODY::", email)), true);
         }
 
         return adminUsers;
@@ -226,12 +228,13 @@ public class EmailService {
 
         User receipentUser = userClient.getUserById(userId);
         sendEmail(buildUserEmail(receipentUser.getEmail(), "Message Reply from Admin",
-                emailContent
-                        .replace("::USER_NAME::",
-                                String.format("%s %s (%s)", emailUser.getFirstName().trim(),
-                                        emailUser.getLastName().trim(), emailUser.getWebRole().toString()))
-                        .replace("::EMAIL_BODY::", email)),
-                true);
+                                 emailContent
+                                         .replace("::USER_NAME::",
+                                                  String.format("%s %s (%s)", emailUser.getFirstName().trim(),
+                                                                emailUser.getLastName().trim(),
+                                                                emailUser.getWebRole().toString()))
+                                         .replace("::EMAIL_BODY::", email)),
+                  true);
         return receipentUser;
     }
 
@@ -272,11 +275,11 @@ public class EmailService {
         request.setEmail(Sets.newHashSet(email));
         List<User> users = userClient.getUsers(request);
 
-        if (users.size() < 1)
+        if(users.size() < 1)
             return "";
         else
             return emailContent.replace("::FORGOT_PASSWORD_LINK::",
-                    RESET_LINK + jwtTokenUtil.generateToken(users.get(0), true));
+                                        RESET_LINK + jwtTokenUtil.generateToken(users.get(0), true));
     }
 
     /**
@@ -300,21 +303,21 @@ public class EmailService {
      * @return Formatted String
      */
     private String buildHTMLCard(List<Vacation> vacs) {
-        if (vacs.size() == 0) {
+        if(vacs.size() == 0) {
             return "No Vacations";
         }
 
         String htmlCards = "";
         String defaultCard = "<div class=\"card\"><div class=\"card-data\">::DATA_NAME::</div><div class=\"card-date\">::DATA_DATE::</div></div>";
 
-        for (Vacation vac : vacs) {
+        for(Vacation vac : vacs) {
             String replacementValueName = String.format("%s (%s)", vac.getFullName(), vac.getStoreId());
             String replacementValueDate = String.format("%s - %s",
-                    CommonUtil.formatDate(vac.getStartDate(), "MMMM d, yyyy"),
-                    CommonUtil.formatDate(vac.getEndDate(), "MMMM d, yyyy"));
+                                                        CommonUtil.formatDate(vac.getStartDate(), "MMMM d, yyyy"),
+                                                        CommonUtil.formatDate(vac.getEndDate(), "MMMM d, yyyy"));
 
             htmlCards += defaultCard.replace("::DATA_NAME::", replacementValueName).replace("::DATA_DATE::",
-                    replacementValueDate);
+                                                                                            replacementValueDate);
         }
         return htmlCards;
     }

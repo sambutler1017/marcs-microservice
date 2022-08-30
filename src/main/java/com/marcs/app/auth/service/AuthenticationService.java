@@ -1,5 +1,9 @@
 package com.marcs.app.auth.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.stereotype.Service;
+
 import com.google.common.collect.Sets;
 import com.marcs.app.auth.dao.AuthenticationDao;
 import com.marcs.app.user.client.UserProfileClient;
@@ -8,10 +12,6 @@ import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.exceptions.BaseException;
 import com.marcs.common.exceptions.InvalidCredentialsException;
 import com.marcs.jwt.utility.JwtHolder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.stereotype.Service;
 
 /**
  * Authorization Service takes a user request and checks the values entered for
@@ -40,10 +40,11 @@ public class AuthenticationService {
      * @throws Exception Throw an exception if the credentials do not match.
      */
     public User verifyUser(String email, String password) throws Exception {
-        if (BCrypt.checkpw(password, authDao.getUserAuthPassword(email))) {
+        if(BCrypt.checkpw(password, authDao.getUserAuthPassword(email))) {
             User authUser = getAuthenticatedUser(email);
             return userClient.updateUserLastLoginToNow(authUser.getId());
-        } else {
+        }
+        else {
             throw new InvalidCredentialsException("Invalid Credentials!");
         }
     }
@@ -55,7 +56,7 @@ public class AuthenticationService {
      * @throws Exception If the user for that id does not exist
      */
     public User getUserToAuthenticate() throws Exception {
-        return validateUserAccess(userClient.getUserById(jwtHolder.getRequiredUserId()));
+        return validateUserAccess(userClient.getUserById(jwtHolder.getUserId()));
     }
 
     /**
@@ -79,7 +80,7 @@ public class AuthenticationService {
      * @return {@link User} object that they were authenticated.
      */
     private User validateUserAccess(User u) {
-        if (!u.isAppAccess()) {
+        if(!u.isAppAccess()) {
             throw new BaseException("User does not have app access!");
         }
         return u;

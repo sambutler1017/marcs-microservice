@@ -1,12 +1,12 @@
 package com.marcs.app.auth.client;
 
-import com.marcs.annotations.interfaces.Client;
-import com.marcs.app.auth.client.domain.AuthToken;
-import com.marcs.app.auth.rest.AuthenticationController;
-import com.marcs.jwt.model.AuthenticationRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
+import com.marcs.annotations.interfaces.Client;
+import com.marcs.app.auth.client.domain.AuthToken;
+import com.marcs.app.auth.client.domain.request.AuthenticationRequest;
+import com.marcs.app.auth.rest.AuthenticationController;
 
 /**
  * Client method for authentication of a user.

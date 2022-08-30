@@ -1,5 +1,8 @@
 package com.marcs.app.user.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.marcs.app.notifications.client.NotificationClient;
 import com.marcs.app.user.client.UserCredentialsClient;
 import com.marcs.app.user.client.UserStatusClient;
@@ -9,9 +12,6 @@ import com.marcs.app.user.dao.UserProfileDao;
 import com.marcs.common.enums.AccountStatus;
 import com.marcs.common.exceptions.InsufficientPermissionsException;
 import com.marcs.jwt.utility.JwtHolder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * User Service class that handles all service calls to the dao
@@ -83,7 +83,7 @@ public class ManageUserProfileService {
 	 * @throws Exception
 	 */
 	public User updateUserProfile(User user) throws Exception {
-		return updateUserProfile(jwtHolder.getRequiredUserId(), user);
+		return updateUserProfile(jwtHolder.getUserId(), user);
 	}
 
 	/**
@@ -95,9 +95,9 @@ public class ManageUserProfileService {
 	 */
 	public User updateUserProfileById(int id, User user) throws Exception {
 		User updatingUser = userProfileService.getUserById(id);
-		if (id != updatingUser.getId() && jwtHolder.getWebRole().getRank() <= updatingUser.getWebRole().getRank()) {
-			throw new InsufficientPermissionsException(
-					String.format("Your role of '%s' can not update a user of role '%s'", jwtHolder.getWebRole(),
+		if(id != updatingUser.getId() && jwtHolder.getWebRole().getRank() <= updatingUser.getWebRole().getRank()) {
+			throw new InsufficientPermissionsException(String
+					.format("Your role of '%s' can not update a user of role '%s'", jwtHolder.getWebRole(),
 							updatingUser.getWebRole()));
 		}
 

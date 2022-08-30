@@ -2,6 +2,10 @@ package com.marcs.app.user.service;
 
 import java.security.NoSuchAlgorithmException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.stereotype.Component;
+
 import com.marcs.app.auth.client.AuthenticationClient;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.PasswordUpdate;
@@ -10,10 +14,6 @@ import com.marcs.app.user.dao.UserCredentialsDao;
 import com.marcs.common.exceptions.BaseException;
 import com.marcs.common.exceptions.InsufficientPermissionsException;
 import com.marcs.jwt.utility.JwtHolder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.stereotype.Component;
 
 /**
  * User Service class that handles all service calls to the
@@ -62,8 +62,8 @@ public class UserCredentialsService {
      *                   not able to hash the new password.
      */
     public User updateUserPassword(PasswordUpdate passUpdate) throws Exception {
-        authClient.authenticateUser(jwtHolder.getRequiredEmail(), passUpdate.getCurrentPassword()).getBody();
-        return passwordUpdate(jwtHolder.getRequiredUserId(), passUpdate.getNewPassword());
+        authClient.authenticateUser(jwtHolder.getEmail(), passUpdate.getCurrentPassword()).getBody();
+        return passwordUpdate(jwtHolder.getUserId(), passUpdate.getNewPassword());
     }
 
     /**
@@ -77,9 +77,9 @@ public class UserCredentialsService {
      */
     public User updateUserPasswordById(int userId, PasswordUpdate passUpdate) throws Exception {
         User updatingUser = userProfileClient.getUserById(userId);
-        if (userId != updatingUser.getId() && jwtHolder.getWebRole().getRank() <= updatingUser.getWebRole().getRank()) {
-            throw new InsufficientPermissionsException(
-                    String.format("Your role of '%s' can not update a user of role '%s'", jwtHolder.getWebRole(),
+        if(userId != updatingUser.getId() && jwtHolder.getWebRole().getRank() <= updatingUser.getWebRole().getRank()) {
+            throw new InsufficientPermissionsException(String
+                    .format("Your role of '%s' can not update a user of role '%s'", jwtHolder.getWebRole(),
                             updatingUser.getWebRole()));
         }
         return passwordUpdate(userId, passUpdate.getNewPassword());
@@ -96,11 +96,11 @@ public class UserCredentialsService {
      *                   not able to hash the new password.
      */
     public User resetUserPassword(String pass) throws Exception {
-        if (!jwtHolder.getRequiredResetPassword()) {
+        if(!jwtHolder.getResetPassword()) {
             throw new Exception("Invalid token for reset password!");
         }
 
-        return passwordUpdate(jwtHolder.getRequiredUserId(), pass);
+        return passwordUpdate(jwtHolder.getUserId(), pass);
     }
 
     /**
@@ -113,12 +113,14 @@ public class UserCredentialsService {
      */
     private User passwordUpdate(int userId, String password) throws Exception {
         try {
-            if (password != null && password.trim() != "") {
+            if(password != null && password.trim() != "") {
                 return dao.updateUserPassword(userId, BCrypt.hashpw(password, BCrypt.gensalt()));
-            } else {
+            }
+            else {
                 return userProfileClient.getCurrentUser();
             }
-        } catch (NoSuchAlgorithmException e) {
+        }
+        catch(NoSuchAlgorithmException e) {
             throw new BaseException("Could not hash password!");
         }
     }

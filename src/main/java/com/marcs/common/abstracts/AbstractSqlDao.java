@@ -2,9 +2,6 @@ package com.marcs.common.abstracts;
 
 import java.util.List;
 
-import com.opengamma.elsql.ElSqlBundle;
-import com.opengamma.elsql.ElSqlConfig;
-
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -12,6 +9,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
+
+import com.opengamma.elsql.ElSqlBundle;
+import com.opengamma.elsql.ElSqlConfig;
 
 /**
  * Abstract class for building the DAO classes and running queries against the
@@ -129,6 +129,15 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      */
     public int update(String sql, MapSqlParameterSource params) {
         return getTemplate().update(sql, params);
+    }
+
+    /**
+     * Will execute the given sql string against the active database.
+     * 
+     * @param sql The sql to be run.
+     */
+    protected void execute(String sql) {
+        getTemplate().update(sql, new MapSqlParameterSource());
     }
 
     /**
