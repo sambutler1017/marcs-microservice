@@ -15,6 +15,7 @@ import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.environment.AppEnvironmentService;
+import com.marcs.jwt.domain.JwtType;
 import com.marcs.jwt.domain.UserJwtClaims;
 
 import io.jsonwebtoken.Claims;
@@ -123,6 +124,7 @@ public class JwtTokenUtil implements Serializable {
         claims.put(UserJwtClaims.EMAIL, user.getEmail());
         claims.put(UserJwtClaims.WEB_ROLE, user.getWebRole());
         claims.put(UserJwtClaims.ENVIRONMENT, activeProfile.getEnvironment());
+        claims.put(UserJwtClaims.JWT_TYPE, JwtType.WEB);
         claims.put(UserJwtClaims.APPS, userClient.getUserAppsById(user.getId()).stream()
                 .filter(v -> (v.isAccess() && v.isEnabled())).map(Application::getName).collect(Collectors.toList()));
         claims.put(UserJwtClaims.ACCESS, featureAccessClient.getFeatureAccess(user.getWebRole().getRank()));
