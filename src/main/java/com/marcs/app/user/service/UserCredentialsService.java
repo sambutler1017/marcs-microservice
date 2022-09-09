@@ -42,8 +42,8 @@ public class UserCredentialsService {
      * passwords. This will only be called when someone else is creating a user
      * account for someone.
      * 
-     * @param userId   The id to add the password for.
-     * @param authPass Contains the hashed password and salt value.
+     * @param userId The id to add the password for.
+     * @param pass   Contains the hashed password.
      * @throws Exception
      */
     public void insertUserPassword(int userId, String pass) throws Exception {
@@ -115,8 +115,7 @@ public class UserCredentialsService {
         try {
             if(password != null && password.trim() != "") {
                 return dao.updateUserPassword(userId, BCrypt.hashpw(password, BCrypt.gensalt()));
-            }
-            else {
+            }else {
                 return userProfileClient.getCurrentUser();
             }
         }

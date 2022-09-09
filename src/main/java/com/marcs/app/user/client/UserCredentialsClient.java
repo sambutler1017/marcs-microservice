@@ -1,11 +1,11 @@
 package com.marcs.app.user.client;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.user.client.domain.PasswordUpdate;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.rest.UserCredentialsController;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This class exposes the user endpoint's to other app's to pull data across the
@@ -26,7 +26,7 @@ public class UserCredentialsClient {
      * be called when creating a new user.
      * 
      * @param id       The id of the new user.
-     * @param authPass The password and salt that was created.
+     * @param authPass The password that was created.
      * @throws Exception If the password can not be stored.
      */
     public void insertUserPassword(int id, String pass) throws Exception {

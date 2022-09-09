@@ -2,8 +2,6 @@ package com.marcs.app.user.client.domain;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.marcs.common.enums.AccountStatus;
 import com.marcs.common.enums.WebRole;
 
@@ -41,9 +39,6 @@ public class User {
 	private Date hireDate;
 
 	private Date insertDate;
-
-	@JsonInclude(Include.NON_DEFAULT)
-	private long salt;
 
 	public int getId() {
 		return id;
@@ -155,13 +150,5 @@ public class User {
 
 	public void setInsertDate(Date insertDate) {
 		this.insertDate = insertDate;
-	}
-
-	public long getSalt() {
-		return salt;
-	}
-
-	public void setSalt(long salt) {
-		this.salt = salt;
 	}
 }

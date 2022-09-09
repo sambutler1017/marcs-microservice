@@ -1,10 +1,6 @@
 package com.marcs.app.user.rest;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
-import com.marcs.app.user.client.domain.PasswordUpdate;
-import com.marcs.app.user.client.domain.User;
-import com.marcs.app.user.service.UserCredentialsService;
+import static org.springframework.http.MediaType.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +8,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.marcs.app.user.client.domain.PasswordUpdate;
+import com.marcs.app.user.client.domain.User;
+import com.marcs.app.user.service.UserCredentialsService;
 
 @RequestMapping("api/user-app/user-credentials")
 @RestController
@@ -26,7 +26,7 @@ public class UserCredentialsController {
      * be called when creating a new user.
      * 
      * @param id       The id of the new user.
-     * @param authPass The password and salt that was created.
+     * @param authPass The password that was created.
      * @throws Exception If the password can not be stored.
      */
     public void insertUserPassword(@PathVariable int id, @RequestBody String pass) throws Exception {
