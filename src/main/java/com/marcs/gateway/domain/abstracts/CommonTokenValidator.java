@@ -1,5 +1,6 @@
 package com.marcs.gateway.domain.abstracts;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +14,8 @@ import com.marcs.common.enums.Environment;
 import com.marcs.common.exceptions.JwtTokenException;
 import com.marcs.environment.AppEnvironmentService;
 import com.marcs.gateway.domain.interfaces.BaseRequestValidator;
+import com.marcs.jwt.domain.JwtPair;
 import com.marcs.jwt.utility.JwtHolder;
-import com.marcs.jwt.utility.JwtTokenUtil;
 
 /**
  * Common abstract validator for tokens.
@@ -27,13 +28,13 @@ public abstract class CommonTokenValidator implements BaseRequestValidator {
     protected static final String TOKEN_PREFIX = "Bearer:";
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
     private AppEnvironmentService activeProfile;
 
     @Autowired
     private JwtHolder jwtHolder;
+
+    @Autowired
+    private AppEnvironmentService appEnvironmentService;
 
     /**
      * Will take in a string token and confirm that it is valid. It will check that
@@ -48,12 +49,11 @@ public abstract class CommonTokenValidator implements BaseRequestValidator {
      * @throws JwtTokenException If the token is invalid.
      */
     protected void runTokenValidation(String token, boolean prefixCheck) {
-        String extractedToken = extractToken(token);
-
         checkValidToken(token, prefixCheck);
-        checkCorrectEnvironment(extractedToken);
-        checkCorrectFields(extractedToken);
-        checkTokenExpiration(extractedToken);
+
+        JwtPair pair = new JwtPair(extractToken(token), appEnvironmentService);
+        checkCorrectEnvironment(pair);
+        checkTokenExpiration(pair);
     }
 
     /**
@@ -103,29 +103,11 @@ public abstract class CommonTokenValidator implements BaseRequestValidator {
      * @param token to be parsed
      * @throws JwtTokenException If the token is invalid.
      */
-    protected void checkCorrectEnvironment(String token) {
-        Environment environment = Environment.valueOf(jwtTokenUtil.getAllClaimsFromToken(token).get("env").toString());
+    protected void checkCorrectEnvironment(JwtPair pair) {
+        Environment environment = Environment.valueOf(pair.getClaimSet().get("env").toString());
 
         if(!activeProfile.getEnvironment().equals(environment)) {
             throw new JwtTokenException("JWT token doesn't match accessing environment!");
-        }
-    }
-
-    /**
-     * Checks to see if it has the required fields on the token. If the tokens can
-     * not be parsed and the expected required fields are not on the token then it
-     * will throw an exception that it could not be parsed.
-     *
-     * @param token - Token to confirm field claims on
-     * @throws JwtTokenException If the token is invalid.
-     */
-    protected void checkCorrectFields(String token) {
-        try {
-            jwtTokenUtil.getExpirationDateFromToken(token);
-            jwtTokenUtil.getAllClaimsFromToken(token);
-        }
-        catch(Exception e) {
-            throw new JwtTokenException("Could not process JWT token. Invalid signature!");
         }
     }
 
@@ -136,8 +118,8 @@ public abstract class CommonTokenValidator implements BaseRequestValidator {
      * @param token The token to validate.
      * @throws JwtTokenException If the token is expired.
      */
-    protected void checkTokenExpiration(String token) {
-        if(jwtTokenUtil.isTokenExpired(token)) {
+    protected void checkTokenExpiration(JwtPair pair) {
+        if(pair.getClaimSet().getExpiration().before(new Date())) {
             throw new JwtTokenException("JWT Token is expired! Please re-authenticate.");
         }
     }
@@ -145,15 +127,14 @@ public abstract class CommonTokenValidator implements BaseRequestValidator {
     /**
      * Extracts out the token from the headers in the request. It will remove the
      * {@code Bearer:} prefix from the header and retrurn just the token. If the
-     * token header is null or does not contain text then it will return null. If
-     * the token does not contain the prefix then it will return the same token that
-     * was passed.
+     * token does not contain the prefix then it will return the same token that was
+     * passed.
      * 
      * @param tokenHeader The token to parse.
      * @return The token value.
      */
     protected String extractToken(String tokenHeader) {
-        return StringUtils.hasText(tokenHeader) ? tokenHeader.replace(TOKEN_PREFIX, "").trim() : null;
+        return tokenHeader.replace(TOKEN_PREFIX, "").trim();
     }
 
     /**

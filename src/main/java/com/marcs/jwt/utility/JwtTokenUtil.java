@@ -86,17 +86,6 @@ public class JwtTokenUtil implements Serializable {
     }
 
     /**
-     * Checks if the given token is expired
-     * 
-     * @param token - Token to pull the expiration date from
-     * @return Returns a boolean object of true, false, or null
-     */
-    public Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
-    }
-
-    /**
      * generate token for reset password as false by default.
      * 
      * @param user - User info to be added to the token
