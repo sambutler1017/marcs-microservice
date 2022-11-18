@@ -28,9 +28,6 @@ public abstract class CommonTokenValidator implements BaseRequestValidator {
     protected static final String TOKEN_PREFIX = "Bearer:";
 
     @Autowired
-    private AppEnvironmentService activeProfile;
-
-    @Autowired
     private JwtHolder jwtHolder;
 
     @Autowired
@@ -106,7 +103,7 @@ public abstract class CommonTokenValidator implements BaseRequestValidator {
     protected void checkCorrectEnvironment(JwtPair pair) {
         Environment environment = Environment.valueOf(pair.getClaimSet().get("env").toString());
 
-        if(!activeProfile.getEnvironment().equals(environment)) {
+        if(!appEnvironmentService.getEnvironment().equals(environment)) {
             throw new JwtTokenException("JWT token doesn't match accessing environment!");
         }
     }
