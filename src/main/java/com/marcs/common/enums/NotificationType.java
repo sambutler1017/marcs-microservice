@@ -7,7 +7,9 @@ package com.marcs.common.enums;
  * @since December 21, 2021
  */
 public enum NotificationType implements TextEnum {
-    USER("USER", "User"), VACATION("VACATION", "Vacation"), REQUEST_TRACKER("REQUEST_TRACKER", "Request Tracker");
+    USER("USER", "User"),
+    VACATION("VACATION", "Vacation"),
+    REQUEST_TRACKER("REQUEST_TRACKER", "Request Tracker");
 
     private String textId;
 

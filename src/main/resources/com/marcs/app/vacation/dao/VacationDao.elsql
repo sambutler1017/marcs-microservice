@@ -63,3 +63,8 @@
     status = 'EXPIRED'
   WHERE end_date < CURRENT_DATE()
   AND status != 'EXPIRED'
+
+@NAME(deleteAllExpiredVacations)
+  DELETE FROM user_vacations 
+  WHERE end_date < DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL :range MONTH)
+  AND status = 'EXPIRED'

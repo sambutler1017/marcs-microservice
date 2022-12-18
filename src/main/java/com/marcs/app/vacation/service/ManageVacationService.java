@@ -95,6 +95,17 @@ public class ManageVacationService {
 	}
 
 	/**
+	 * Deletes all expired vacations in the given range. Range will be a value in
+	 * months.
+	 * 
+	 * @param range The range to delete in months
+	 * @return How many rows were deleted
+	 */
+	public int deleteAllExpiredVacations(int range) {
+		return dao.deleteAllExpiredVacations(range);
+	}
+
+	/**
 	 * This will update the vacations dates for the given vacation id.
 	 * 
 	 * @param id  The id of the vacation to be updates.

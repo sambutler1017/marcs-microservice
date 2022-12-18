@@ -2,12 +2,12 @@ package com.marcs.app.vacation.client;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.app.vacation.rest.VacationController;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This class exposes the vacation endpoint's to other app's to pull data across
@@ -49,5 +49,16 @@ public class VacationClient {
 	 */
 	public int markExpiredVacations() {
 		return controller.markExpiredVacations();
+	}
+
+	/**
+	 * Deletes all expired vacations in the given range. Range will be a value in
+	 * months.
+	 * 
+	 * @param range The range to delete in months
+	 * @return How many rows were deleted
+	 */
+	public int deleteAllExpiredVacations(int range) {
+		return controller.deleteAllExpiredVacations(range);
 	}
 }

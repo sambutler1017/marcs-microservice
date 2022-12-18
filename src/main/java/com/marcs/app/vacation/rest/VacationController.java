@@ -1,14 +1,8 @@
 package com.marcs.app.vacation.rest;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.*;
 
 import java.util.List;
-
-import com.marcs.annotations.interfaces.RestApiController;
-import com.marcs.app.vacation.client.domain.Vacation;
-import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
-import com.marcs.app.vacation.service.ManageVacationService;
-import com.marcs.app.vacation.service.VacationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.marcs.annotations.interfaces.RestApiController;
+import com.marcs.app.vacation.client.domain.Vacation;
+import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
+import com.marcs.app.vacation.service.ManageVacationService;
+import com.marcs.app.vacation.service.VacationService;
 
 @RequestMapping("api/vacation-app/vacations")
 @RestApiController
@@ -196,5 +196,17 @@ public class VacationController {
 	@DeleteMapping("/{userId}/user")
 	public void deleteAllVacationsByUserId(@PathVariable int userId) throws Exception {
 		manageVacationService.deleteAllVacationsByUserId(userId);
+	}
+
+	/**
+	 * Deletes all expired vacations in the given range. Range will be a value in
+	 * months.
+	 * 
+	 * @param range The range to delete in months
+	 * @return How many rows were deleted
+	 */
+	@DeleteMapping("/expired/{range}")
+	public int deleteAllExpiredVacations(@PathVariable int range) {
+		return manageVacationService.deleteAllExpiredVacations(range);
 	}
 }
