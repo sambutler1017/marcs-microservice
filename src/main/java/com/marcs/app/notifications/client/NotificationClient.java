@@ -2,6 +2,9 @@ package com.marcs.app.notifications.client;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.common.collect.Sets;
 import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.email.client.EmailClient;
 import com.marcs.app.notifications.client.domain.Notification;
@@ -14,8 +17,6 @@ import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.common.enums.NotificationType;
 import com.marcs.common.enums.WebRole;
 import com.marcs.websockets.client.WebSocketClient;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This class exposes the Request Manager endpoint's to other app's to pull data
@@ -103,6 +104,7 @@ public class NotificationClient {
      */
     public Notification createNotification(Notification n) throws Exception {
         Notification generatedNotification = controller.createNotification(n);
+        generatedNotification.setReceiverRoles(Sets.newHashSet(WebRole.SITE_ADMIN, WebRole.ADMIN));
         websocketClient.sendWebNotification(generatedNotification);
         return generatedNotification;
     }
@@ -120,11 +122,13 @@ public class NotificationClient {
         n.setLinkId(vac.getId());
         n.setType(NotificationType.VACATION);
 
-        if (userRequesting.getWebRole().isManager()) {
+        if(userRequesting.getWebRole().isManager()) {
             n.setReceiverId(storeClient.getRegionalOfStoreById(userRequesting.getStoreId()).getId());
-        } else if (userRequesting.getWebRole().equals(WebRole.EMPLOYEE)) {
+        }
+        else if(userRequesting.getWebRole().equals(WebRole.EMPLOYEE)) {
             n.setReceiverId(storeClient.getManagerOfStoreById(userRequesting.getStoreId()).getId());
-        } else {
+        }
+        else {
             n.setReceiverId(0); // Notification to only site admin and admins
         }
 
@@ -142,11 +146,13 @@ public class NotificationClient {
         n.setLinkId(user.getId());
         n.setType(NotificationType.USER);
 
-        if (user.getWebRole().isManager()) {
+        if(user.getWebRole().isManager()) {
             n.setReceiverId(storeClient.getRegionalOfStoreById(user.getStoreId()).getId());
-        } else if (user.getWebRole().equals(WebRole.EMPLOYEE)) {
+        }
+        else if(user.getWebRole().equals(WebRole.EMPLOYEE)) {
             n.setReceiverId(storeClient.getManagerOfStoreById(user.getStoreId()).getId());
-        } else {
+        }
+        else {
             n.setReceiverId(0); // Notification to only site admin and admins
         }
 
