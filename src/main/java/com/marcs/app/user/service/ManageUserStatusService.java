@@ -34,7 +34,7 @@ public class ManageUserStatusService {
      * @throws Exception
      */
     public UserStatus insertUserStatus(UserStatus userStatus) throws Exception {
-        return dao.insertUserStatus(userStatus, jwtHolder.getUserId());
+        return dao.insertUserStatus(userStatus, userStatus.getUserId());
     }
 
     /**
