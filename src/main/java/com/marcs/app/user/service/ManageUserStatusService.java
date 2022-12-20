@@ -46,8 +46,9 @@ public class ManageUserStatusService {
      */
     public UserStatus updateUserStatusByUserId(int id, UserStatus userStatus) throws Exception {
         userStatus.setUpdatedUserId(jwtHolder.getUserId());
-        emailClient.sendUserAccountUpdateStatusEmail(id, userStatus.getAccountStatus());
-        return dao.updateUserStatusByUserId(id, userStatus);
+        UserStatus updatedStatus = dao.updateUserStatusByUserId(id, userStatus);
+        emailClient.sendUserAccountUpdateStatusEmail(id);
+        return updatedStatus;
     }
 
     /**
