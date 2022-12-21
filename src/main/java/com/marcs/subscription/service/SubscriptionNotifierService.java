@@ -1,7 +1,6 @@
 package com.marcs.subscription.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,7 +36,9 @@ public class SubscriptionNotifierService {
      * @param userId The user id of the user to send it too.
      */
     public void sendToUser(Notification body, int userId) {
-        getActiveUserSessionByUserId(userId).ifPresent(u -> send(body, QUEUE_USER_NOTIFICATION, u.getName()));
+        for(UserPrincipal u : getActiveUserSessionsByUserId(userId)) {
+            send(body, QUEUE_USER_NOTIFICATION, u.getName());
+        }
     }
 
     /**
@@ -50,7 +51,7 @@ public class SubscriptionNotifierService {
      * @param role   The role of the user to send it too.
      */
     public void sendToUser(Notification body, WebRole role) {
-        List<UserPrincipal> sessionList = getActiveUserSessionByWebRole(role);
+        List<UserPrincipal> sessionList = getActiveUserSessionsByWebRole(role);
         if(!sessionList.isEmpty()) {
             for(UserPrincipal u : sessionList) {
                 send(body, QUEUE_USER_NOTIFICATION, u.getName());
@@ -113,8 +114,8 @@ public class SubscriptionNotifierService {
      * @param userId The id of the user to find.
      * @return Optional of the user Principal.
      */
-    private Optional<UserPrincipal> getActiveUserSessionByUserId(int userId) {
-        return getActiveUserSessions().stream().filter(u -> u.getUser().getId() == userId).findFirst();
+    private List<UserPrincipal> getActiveUserSessionsByUserId(int userId) {
+        return getActiveUserSessions().stream().filter(u -> u.getUser().getId() == userId).collect(Collectors.toList());
     }
 
     /**
@@ -123,7 +124,7 @@ public class SubscriptionNotifierService {
      * @param role The user role to find.
      * @return List of the user Principal.
      */
-    private List<UserPrincipal> getActiveUserSessionByWebRole(WebRole role) {
+    private List<UserPrincipal> getActiveUserSessionsByWebRole(WebRole role) {
         return getActiveUserSessions().stream().filter(u -> u.getUser().getWebRole().equals(role))
                 .collect(Collectors.toList());
     }
