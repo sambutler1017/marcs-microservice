@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,8 +33,8 @@ public class SubscriptionController {
     /**
      * Test endpoint for sending a notification body to the given user.
      */
-    @PostMapping(path = "/user/{userId}/notification")
-    public void pushUserNotification(@PathVariable int userId, @RequestBody Notification body) {
-        service.sendToUser(body, userId);
+    @PostMapping(path = "/user/notification")
+    public void pushUserNotification(@RequestBody Notification body) {
+        service.sendToUser(body, body.getReceiverId());
     }
 }
