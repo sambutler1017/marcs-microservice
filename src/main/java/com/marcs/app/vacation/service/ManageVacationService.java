@@ -13,7 +13,7 @@ import com.marcs.app.vacation.dao.VacationDao;
 import com.marcs.common.enums.NotificationType;
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.jwt.utility.JwtHolder;
-import com.marcs.websockets.client.WebSocketClient;
+import com.marcs.subscription.client.SubscriptionNotifierClient;
 
 /**
  * Vacation Service class that handles all service calls to the dao
@@ -37,7 +37,7 @@ public class ManageVacationService {
 	private NotificationClient notificationClient;
 
 	@Autowired
-	private WebSocketClient websocketClient;
+	private SubscriptionNotifierClient subscriptionNotifierClient;
 
 	@Autowired
 	private VacationService vacationService;
@@ -183,8 +183,7 @@ public class ManageVacationService {
 	 */
 	private void notifyUserBeingUpdated(int userId) throws Exception {
 		Notification n = new Notification();
-		n.setReceiverId(userId);
 		n.setType(NotificationType.REQUEST_TRACKER);
-		websocketClient.sendWebNotification(n);
+		subscriptionNotifierClient.sendToUser(n, userId);
 	}
 }

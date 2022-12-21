@@ -1,10 +1,10 @@
 package com.marcs.app.notifications.service;
 
-import com.marcs.app.notifications.client.domain.Notification;
-import com.marcs.app.notifications.dao.NotificationDao;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.marcs.app.notifications.client.domain.Notification;
+import com.marcs.app.notifications.dao.NotificationDao;
 
 /**
  * Notification Service class that handles all service calls to the dao.
@@ -46,7 +46,7 @@ public class ManageNotificationService {
      * @throws Exception
      */
     public Notification createNotification(Notification n) throws Exception {
-        if (n.getLinkId() == 0 || n.getType() == null) {
+        if(n.getLinkId() == 0 || n.getType() == null) {
             throw new Exception("Link ID, and Type are required fields");
         }
         return dao.createNotification(n);

@@ -16,7 +16,7 @@ import com.marcs.app.user.client.domain.User;
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.common.enums.NotificationType;
 import com.marcs.common.enums.WebRole;
-import com.marcs.websockets.client.WebSocketClient;
+import com.marcs.subscription.client.SubscriptionNotifierClient;
 
 /**
  * This class exposes the Request Manager endpoint's to other app's to pull data
@@ -41,7 +41,7 @@ public class NotificationClient {
     private EmailClient emailClient;
 
     @Autowired
-    private WebSocketClient websocketClient;
+    private SubscriptionNotifierClient subscriptionNotifierClient;
 
     /**
      * This will get a list of notifications that the user has. The request will be
@@ -95,21 +95,6 @@ public class NotificationClient {
     }
 
     /**
-     * This will create a new notification that needs inserted. It will contain the
-     * type, link id, and who is receiving the notification.
-     * 
-     * @param n The notification that needs inserted.
-     * @return {@link Notification} That is created.
-     * @throws Exception
-     */
-    public Notification createNotification(Notification n) throws Exception {
-        Notification generatedNotification = controller.createNotification(n);
-        generatedNotification.setReceiverRoles(Sets.newHashSet(WebRole.SITE_ADMIN, WebRole.ADMIN));
-        websocketClient.sendWebNotification(generatedNotification);
-        return generatedNotification;
-    }
-
-    /**
      * This will create a new notification specific to a VACATION.
      * 
      * @param vac The vacation to create a notification for.
@@ -117,22 +102,8 @@ public class NotificationClient {
      */
     public void createNotificationForVacation(Vacation vac) throws Exception {
         User userRequesting = userProfileClient.getUserById(vac.getUserId());
-        Notification n = new Notification();
-
-        n.setLinkId(vac.getId());
-        n.setType(NotificationType.VACATION);
-
-        if(userRequesting.getWebRole().isManager()) {
-            n.setReceiverId(storeClient.getRegionalOfStoreById(userRequesting.getStoreId()).getId());
-        }
-        else if(userRequesting.getWebRole().equals(WebRole.EMPLOYEE)) {
-            n.setReceiverId(storeClient.getManagerOfStoreById(userRequesting.getStoreId()).getId());
-        }
-        else {
-            n.setReceiverId(0); // Notification to only site admin and admins
-        }
-
-        createNotification(n);
+        Notification n = createNotification(userRequesting, vac.getId(), NotificationType.VACATION);
+        sendWebNotification(n);
     }
 
     /**
@@ -142,22 +113,37 @@ public class NotificationClient {
      * @throws Exception
      */
     public void createNotificationForUser(User user) throws Exception {
-        Notification n = new Notification();
-        n.setLinkId(user.getId());
-        n.setType(NotificationType.USER);
+        Notification n = createNotification(user, user.getId(), NotificationType.USER);
+        emailClient.sendNewUserEmail(user);
+        sendWebNotification(n);
+    }
 
-        if(user.getWebRole().isManager()) {
-            n.setReceiverId(storeClient.getRegionalOfStoreById(user.getStoreId()).getId());
+    public Notification createNotification(User u, int link, NotificationType type) throws Exception {
+        Notification n = new Notification();
+
+        n.setLinkId(link);
+        n.setType(type);
+
+        if(u.getWebRole().isManager()) {
+            n.setReceiverId(storeClient.getRegionalOfStoreById(u.getStoreId()).getId());
         }
-        else if(user.getWebRole().equals(WebRole.EMPLOYEE)) {
-            n.setReceiverId(storeClient.getManagerOfStoreById(user.getStoreId()).getId());
+        else if(u.getWebRole().equals(WebRole.EMPLOYEE)) {
+            n.setReceiverId(storeClient.getManagerOfStoreById(u.getStoreId()).getId());
         }
         else {
             n.setReceiverId(0); // Notification to only site admin and admins
         }
+        return controller.createNotification(n);
+    }
 
-        emailClient.sendNewUserEmail(user);
-        createNotification(n);
+    /**
+     * Sends web notification to the desired users and web roles.
+     * 
+     * @param n The notification to be sent.
+     */
+    public void sendWebNotification(Notification n) {
+        subscriptionNotifierClient.sendToUserWebRoles(n, Sets.newHashSet(WebRole.SITE_ADMIN, WebRole.ADMIN));
+        subscriptionNotifierClient.sendToUser(n, n.getReceiverId());
     }
 
     /**

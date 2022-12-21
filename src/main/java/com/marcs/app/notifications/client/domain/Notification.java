@@ -25,6 +25,8 @@ public class Notification {
 
     private int linkId;
 
+    private String destination;
+
     private Date insertDate;
 
     public int getId() {
@@ -73,6 +75,14 @@ public class Notification {
 
     public void setLinkId(int linkId) {
         this.linkId = linkId;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 
     public Date getInsertDate() {

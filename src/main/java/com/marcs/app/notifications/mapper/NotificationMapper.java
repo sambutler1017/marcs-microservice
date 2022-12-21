@@ -3,11 +3,11 @@ package com.marcs.app.notifications.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.stereotype.Service;
+
 import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.common.abstracts.AbstractMapper;
 import com.marcs.common.enums.NotificationType;
-
-import org.springframework.stereotype.Service;
 
 /**
  * Mapper class to map a Store Object {@link Notification}

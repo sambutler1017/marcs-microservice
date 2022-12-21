@@ -1,22 +1,22 @@
 package com.marcs.app.notifications.dao;
 
-import static com.marcs.app.notifications.mapper.NotificationMapper.NOTIFICATION_MAPPER;
+import static com.marcs.app.notifications.mapper.NotificationMapper.*;
 
 import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import com.marcs.app.notifications.client.domain.Notification;
-import com.marcs.app.notifications.client.domain.request.NotificationGetRequest;
-import com.marcs.common.abstracts.BaseDao;
-import com.marcs.sql.SqlParamBuilder;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
+import com.marcs.app.notifications.client.domain.Notification;
+import com.marcs.app.notifications.client.domain.request.NotificationGetRequest;
+import com.marcs.common.abstracts.BaseDao;
+import com.marcs.sql.SqlParamBuilder;
 
 /**
  * Class that handles all the dao calls to the database for requests
@@ -43,10 +43,8 @@ public class NotificationDao extends BaseDao {
      * @throws Exception If no data is returned
      */
     public List<Notification> getNotifications(NotificationGetRequest request) throws Exception {
-        MapSqlParameterSource params = SqlParamBuilder.with(request)
-                .withParam(ID, request.getId())
-                .withParam(RECEIVER_ID, request.getReceiverId())
-                .withParam(READ_FLAG, request.getRead())
+        MapSqlParameterSource params = SqlParamBuilder.with(request).withParam(ID, request.getId())
+                .withParam(RECEIVER_ID, request.getReceiverId()).withParam(READ_FLAG, request.getRead())
                 .withParamTextEnumCollection(NOTIFICATION_TYPE, request.getType()).build();
 
         return getPage(getSql("getNotifications", params), params, NOTIFICATION_MAPPER);
@@ -75,10 +73,8 @@ public class NotificationDao extends BaseDao {
      */
     public Notification createNotification(Notification n) throws Exception {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        MapSqlParameterSource params = SqlParamBuilder.with()
-                .withParam(NOTIFICATION_TYPE, n.getType())
-                .withParam(RECEIVER_ID, n.getReceiverId())
-                .withParam(LINK_ID, n.getLinkId()).build();
+        MapSqlParameterSource params = SqlParamBuilder.with().withParam(NOTIFICATION_TYPE, n.getType())
+                .withParam(RECEIVER_ID, n.getReceiverId()).withParam(LINK_ID, n.getLinkId()).build();
 
         post(getSql("createNotification"), params, keyHolder);
 
