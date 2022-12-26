@@ -118,6 +118,15 @@ public class NotificationClient {
         sendWebNotification(n);
     }
 
+    /**
+     * Inserts the notification into the database to be tracked and stored.
+     * 
+     * @param u    The user who gets the notification
+     * @param link The link to the data.
+     * @param type The type of notification.
+     * @return The updated notification object.
+     * @throws Exception
+     */
     public Notification createNotification(User u, int link, NotificationType type) throws Exception {
         Notification n = new Notification();
 
@@ -143,7 +152,7 @@ public class NotificationClient {
      */
     public void sendWebNotification(Notification n) {
         subscriptionNotifierClient.sendToUserWebRoles(n, Sets.newHashSet(WebRole.SITE_ADMIN, WebRole.ADMIN));
-        subscriptionNotifierClient.sendToUser(n, n.getReceiverId());
+        subscriptionNotifierClient.sendToUser(n);
     }
 
     /**

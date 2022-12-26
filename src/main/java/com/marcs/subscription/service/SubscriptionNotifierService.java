@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.runtime.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ import com.marcs.subscription.client.domain.UserPrincipal;
 @Component
 public class SubscriptionNotifierService {
     private static final String QUEUE_USER_NOTIFICATION = "/queue/user/notification";
+    private static final String TOPIC_GENERAL_NOTIFICATION = "/topic/general/notification";
 
     @Autowired
     private WebNotifierService webNotifierService;
@@ -32,44 +34,11 @@ public class SubscriptionNotifierService {
      * Push a web notification to a user for the given user id. The default socket
      * this notification will be sent to {@link #QUEUE_USER_NOTIFICATION}.
      * 
-     * @param body   The body to be sent.
-     * @param userId The user id of the user to send it too.
-     */
-    public void sendToUser(Notification body, int userId) {
-        for(UserPrincipal u : getActiveUserSessionsByUserId(userId)) {
-            send(body, QUEUE_USER_NOTIFICATION, u.getName());
-        }
-    }
-
-    /**
-     * Push a web notification to list of users with the given role. It will perform
-     * a notification action with the passed in notification body. The default
-     * socket this notification will be sent to {@link #QUEUE_USER_NOTIFICATION}.
-     * 
-     * @param action The action to perform.
-     * @param body   The body to be sent.
-     * @param role   The role of the user to send it too.
-     */
-    public void sendToUser(Notification body, WebRole role) {
-        List<UserPrincipal> sessionList = getActiveUserSessionsByWebRole(role);
-        if(!sessionList.isEmpty()) {
-            for(UserPrincipal u : sessionList) {
-                send(body, QUEUE_USER_NOTIFICATION, u.getName());
-            }
-        }
-    }
-
-    /**
-     * Push a web notification to a user for the given user id. The default socket
-     * this notification will be sent to {@link #QUEUE_USER_NOTIFICATION}.
-     * 
      * @param body    The body to be sent.
      * @param userIds The list of user ids of the user to send it too.
      */
     public void sendToUserIds(Notification body, Set<Integer> userIds) {
-        for(Integer id : userIds) {
-            sendToUser(body, id);
-        }
+        userIds.forEach(id -> sendToUser(body, id));
     }
 
     /**
@@ -81,14 +50,68 @@ public class SubscriptionNotifierService {
      * @param roles The list of roles of the user to send it too.
      */
     public void sendToUserWebRoles(Notification body, Set<WebRole> roles) {
-        for(WebRole r : roles) {
-            sendToUser(body, r);
-        }
+        roles.forEach(r -> sendToUser(body, r));
+    }
+
+    /**
+     * Push a web notification to a user. The user id to send it to must be attached
+     * on the receiver user id field.
+     * 
+     * @param body The body to be sent.
+     */
+    public void sendToUser(Notification body) {
+        Assert.isTrue(body.getReceiverId() != 0, "Receiver ID must be greater than 0!");
+        sendToUser(body, body.getReceiverId());
+    }
+
+    /**
+     * Push a web notification to a user for the given user id. The default socket
+     * this notification will be sent to {@link #QUEUE_USER_NOTIFICATION}.
+     * 
+     * @param body   The body to be sent.
+     * @param userId The user id of the user to send it too.
+     */
+    public void sendToUser(Notification body, int userId) {
+        getActiveUserSessionsByUserId(userId).forEach(u -> send(body, QUEUE_USER_NOTIFICATION, u.getName()));
+    }
+
+    /**
+     * Push a web notification to list of users with the given role. It will perform
+     * a notification action with the passed in notification body. The default
+     * socket this notification will be sent to {@link #QUEUE_USER_NOTIFICATION}.
+     * 
+     * @param body The body to be sent.
+     * @param role The role of the user to send it too.
+     */
+    public void sendToUser(Notification body, WebRole role) {
+        getActiveUserSessionsByWebRole(role).forEach(u -> send(body, QUEUE_USER_NOTIFICATION, u.getName()));
+    }
+
+    /**
+     * Send notification to anybody listening on the website subscription.
+     * 
+     * @param body The body to send.
+     */
+    public void sendToAll(Notification body) {
+        send(body, TOPIC_GENERAL_NOTIFICATION);
+    }
+
+    /**
+     * Push a web notification to the general socket connnection. This is not a
+     * specific user listener this would be sent to a topic subscription,
+     * {@link #TOPIC_GENERAL_NOTIFICATION}.
+     * 
+     * @param body   The body to send.
+     * @param socket The socket the notitication should go to.
+     */
+    public void send(Notification body, String socket) {
+        webNotifierService.send(buildNotification(body, socket));
     }
 
     /**
      * Push a web notification based on the given session id. Only the client with
-     * the specified session id will receive the notification.
+     * the specified session id will receive the notification at
+     * {@link #QUEUE_USER_NOTIFICATION}.
      * 
      * @param body      The body to be sent.
      * @param socket    The socket path the notification should be sent too.
@@ -112,7 +135,7 @@ public class SubscriptionNotifierService {
      * Get the subscription session of a user by their id.
      * 
      * @param userId The id of the user to find.
-     * @return Optional of the user Principal.
+     * @return List of the user Principal.
      */
     private List<UserPrincipal> getActiveUserSessionsByUserId(int userId) {
         return getActiveUserSessions().stream().filter(u -> u.getUser().getId() == userId).collect(Collectors.toList());

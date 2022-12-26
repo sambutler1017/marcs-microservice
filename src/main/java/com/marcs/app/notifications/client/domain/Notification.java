@@ -1,10 +1,8 @@
 package com.marcs.app.notifications.client.domain;
 
 import java.util.Date;
-import java.util.Set;
 
 import com.marcs.common.enums.NotificationType;
-import com.marcs.common.enums.WebRole;
 
 /**
  * Notification object that will map the data to the fields needed.
@@ -20,8 +18,6 @@ public class Notification {
     private boolean read;
 
     private int receiverId;
-
-    private Set<WebRole> receiverRoles;
 
     private int linkId;
 
@@ -59,14 +55,6 @@ public class Notification {
 
     public void setReceiverId(int receiverId) {
         this.receiverId = receiverId;
-    }
-
-    public Set<WebRole> getReceiverRoles() {
-        return receiverRoles;
-    }
-
-    public void setReceiverRoles(Set<WebRole> receiverRoles) {
-        this.receiverRoles = receiverRoles;
     }
 
     public int getLinkId() {

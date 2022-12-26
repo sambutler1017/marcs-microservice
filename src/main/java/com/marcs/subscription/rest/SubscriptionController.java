@@ -31,10 +31,23 @@ public class SubscriptionController {
     }
 
     /**
-     * Test endpoint for sending a notification body to the given user.
+     * Push Notification to a specific user by id.
+     * 
+     * @param body The notification to push.
      */
     @PostMapping(path = "/user/notification")
     public void pushUserNotification(@RequestBody Notification body) {
         service.sendToUser(body, body.getReceiverId());
+    }
+
+    /**
+     * Endpoint that will push the notitication to all users on the subscription of
+     * the website.
+     * 
+     * @param body The body to send.
+     */
+    @PostMapping(path = "/all/notification")
+    public void pushNotificationToAll(@RequestBody Notification body) {
+        service.sendToAll(body);
     }
 }
