@@ -25,7 +25,7 @@ public class NotificationMapper extends AbstractMapper<Notification> {
         notification.setId(rs.getInt(ID));
         notification.setType(NotificationType.valueOf(rs.getString(NOTIFICATION_TYPE)));
         notification.setLinkId(rs.getInt(LINK_ID));
-        notification.setInsertDate(dateTimeFormat(rs.getString(INSERT_DATE)));
+        notification.setInsertDate(parseDateTime(rs.getString(INSERT_DATE)));
         notification.setReceiverId(rs.getInt(RECEIVER_ID));
         notification.setRead(rs.getBoolean(READ_FLAG));
 
