@@ -61,7 +61,7 @@ public class JwtTokenUtil implements Serializable {
      * @return A Date object
      */
     public LocalDateTime getExpirationDateFromToken(String token) {
-        return getClaimFromToken(token, Claims::getExpiration).toInstant().atZone(ZoneId.of("US/Eastern"))
+        return getClaimFromToken(token, Claims::getExpiration).toInstant().atZone(ZoneId.of("America/New_York"))
                 .toLocalDateTime();
     }
 
