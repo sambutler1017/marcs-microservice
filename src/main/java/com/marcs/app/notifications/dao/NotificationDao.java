@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.app.notifications.client.domain.request.NotificationGetRequest;
 import com.marcs.common.abstracts.BaseDao;
+import com.marcs.common.util.TimeZoneUtil;
 import com.marcs.sql.SqlParamBuilder;
 
 /**
@@ -79,7 +80,7 @@ public class NotificationDao extends BaseDao {
         post(getSql("createNotification"), params, keyHolder);
 
         n.setId(keyHolder.getKey().intValue());
-        n.setInsertDate(LocalDateTime.now());
+        n.setInsertDate(LocalDateTime.now(TimeZoneUtil.defaultZone()));
         return n;
     }
 

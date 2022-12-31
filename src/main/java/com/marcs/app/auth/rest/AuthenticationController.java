@@ -2,11 +2,8 @@ package com.marcs.app.auth.rest;
 
 import static org.springframework.http.MediaType.*;
 
-import java.time.LocalDateTime;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,17 +50,4 @@ public class AuthenticationController {
     public ResponseEntity<AuthToken> reauthenticateUser() throws Exception {
         return ResponseEntity.ok(service.reauthenticate());
     }
-
-    /**
-     * Reauthenticates a user and generates a new token.
-     *
-     * @param authenticationRequest A email and password request.
-     * @return a new JWT.
-     * @throws Exception If user does not exist.
-     */
-    @GetMapping(path = "/test/time", produces = APPLICATION_JSON_VALUE)
-    public LocalDateTime tempMethod() throws Exception {
-        return LocalDateTime.now();
-    }
-
 }

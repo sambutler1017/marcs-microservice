@@ -15,6 +15,7 @@ import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.exceptions.BaseException;
 import com.marcs.common.exceptions.InvalidCredentialsException;
+import com.marcs.common.util.TimeZoneUtil;
 import com.marcs.jwt.utility.JwtHolder;
 import com.marcs.jwt.utility.JwtTokenUtil;
 
@@ -28,6 +29,7 @@ import com.marcs.jwt.utility.JwtTokenUtil;
  */
 @Service
 public class AuthenticationService {
+
     @Autowired
     private AuthenticationDao authDao;
 
@@ -51,7 +53,8 @@ public class AuthenticationService {
         User user = verifyUser(request.getEmail(), request.getPassword());
 
         String token = jwtTokenUtil.generateToken(user);
-        return new AuthToken(token, LocalDateTime.now(), jwtTokenUtil.getExpirationDateFromToken(token), user);
+        return new AuthToken(token, LocalDateTime.now(TimeZoneUtil.defaultZone()),
+                             jwtTokenUtil.getExpirationDateFromToken(token), user);
     }
 
     /**
@@ -66,7 +69,8 @@ public class AuthenticationService {
         userProfileClient.updateUserLastLoginToNow(u.getId());
 
         String token = jwtTokenUtil.generateToken(u);
-        return new AuthToken(token, LocalDateTime.now(), jwtTokenUtil.getExpirationDateFromToken(token), u);
+        return new AuthToken(token, LocalDateTime.now(TimeZoneUtil.defaultZone()),
+                             jwtTokenUtil.getExpirationDateFromToken(token), u);
     }
 
     /**

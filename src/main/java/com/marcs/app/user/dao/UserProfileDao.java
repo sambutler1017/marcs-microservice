@@ -22,6 +22,7 @@ import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.common.exceptions.UserNotFoundException;
 import com.marcs.common.util.CommonUtil;
+import com.marcs.common.util.TimeZoneUtil;
 import com.marcs.sql.SqlParamBuilder;
 
 /**
@@ -104,7 +105,8 @@ public class UserProfileDao extends BaseDao {
 				.withParam(WEB_ROLE_ID, user.getWebRole().getRank())
 				.withParam(STORE_ID, user.getStoreId() == null ? null : user.getStoreId().trim())
 				.withParam(	HIRE_DATE,
-							user.getHireDate() == null ? LocalDateTime.now().toString() : user.getHireDate().toString())
+							user.getHireDate() == null ? LocalDateTime.now(TimeZoneUtil.defaultZone()).toString()
+									: user.getHireDate().toString())
 				.build();
 
 		post(getSql("insertUser", params), params, keyHolder);

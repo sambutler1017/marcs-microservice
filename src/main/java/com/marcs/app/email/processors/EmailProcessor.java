@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.marcs.app.email.client.domain.UserEmail;
+import com.marcs.common.util.TimeZoneUtil;
 import com.marcs.environment.AppEnvironmentService;
 import com.sendgrid.Content;
 import com.sendgrid.Email;
@@ -59,7 +60,7 @@ public abstract class EmailProcessor<T> {
         request.setBody(mail.build());
         sg.api(request);
 
-        userEmail.setSentDate(LocalDateTime.now());
+        userEmail.setSentDate(LocalDateTime.now(TimeZoneUtil.defaultZone()));
         return userEmail;
     }
 
