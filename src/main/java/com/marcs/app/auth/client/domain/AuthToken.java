@@ -1,8 +1,10 @@
 package com.marcs.app.auth.client.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.marcs.app.user.client.domain.User;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * Authentication token to be used within the app.
@@ -10,17 +12,24 @@ import com.marcs.app.user.client.domain.User;
  * @author Sam Butler
  * @since July 31, 2021
  */
+@Schema(description = "User Auth Token")
 public class AuthToken {
 
+    @Schema(description = "JWT Token for the user.")
     private String token;
 
-    private Date createDate;
+    @Schema(description = "When the token was created.")
+    private LocalDateTime createDate;
 
-    private Date expireDate;
+    @Schema(description = "When the token expires.")
+    private LocalDateTime expireDate;
 
+    @Schema(description = "Data to be attached to the auth token.")
     private User user;
 
-    public AuthToken(String t, Date creation, Date expire, User u) {
+    public AuthToken() {}
+
+    public AuthToken(String t, LocalDateTime creation, LocalDateTime expire, User u) {
         token = t;
         expireDate = expire;
         createDate = creation;
@@ -35,19 +44,19 @@ public class AuthToken {
         this.token = token;
     }
 
-    public Date getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
-    public Date getExpireDate() {
+    public LocalDateTime getExpireDate() {
         return expireDate;
     }
 
-    public void setExpireDate(Date expireDate) {
+    public void setExpireDate(LocalDateTime expireDate) {
         this.expireDate = expireDate;
     }
 

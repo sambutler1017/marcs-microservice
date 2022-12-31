@@ -1,6 +1,10 @@
 package com.marcs.app.blockOutDate.client.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * Class to represent a block out date object
@@ -11,13 +15,17 @@ import java.util.Date;
 public class BlockOutDate {
     private int id;
 
-    private Date startDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDateTime startDate;
 
-    private Date endDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDateTime endDate;
 
     private int insertUserId;
 
-    private Date insertDate;
+    private LocalDateTime insertDate;
 
     public int getId() {
         return id;
@@ -27,19 +35,19 @@ public class BlockOutDate {
         this.id = id;
     }
 
-    public Date getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
@@ -51,11 +59,11 @@ public class BlockOutDate {
         this.insertUserId = insertUserId;
     }
 
-    public Date getInsertDate() {
+    public LocalDateTime getInsertDate() {
         return insertDate;
     }
 
-    public void setInsertDate(Date insertDate) {
+    public void setInsertDate(LocalDateTime insertDate) {
         this.insertDate = insertDate;
     }
 }

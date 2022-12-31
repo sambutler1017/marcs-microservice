@@ -19,9 +19,9 @@ public class BlockOutDateMapper extends AbstractMapper<BlockOutDate> {
 		BlockOutDate blockOutDate = new BlockOutDate();
 		blockOutDate.setId(rs.getInt(ID));
 		blockOutDate.setInsertUserId(rs.getInt(INSERT_USER_ID));
-		blockOutDate.setStartDate(rs.getDate(START_DATE));
-		blockOutDate.setEndDate(rs.getDate(END_DATE));
-		blockOutDate.setInsertDate(rs.getDate(INSERT_DATE));
+		blockOutDate.setStartDate(dateTimeFormat(rs.getString(START_DATE)));
+		blockOutDate.setEndDate(dateTimeFormat(rs.getString(END_DATE)));
+		blockOutDate.setInsertDate(dateTimeFormat(rs.getString(INSERT_DATE)));
 		return blockOutDate;
 	}
 }

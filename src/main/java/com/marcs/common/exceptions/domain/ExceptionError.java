@@ -1,6 +1,6 @@
 package com.marcs.common.exceptions.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 
@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
  * @since August 24, 2021
  */
 public class ExceptionError {
-    private Date timestamp;
+    private LocalDateTime timestamp;
 
     private int status;
 
@@ -24,29 +24,29 @@ public class ExceptionError {
     public ExceptionError(String message) {
         this.status = HttpStatus.BAD_REQUEST.value();
         this.error = HttpStatus.BAD_REQUEST.getReasonPhrase();
-        this.timestamp = new Date();
+        this.timestamp = LocalDateTime.now();
         this.message = message;
     }
 
     public ExceptionError(String message, HttpStatus status) {
         this.status = status.value();
         this.error = status.getReasonPhrase();
-        this.timestamp = new Date();
+        this.timestamp = LocalDateTime.now();
         this.message = message;
     }
 
-    public ExceptionError(Date timestamp, HttpStatus status, String error, String message) {
+    public ExceptionError(LocalDateTime timestamp, HttpStatus status, String error, String message) {
         this.timestamp = timestamp;
         this.status = status.value();
         this.error = error;
         this.message = message;
     }
 
-    public Date getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 

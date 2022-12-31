@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.runtime.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Component;
@@ -60,7 +59,6 @@ public class SubscriptionNotifierService {
      * @param body The body to be sent.
      */
     public void sendToUser(Notification body) {
-        Assert.isTrue(body.getReceiverId() != 0, "Receiver ID must be greater than 0!");
         sendToUser(body, body.getReceiverId());
     }
 

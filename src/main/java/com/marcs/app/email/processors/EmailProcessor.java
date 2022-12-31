@@ -1,6 +1,6 @@
 package com.marcs.app.email.processors;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -59,7 +59,7 @@ public abstract class EmailProcessor<T> {
         request.setBody(mail.build());
         sg.api(request);
 
-        userEmail.setSentDate(new Date());
+        userEmail.setSentDate(LocalDateTime.now());
         return userEmail;
     }
 

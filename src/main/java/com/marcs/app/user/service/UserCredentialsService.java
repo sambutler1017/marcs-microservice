@@ -115,7 +115,8 @@ public class UserCredentialsService {
         try {
             if(password != null && password.trim() != "") {
                 return dao.updateUserPassword(userId, BCrypt.hashpw(password, BCrypt.gensalt()));
-            }else {
+            }
+            else {
                 return userProfileClient.getCurrentUser();
             }
         }

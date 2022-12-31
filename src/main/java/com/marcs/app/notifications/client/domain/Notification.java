@@ -1,6 +1,6 @@
 package com.marcs.app.notifications.client.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.marcs.common.enums.NotificationType;
 
@@ -23,7 +23,7 @@ public class Notification {
 
     private String destination;
 
-    private Date insertDate;
+    private LocalDateTime insertDate;
 
     public int getId() {
         return id;
@@ -73,11 +73,11 @@ public class Notification {
         this.destination = destination;
     }
 
-    public Date getInsertDate() {
+    public LocalDateTime getInsertDate() {
         return insertDate;
     }
 
-    public void setInsertDate(Date insertDate) {
+    public void setInsertDate(LocalDateTime insertDate) {
         this.insertDate = insertDate;
     }
 }

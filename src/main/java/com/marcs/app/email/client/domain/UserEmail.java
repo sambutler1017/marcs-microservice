@@ -1,6 +1,6 @@
 package com.marcs.app.email.client.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * User Email class request that is used to send an email to users.
@@ -14,10 +14,9 @@ public class UserEmail {
 
     private String body;
 
-    private Date sentDate;
+    private LocalDateTime sentDate;
 
-    public UserEmail() {
-    }
+    public UserEmail() {}
 
     public UserEmail(String recipient, String subject, String body) {
         this.recipient = recipient;
@@ -57,11 +56,11 @@ public class UserEmail {
         this.body = body;
     }
 
-    public Date getSentDate() {
+    public LocalDateTime getSentDate() {
         return sentDate;
     }
 
-    public void setSentDate(Date sentDate) {
+    public void setSentDate(LocalDateTime sentDate) {
         this.sentDate = sentDate;
     }
 

@@ -32,13 +32,14 @@ public class UserProfileMapper extends AbstractMapper<User> {
 
 		try {
 			user.setPassword(rs.getString(PASSWORD));
-		} catch (Exception e) {
+		}
+		catch(Exception e) {
 			user.setPassword(null);
 		}
 
-		user.setLastLoginDate(rs.getDate(LAST_LOGIN_DATE));
-		user.setHireDate(rs.getDate(HIRE_DATE));
-		user.setInsertDate(rs.getDate(INSERT_DATE));
+		user.setLastLoginDate(dateTimeFormat(rs.getString(LAST_LOGIN_DATE)));
+		user.setHireDate(dateTimeFormat(rs.getString(HIRE_DATE)));
+		user.setInsertDate(dateTimeFormat(rs.getString(INSERT_DATE)));
 		return user;
 	}
 }

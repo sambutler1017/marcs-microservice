@@ -2,7 +2,7 @@ package com.marcs.app.notifications.dao;
 
 import static com.marcs.app.notifications.mapper.NotificationMapper.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -79,7 +79,7 @@ public class NotificationDao extends BaseDao {
         post(getSql("createNotification"), params, keyHolder);
 
         n.setId(keyHolder.getKey().intValue());
-        n.setInsertDate(new Date());
+        n.setInsertDate(LocalDateTime.now());
         return n;
     }
 

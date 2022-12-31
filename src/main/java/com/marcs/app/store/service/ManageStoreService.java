@@ -1,15 +1,15 @@
 package com.marcs.app.store.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+
 import com.marcs.app.store.client.domain.Store;
 import com.marcs.app.store.dao.StoreDao;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.common.enums.WebRole;
 import com.marcs.common.exceptions.BaseException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * Store Service class that handles all service calls to the dao
@@ -42,7 +42,7 @@ public class ManageStoreService {
 		storeService.getStoreById(storeId);
 		dao.updateStore(storeId, store);
 
-		if (store.getRegionalId() > 0) {
+		if(store.getRegionalId() > 0) {
 			updateRegionalOfStore(store.getRegionalId(), store.getId());
 		}
 		return storeService.getStoreById(store.getId());
@@ -59,20 +59,13 @@ public class ManageStoreService {
 	 * @throws Exception
 	 */
 	public Store updateStoreManagerOfStore(int userId, String storeId) throws Exception {
-		if (!userProfileClient.getUserById(userId).getWebRole().equals(WebRole.STORE_MANAGER)) {
-			throw new BaseException(
-					String.format(
-							"User id '%d' is not a STORE_MANAGER web role. Can not update store manager of store!",
+		if(!userProfileClient.getUserById(userId).getWebRole().equals(WebRole.STORE_MANAGER)) {
+			throw new BaseException(String
+					.format("User id '%d' is not a STORE_MANAGER web role. Can not update store manager of store!",
 							userId));
 		}
 
-		int currentManagerId = storeService.getStoreById(storeId).getManagerId();
-		if (currentManagerId != 0) {
-			User updatedUserRole = new User();
-			updatedUserRole.setWebRole(WebRole.ASSISTANT_MANAGER);
-			userProfileClient.updateUserProfileById(currentManagerId, updatedUserRole);
-		}
-
+		demoteStoreManagerOfStore(storeId);
 		dao.updateStoreManagerOfStore(userId, storeId);
 		return storeService.getStoreById(storeId);
 	}
@@ -86,10 +79,9 @@ public class ManageStoreService {
 	 * @throws Exception
 	 */
 	public Store updateRegionalOfStore(int userId, String storeId) throws Exception {
-		if (userProfileClient.getUserById(userId).getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
-			throw new BaseException(
-					String.format("User id '%d' is not a sufficient web role. Can not update overseer of store!",
-							userId));
+		if(userProfileClient.getUserById(userId).getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
+			throw new BaseException(String
+					.format("User id '%d' is not a sufficient web role. Can not update overseer of store!", userId));
 		}
 
 		dao.updateRegionalOfStore(userId, storeId);
@@ -121,5 +113,21 @@ public class ManageStoreService {
 	public void deleteStoreById(String storeId) throws Exception {
 		storeService.getStoreById(storeId);
 		dao.deleteStoreById(storeId);
+	}
+
+	/**
+	 * Will demote the current store manage of a store given the store id. If there
+	 * is no manager of the store, then it will do nothing.
+	 * 
+	 * @param storeId The store id of the manager to demote.
+	 * @throws Exception
+	 */
+	private void demoteStoreManagerOfStore(String storeId) throws Exception {
+		int currentManagerId = storeService.getStoreById(storeId).getManagerId();
+		if(currentManagerId != 0) {
+			User updatedUserRole = new User();
+			updatedUserRole.setWebRole(WebRole.ASSISTANT_MANAGER);
+			userProfileClient.updateUserProfileById(currentManagerId, updatedUserRole);
+		}
 	}
 }

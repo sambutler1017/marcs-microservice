@@ -26,7 +26,7 @@ public class JwtHolder {
 	private static final ThreadLocal<JwtPair> TOKEN = new ThreadLocal<>();
 
 	@Autowired
-	private AppEnvironmentService activeProfile;
+	private AppEnvironmentService appEnvironmentService;
 
 	/**
 	 * Set the token on the current thread local instance.
@@ -34,7 +34,7 @@ public class JwtHolder {
 	 * @param token The token to store.
 	 */
 	public void setToken(String token) {
-		JwtPair pair = new JwtPair(token, activeProfile);
+		JwtPair pair = new JwtPair(token, appEnvironmentService);
 		TOKEN.set(pair);
 	}
 

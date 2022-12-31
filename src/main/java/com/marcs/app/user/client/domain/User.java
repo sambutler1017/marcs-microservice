@@ -1,6 +1,6 @@
 package com.marcs.app.user.client.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.marcs.common.enums.AccountStatus;
 import com.marcs.common.enums.WebRole;
@@ -34,11 +34,11 @@ public class User {
 
 	private AccountStatus accountStatus;
 
-	private Date lastLoginDate;
+	private LocalDateTime lastLoginDate;
 
-	private Date hireDate;
+	private LocalDateTime hireDate;
 
-	private Date insertDate;
+	private LocalDateTime insertDate;
 
 	public int getId() {
 		return id;
@@ -128,27 +128,27 @@ public class User {
 		this.accountStatus = accountStatus;
 	}
 
-	public Date getLastLoginDate() {
+	public LocalDateTime getLastLoginDate() {
 		return lastLoginDate;
 	}
 
-	public void setLastLoginDate(Date lastLoginDate) {
+	public void setLastLoginDate(LocalDateTime lastLoginDate) {
 		this.lastLoginDate = lastLoginDate;
 	}
 
-	public Date getHireDate() {
+	public LocalDateTime getHireDate() {
 		return hireDate;
 	}
 
-	public void setHireDate(Date hireDate) {
+	public void setHireDate(LocalDateTime hireDate) {
 		this.hireDate = hireDate;
 	}
 
-	public Date getInsertDate() {
+	public LocalDateTime getInsertDate() {
 		return insertDate;
 	}
 
-	public void setInsertDate(Date insertDate) {
+	public void setInsertDate(LocalDateTime insertDate) {
 		this.insertDate = insertDate;
 	}
 }
