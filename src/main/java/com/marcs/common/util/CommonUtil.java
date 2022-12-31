@@ -30,6 +30,6 @@ public class CommonUtil {
     }
 
     public static LocalDateTime convertDateToLocalDate(Date d) {
-        return d.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        return d.toInstant().atZone(ZoneId.of("US/Eastern")).toLocalDateTime();
     }
 }
