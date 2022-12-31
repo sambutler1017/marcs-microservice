@@ -4,7 +4,6 @@ import static com.marcs.app.user.mapper.ApplicationMapper.*;
 import static com.marcs.app.user.mapper.UserProfileMapper.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -21,7 +20,6 @@ import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.common.exceptions.UserNotFoundException;
-import com.marcs.common.util.CommonUtil;
 import com.marcs.common.util.TimeZoneUtil;
 import com.marcs.sql.SqlParamBuilder;
 
@@ -148,8 +146,8 @@ public class UserProfileDao extends BaseDao {
 	 */
 	public User updateUserLastLoginToNow(int userId) throws Exception {
 		MapSqlParameterSource params = SqlParamBuilder.with()
-				.withParam(LAST_LOGIN_DATE, CommonUtil.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"))
-				.withParam(ID, userId).build();
+				.withParam(LAST_LOGIN_DATE, LocalDateTime.now(TimeZoneUtil.defaultZone())).withParam(ID, userId)
+				.build();
 
 		update(getSql("updateUserLastLoginToNow", params), params);
 
