@@ -20,6 +20,7 @@ import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.app.vacation.rest.VacationController;
 import com.marcs.common.date.LocalDateFormatter;
+import com.marcs.common.date.TimeZoneUtil;
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.common.enums.WebRole;
 
@@ -52,10 +53,14 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
                 vRequest.setRegionalId(Sets.newHashSet(user.getId()));
             }
 
-            send(buildUserEmail(user.getEmail(), "Weekly Report", emailContent
-                    .replace("::REPLACE_CARDS::", buildHTMLCard(vacationController.getVacationsForReport(vRequest)))
-                    .replace("::DATE_TODAY::", LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
-                            .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")))));
+            send(buildUserEmail(user.getEmail(), "Weekly Report",
+                                emailContent
+                                        .replace("::REPLACE_CARDS::",
+                                                 buildHTMLCard(vacationController.getVacationsForReport(vRequest)))
+                                        .replace("::DATE_TODAY::",
+                                                 LocalDate.now(TimeZoneUtil.SYSTEM_ZONE)
+                                                         .with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
+                                                         .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")))));
         }
         br.close();
     }
