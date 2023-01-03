@@ -2,7 +2,6 @@ package com.marcs.jwt.utility;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +15,7 @@ import com.marcs.app.featureAccess.client.FeatureAccessClient;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
+import com.marcs.common.date.LocalDateFormatter;
 import com.marcs.environment.AppEnvironmentService;
 import com.marcs.jwt.domain.JwtType;
 import com.marcs.jwt.domain.UserJwtClaims;
@@ -61,8 +61,7 @@ public class JwtTokenUtil implements Serializable {
      * @return A Date object
      */
     public LocalDateTime getExpirationDateFromToken(String token) {
-        return getClaimFromToken(token, Claims::getExpiration).toInstant().atZone(ZoneId.of("America/New_York"))
-                .toLocalDateTime();
+        return LocalDateFormatter.convertDateToLocalDateTime(getClaimFromToken(token, Claims::getExpiration));
     }
 
     /**

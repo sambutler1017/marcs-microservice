@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.marcs.app.email.rest.EmailController;
 import com.marcs.app.vacation.client.VacationClient;
 
 /**
@@ -21,6 +22,22 @@ public class VacationScheduler {
 
     @Autowired
     private VacationClient vacationClient;
+
+    @Autowired
+    private EmailController emailController;
+
+    /**
+     * Scheduler that gets run every Monday at 8:00 AM (UTC) for sending a vacation
+     * report every who has it enabled.
+     * 
+     * @throws Exception If the reports were not able to be sent.
+     */
+    @Scheduled(cron = "0 0 12 * * MON", zone = "UTC")
+    public void create() throws Exception {
+        LOGGER.info("Sending Vacation Reports...");
+        emailController.sendVacationReport();
+        LOGGER.info("Reports Sent Complete!");
+    }
 
     /**
      * Scheduler that gets run every Monday at 3:00 AM (UTC) for marking vacations

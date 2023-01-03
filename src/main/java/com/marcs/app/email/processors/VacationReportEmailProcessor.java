@@ -19,10 +19,9 @@ import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.app.vacation.rest.VacationController;
+import com.marcs.common.date.LocalDateFormatter;
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.common.enums.WebRole;
-import com.marcs.common.util.CommonUtil;
-import com.marcs.common.util.TimeZoneUtil;
 
 /**
  * Forgot Password email processor
@@ -53,14 +52,10 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
                 vRequest.setRegionalId(Sets.newHashSet(user.getId()));
             }
 
-            send(buildUserEmail(user.getEmail(), "Weekly Report",
-                                emailContent
-                                        .replace("::REPLACE_CARDS::",
-                                                 buildHTMLCard(vacationController.getVacationsForReport(vRequest)))
-                                        .replace("::DATE_TODAY::",
-                                                 LocalDate.now(TimeZoneUtil.defaultZone())
-                                                         .with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
-                                                         .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")))));
+            send(buildUserEmail(user.getEmail(), "Weekly Report", emailContent
+                    .replace("::REPLACE_CARDS::", buildHTMLCard(vacationController.getVacationsForReport(vRequest)))
+                    .replace("::DATE_TODAY::", LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
+                            .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")))));
         }
         br.close();
     }
@@ -97,14 +92,20 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
         String defaultCard = "<div class=\"card\"><div class=\"card-data\">::DATA_NAME::</div><div class=\"card-date\">::DATA_DATE::</div></div>";
 
         for(Vacation vac : vacs) {
-            String replacementValueName = String.format("%s (%s)", vac.getFullName(), vac.getStoreId());
-            String replacementValueDate = String.format("%s - %s",
-                                                        CommonUtil.formatDate(vac.getStartDate(), "MMMM d, yyyy"),
-                                                        CommonUtil.formatDate(vac.getEndDate(), "MMMM d, yyyy"));
-
-            htmlCards += defaultCard.replace("::DATA_NAME::", replacementValueName).replace("::DATA_DATE::",
-                                                                                            replacementValueDate);
+            String replaceName = String.format("%s (%s)", vac.getFullName(), vac.getStoreId());
+            String replaceDate = String.format("%s - %s", formatDate(vac.getStartDate()), formatDate(vac.getEndDate()));
+            htmlCards += defaultCard.replace("::DATA_NAME::", replaceName).replace("::DATA_DATE::", replaceDate);
         }
         return htmlCards;
+    }
+
+    /**
+     * Formts the local date to a user readable format.
+     * 
+     * @param dt The date to format.
+     * @return The string representation of the formatted date.
+     */
+    private String formatDate(LocalDate dt) {
+        return LocalDateFormatter.formatDate(dt, "MMMM d, yyyy");
     }
 }

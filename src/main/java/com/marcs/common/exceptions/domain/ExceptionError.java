@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 
-import com.marcs.common.util.TimeZoneUtil;
-
 /**
  * Custom exception object to be returned when endpoints have errors.
  * 
@@ -26,14 +24,14 @@ public class ExceptionError {
     public ExceptionError(String message) {
         this.status = HttpStatus.BAD_REQUEST.value();
         this.error = HttpStatus.BAD_REQUEST.getReasonPhrase();
-        this.timestamp = LocalDateTime.now(TimeZoneUtil.defaultZone());
+        this.timestamp = LocalDateTime.now();
         this.message = message;
     }
 
     public ExceptionError(String message, HttpStatus status) {
         this.status = status.value();
         this.error = status.getReasonPhrase();
-        this.timestamp = LocalDateTime.now(TimeZoneUtil.defaultZone());
+        this.timestamp = LocalDateTime.now();
         this.message = message;
     }
 

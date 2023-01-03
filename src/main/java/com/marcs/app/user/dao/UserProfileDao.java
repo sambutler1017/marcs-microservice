@@ -20,7 +20,6 @@ import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.common.exceptions.UserNotFoundException;
-import com.marcs.common.util.TimeZoneUtil;
 import com.marcs.sql.SqlParamBuilder;
 
 /**
@@ -103,8 +102,7 @@ public class UserProfileDao extends BaseDao {
 				.withParam(WEB_ROLE_ID, user.getWebRole().getRank())
 				.withParam(STORE_ID, user.getStoreId() == null ? null : user.getStoreId().trim())
 				.withParam(	HIRE_DATE,
-							user.getHireDate() == null ? LocalDateTime.now(TimeZoneUtil.defaultZone()).toString()
-									: user.getHireDate().toString())
+							user.getHireDate() == null ? LocalDateTime.now().toString() : user.getHireDate().toString())
 				.build();
 
 		post(getSql("insertUser", params), params, keyHolder);
@@ -145,10 +143,8 @@ public class UserProfileDao extends BaseDao {
 	 * @throws Exception
 	 */
 	public User updateUserLastLoginToNow(int userId) throws Exception {
-		MapSqlParameterSource params = SqlParamBuilder.with()
-				.withParam(LAST_LOGIN_DATE, LocalDateTime.now(TimeZoneUtil.defaultZone())).withParam(ID, userId)
-				.build();
-
+		MapSqlParameterSource params = SqlParamBuilder.with().withParam(LAST_LOGIN_DATE, LocalDateTime.now())
+				.withParam(ID, userId).build();
 		update(getSql("updateUserLastLoginToNow", params), params);
 
 		return getUserById(userId);
