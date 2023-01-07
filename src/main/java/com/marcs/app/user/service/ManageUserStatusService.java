@@ -4,8 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.marcs.app.email.client.EmailClient;
+import com.marcs.app.store.client.StoreClient;
+import com.marcs.app.user.client.UserProfileClient;
+import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.UserStatus;
 import com.marcs.app.user.dao.UserStatusDao;
+import com.marcs.common.enums.WebRole;
 import com.marcs.jwt.utility.JwtHolder;
 
 /**
@@ -25,6 +29,12 @@ public class ManageUserStatusService {
 
     @Autowired
     private EmailClient emailClient;
+
+    @Autowired
+    private StoreClient storeClient;
+
+    @Autowired
+    private UserProfileClient userProfileClient;
 
     /**
      * Inserts the given user status object into the db
@@ -47,6 +57,7 @@ public class ManageUserStatusService {
     public UserStatus updateUserStatusByUserId(int id, UserStatus userStatus) throws Exception {
         userStatus.setUpdatedUserId(jwtHolder.getUserId());
         UserStatus updatedStatus = dao.updateUserStatusByUserId(id, userStatus);
+        currentStoreManagerCheck(id);
         emailClient.sendUserAccountUpdateStatusEmail(id);
         return updatedStatus;
     }
@@ -61,5 +72,21 @@ public class ManageUserStatusService {
      */
     public UserStatus updateUserAppAccessByUserId(int id, Boolean appAccess) throws Exception {
         return dao.updateUserStatusByUserId(id, new UserStatus(jwtHolder.getUserId(), null, appAccess));
+    }
+
+    /**
+     * This will do a check on store manager if there is already a store manage of
+     * an existing store. If the current user being approved is a store manager then
+     * it will update the store the user is at as that store manager. Otherwise it
+     * will ignore this call.
+     * 
+     * @param userId The id of the user to check
+     * @throws Exception
+     */
+    private void currentStoreManagerCheck(int userId) throws Exception {
+        User user = userProfileClient.getUserById(userId);
+        if(user.getWebRole().equals(WebRole.STORE_MANAGER)) {
+            storeClient.updateStoreManagerOfStore(user.getId(), user.getStoreId());
+        }
     }
 }
