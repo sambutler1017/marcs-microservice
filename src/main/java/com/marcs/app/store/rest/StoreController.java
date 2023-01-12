@@ -1,15 +1,8 @@
 package com.marcs.app.store.rest;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.*;
 
 import java.util.List;
-
-import com.marcs.annotations.interfaces.RestApiController;
-import com.marcs.app.store.client.domain.Store;
-import com.marcs.app.store.client.domain.request.StoreGetRequest;
-import com.marcs.app.store.service.ManageStoreService;
-import com.marcs.app.store.service.StoreService;
-import com.marcs.app.user.client.domain.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.marcs.annotations.interfaces.RestApiController;
+import com.marcs.app.store.client.domain.Store;
+import com.marcs.app.store.client.domain.request.StoreGetRequest;
+import com.marcs.app.store.service.ManageStoreService;
+import com.marcs.app.store.service.StoreService;
+import com.marcs.app.user.client.domain.User;
 
 @RestApiController
 @RequestMapping("api/store-app/stores")

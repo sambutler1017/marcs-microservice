@@ -1,0 +1,13 @@
+@NAME(userRequestFields)
+    request_id, user_id, type, status, notes, data, insert_date
+
+@NAME(getUserRequest)
+    SELECT @INCLUDE(userRequestFields)
+    FROM user_request
+    @WHERE
+        @AND(:request_id)
+            request_id = :request_id
+        @AND(:type)
+            type = :type
+        @AND(:user_id)
+            user_id = :user_id
