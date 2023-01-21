@@ -2,13 +2,15 @@ package com.marcs.app.email.client.domain;
 
 import java.time.LocalDateTime;
 
+import com.sendgrid.Email;
+
 /**
  * User Email class request that is used to send an email to users.
  */
 public class UserEmail {
-    private String from;
+    private Email from;
 
-    private String recipient;
+    private Email recipient;
 
     private String subject;
 
@@ -16,27 +18,28 @@ public class UserEmail {
 
     private LocalDateTime sentDate;
 
-    public UserEmail() {}
+    public UserEmail() {
+    }
 
-    public UserEmail(String recipient, String subject, String body) {
+    public UserEmail(Email recipient, String subject, String body) {
         this.recipient = recipient;
         this.subject = subject;
         this.body = body;
     }
 
-    public String getFrom() {
+    public Email getFrom() {
         return from;
     }
 
-    public void setFrom(String from) {
+    public void setFrom(Email from) {
         this.from = from;
     }
 
-    public String getRecipient() {
+    public Email getRecipient() {
         return recipient;
     }
 
-    public void setRecipient(String recipient) {
+    public void setRecipient(Email recipient) {
         this.recipient = recipient;
     }
 
