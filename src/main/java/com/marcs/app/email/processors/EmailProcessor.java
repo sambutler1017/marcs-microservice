@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.marcs.app.email.client.domain.DynamicTemplatePersonalization;
 import com.marcs.app.email.client.domain.UserEmail;
 import com.marcs.common.date.TimeZoneUtil;
 import com.marcs.environment.AppEnvironmentService;
@@ -44,6 +45,13 @@ public abstract class EmailProcessor<T> {
      * Set any params to be passed in with the email to be processed.
      */
     public abstract void setParams(T params);
+
+    /**
+     * Generate object personalization data for email template.
+     * 
+     * @return The {@link DynamicTemplatePersonalization} data
+     */
+    public abstract DynamicTemplatePersonalization generatePersonalization();
 
     /**
      * {@link UserEmail} object to send a email too. Default from user will be the

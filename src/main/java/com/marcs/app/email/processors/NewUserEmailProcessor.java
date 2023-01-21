@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.marcs.app.email.client.domain.DynamicTemplatePersonalization;
 import com.marcs.app.user.client.domain.User;
 
 /**
@@ -26,8 +27,15 @@ public class NewUserEmailProcessor extends EmailProcessor<User> {
         String emailContent = br.lines().collect(Collectors.joining(" "));
 
         send(buildUserEmail(newUser.getEmail(), "Welcome to Marc's!",
-                            emailContent.replace("::USER_NAME::", newUser.getFirstName())));
+                emailContent.replace("::USER_NAME::", newUser.getFirstName())));
         br.close();
+    }
+
+    @Override
+    public DynamicTemplatePersonalization generatePersonalization() {
+        final DynamicTemplatePersonalization personalization = new DynamicTemplatePersonalization();
+        personalization.addTo(null);
+        return personalization;
     }
 
     @Override

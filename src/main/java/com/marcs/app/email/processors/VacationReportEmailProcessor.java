@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Sets;
+import com.marcs.app.email.client.domain.DynamicTemplatePersonalization;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
@@ -46,27 +47,35 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
         String emailContent = br.lines().collect(Collectors.joining(" "));
 
         List<User> usersWithNotifications = getUsersWithEmailReportsEnabled();
-        for(User user : usersWithNotifications) {
+        for (User user : usersWithNotifications) {
             VacationGetRequest vRequest = new VacationGetRequest();
             vRequest.setStatus(Sets.newHashSet(VacationStatus.APPROVED));
-            if(user.getWebRole().equals(WebRole.REGIONAL) || user.getWebRole().equals(WebRole.DISTRICT_MANAGER)) {
+            if (user.getWebRole().equals(WebRole.REGIONAL) || user.getWebRole().equals(WebRole.DISTRICT_MANAGER)) {
                 vRequest.setRegionalId(Sets.newHashSet(user.getId()));
             }
 
             send(buildUserEmail(user.getEmail(), "Weekly Report",
-                                emailContent
-                                        .replace("::REPLACE_CARDS::",
-                                                 buildHTMLCard(vacationController.getVacationsForReport(vRequest)))
-                                        .replace("::DATE_TODAY::",
-                                                 LocalDate.now(TimeZoneUtil.SYSTEM_ZONE)
-                                                         .with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
-                                                         .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")))));
+                    emailContent
+                            .replace("::REPLACE_CARDS::",
+                                    buildHTMLCard(vacationController.getVacationsForReport(vRequest)))
+                            .replace("::DATE_TODAY::",
+                                    LocalDate.now(TimeZoneUtil.SYSTEM_ZONE)
+                                            .with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
+                                            .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")))));
         }
         br.close();
     }
 
     @Override
-    public void setParams(Void params) {}
+    public DynamicTemplatePersonalization generatePersonalization() {
+        final DynamicTemplatePersonalization personalization = new DynamicTemplatePersonalization();
+        personalization.addTo(null);
+        return personalization;
+    }
+
+    @Override
+    public void setParams(Void params) {
+    }
 
     /**
      * Get the list of regionals that have notifications enabled to get a weekly
@@ -89,14 +98,14 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
      * @return Formatted String
      */
     private String buildHTMLCard(List<Vacation> vacs) {
-        if(vacs.size() == 0) {
+        if (vacs.size() == 0) {
             return "No Vacations";
         }
 
         String htmlCards = "";
         String defaultCard = "<div class=\"card\"><div class=\"card-data\">::DATA_NAME::</div><div class=\"card-date\">::DATA_DATE::</div></div>";
 
-        for(Vacation vac : vacs) {
+        for (Vacation vac : vacs) {
             String replaceName = String.format("%s (%s)", vac.getFullName(), vac.getStoreId());
             String replaceDate = String.format("%s - %s", formatDate(vac.getStartDate()), formatDate(vac.getEndDate()));
             htmlCards += defaultCard.replace("::DATA_NAME::", replaceName).replace("::DATA_DATE::", replaceDate);

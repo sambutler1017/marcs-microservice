@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Sets;
+import com.marcs.app.email.client.domain.DynamicTemplatePersonalization;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
@@ -44,6 +45,13 @@ public class ForgotPasswordEmailProcessor extends EmailProcessor<String> {
         } else {
             LOGGER.warn("Email could not be processed. No user found for email '{}'", email);
         }
+    }
+
+    @Override
+    public DynamicTemplatePersonalization generatePersonalization() {
+        final DynamicTemplatePersonalization personalization = new DynamicTemplatePersonalization();
+        personalization.addTo(null);
+        return personalization;
     }
 
     @Override
