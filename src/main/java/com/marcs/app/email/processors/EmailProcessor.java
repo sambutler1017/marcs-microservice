@@ -13,7 +13,6 @@ import com.sendgrid.Content;
 import com.sendgrid.Email;
 import com.sendgrid.Mail;
 import com.sendgrid.Method;
-import com.sendgrid.Personalization;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
@@ -45,13 +44,6 @@ public abstract class EmailProcessor<T> {
      * Set any params to be passed in with the email to be processed.
      */
     public abstract void setParams(T params);
-
-    /**
-     * Generate object personalization data for email template.
-     * 
-     * @return The {@link Personalization} data
-     */
-    public abstract Personalization generatePersonalization();
 
     /**
      * {@link UserEmail} object to send a email too. Default from user will be the

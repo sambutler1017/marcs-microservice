@@ -15,7 +15,6 @@ import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.jwt.utility.JwtTokenUtil;
-import com.sendgrid.Personalization;
 
 /**
  * Forgot Password email processor
@@ -45,13 +44,6 @@ public class ForgotPasswordEmailProcessor extends EmailProcessor<String> {
         } else {
             LOGGER.warn("Email could not be processed. No user found for email '{}'", email);
         }
-    }
-
-    @Override
-    public Personalization generatePersonalization() {
-        final Personalization personalization = new Personalization();
-        personalization.addTo(null);
-        return personalization;
     }
 
     @Override

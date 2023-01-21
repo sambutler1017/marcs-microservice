@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.marcs.app.user.client.domain.User;
-import com.sendgrid.Personalization;
 
 /**
  * Forgot Password email processor
@@ -29,13 +28,6 @@ public class NewUserEmailProcessor extends EmailProcessor<User> {
         send(buildUserEmail(newUser.getEmail(), "Welcome to Marc's!",
                 emailContent.replace("::USER_NAME::", newUser.getFirstName())));
         br.close();
-    }
-
-    @Override
-    public Personalization generatePersonalization() {
-        final Personalization personalization = new Personalization();
-        personalization.addTo(null);
-        return personalization;
     }
 
     @Override

@@ -23,7 +23,6 @@ import com.marcs.common.date.LocalDateFormatter;
 import com.marcs.common.date.TimeZoneUtil;
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.common.enums.WebRole;
-import com.sendgrid.Personalization;
 
 /**
  * Forgot Password email processor
@@ -64,13 +63,6 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
                                             .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")))));
         }
         br.close();
-    }
-
-    @Override
-    public Personalization generatePersonalization() {
-        final Personalization personalization = new Personalization();
-        personalization.addTo(null);
-        return personalization;
     }
 
     @Override
