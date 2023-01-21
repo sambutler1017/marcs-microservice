@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.marcs.app.email.client.domain.DynamicTemplatePersonalization;
 import com.marcs.app.user.client.domain.User;
+import com.sendgrid.Personalization;
 
 /**
  * Forgot Password email processor
@@ -32,8 +32,8 @@ public class NewUserEmailProcessor extends EmailProcessor<User> {
     }
 
     @Override
-    public DynamicTemplatePersonalization generatePersonalization() {
-        final DynamicTemplatePersonalization personalization = new DynamicTemplatePersonalization();
+    public Personalization generatePersonalization() {
+        final Personalization personalization = new Personalization();
         personalization.addTo(null);
         return personalization;
     }
