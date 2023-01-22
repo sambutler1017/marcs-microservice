@@ -77,17 +77,6 @@ public class SqlParamBuilder {
     }
 
     /**
-     * Add {@link String} parameter to the sql map.
-     * 
-     * @param name  The name of the parameter.
-     * @param value The value of the parameter.
-     * @return this builder object {@link SqlParamBuilder}
-     */
-    public SqlParamBuilder withParam(String name, String value) {
-        return withParam(name, value == null ? null : value.trim());
-    }
-
-    /**
      * Add {@link TextEnum} parameter to sql map and check that the text enum is not
      * null, if not get the text id.
      * 
