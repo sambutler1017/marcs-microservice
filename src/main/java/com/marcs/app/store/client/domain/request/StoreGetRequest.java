@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.marcs.common.page.domain.PageParam;
 import com.marcs.common.search.SearchField;
 import com.marcs.common.search.SearchFieldParams;
 import com.marcs.common.search.SearchParam;
@@ -15,7 +16,7 @@ import com.marcs.common.search.SearchParam;
  * @author Sam Butler
  * @since September 9, 2021
  */
-public class StoreGetRequest implements SearchParam, SearchFieldParams<StoreSearchFields> {
+public class StoreGetRequest implements SearchParam, PageParam, SearchFieldParams<StoreSearchFields> {
     private Set<String> id;
 
     private Set<Integer> regionalId;
@@ -25,6 +26,10 @@ public class StoreGetRequest implements SearchParam, SearchFieldParams<StoreSear
     private Set<String> name;
 
     private String search;
+
+    private int pageSize;
+
+    private int rowOffset;
 
     public Set<String> getId() {
         return id;
@@ -64,6 +69,22 @@ public class StoreGetRequest implements SearchParam, SearchFieldParams<StoreSear
 
     public void setSearch(String search) {
         this.search = search;
+    }
+
+    public int getRowOffset() {
+        return rowOffset;
+    }
+
+    public void setRowOffset(int rowOffset) {
+        this.rowOffset = rowOffset;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 
     @JsonIgnore

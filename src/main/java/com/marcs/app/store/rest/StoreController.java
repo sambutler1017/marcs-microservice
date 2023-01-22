@@ -2,8 +2,6 @@ package com.marcs.app.store.rest;
 
 import static org.springframework.http.MediaType.*;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +17,7 @@ import com.marcs.app.store.client.domain.request.StoreGetRequest;
 import com.marcs.app.store.service.ManageStoreService;
 import com.marcs.app.store.service.StoreService;
 import com.marcs.app.user.client.domain.User;
+import com.marcs.common.page.Page;
 
 @RestApiController
 @RequestMapping("api/store-app/stores")
@@ -37,7 +36,7 @@ public class StoreController {
 	 * @return List of store objects {@link Store}
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
-	public List<Store> getStores(StoreGetRequest request) {
+	public Page<Store> getStores(StoreGetRequest request) {
 		return storeService.getStores(request);
 	}
 

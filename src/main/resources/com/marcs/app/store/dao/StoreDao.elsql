@@ -8,11 +8,7 @@
 @NAME(userStatusFields)
   us.request_id, us.app_access, us.account_status, us.updated_user_id
 
-@NAME(getStores)
-  SELECT 
-    @INCLUDE(storeFields)
-  FROM
-    stores st
+@NAME(storeFilters)
   @WHERE
     @AND(:id)
       st.id IN (:id)
@@ -22,7 +18,22 @@
       st.manager_id IN (:manager_id)
     @AND(:searchEnabled = true)
       @INCLUDE(search)
-  ORDER BY st.name
+
+@NAME(getStoresBase)
+  FROM
+    stores st
+  @INCLUDE(storeFilters)
+
+@NAME(getStoresPage)
+  @PAGING(:rowOffset, :pageSize)
+    SELECT 
+      @INCLUDE(storeFields)
+    @INCLUDE(getStoresBase)
+    ORDER BY st.name
+
+@NAME(getStoresPageTotalCount)
+  SELECT COUNT(*)
+  @INCLUDE(getStoresBase)
 
 @NAME(getRegionalOfStore)
   SELECT 
@@ -36,8 +47,7 @@
     st.id = :id
 
 @NAME(getManagerOfStoreById)
-  SELECT 
-    @INCLUDE(userProfileFields), @INCLUDE(storeFields), @INCLUDE(userStatusFields)
+  SELECT @INCLUDE(userProfileFields), @INCLUDE(storeFields), @INCLUDE(userStatusFields)
   FROM
     stores st
     LEFT JOIN user_profile up ON st.manager_id = up.id
@@ -51,19 +61,16 @@
   SET
     id   = :newId,
     name = :name
-  WHERE 
-    id = :oldId
+  WHERE id = :oldId
 
 @NAME(updateStoreManagerByStoreId)
   UPDATE stores
-  SET
-    manager_id = :manager_id
+  SET manager_id = :manager_id
   WHERE id = :id
 
 @NAME(updateRegionalOfStore)
   UPDATE stores
-  SET
-    regional_id = :regional_id
+  SET regional_id = :regional_id
   WHERE id = :id
 
 @NAME(insertStore)

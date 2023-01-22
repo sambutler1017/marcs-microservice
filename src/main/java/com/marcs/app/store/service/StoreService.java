@@ -1,7 +1,5 @@
 package com.marcs.app.store.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +8,7 @@ import com.marcs.app.store.client.domain.Store;
 import com.marcs.app.store.client.domain.request.StoreGetRequest;
 import com.marcs.app.store.dao.StoreDao;
 import com.marcs.app.user.client.domain.User;
+import com.marcs.common.page.Page;
 
 /**
  * Store Service class that handles all service calls to the dao
@@ -29,7 +28,7 @@ public class StoreService {
 	 * @param request to filter stores on
 	 * @return List of store objects {@link Store}
 	 */
-	public List<Store> getStores(StoreGetRequest request) {
+	public Page<Store> getStores(StoreGetRequest request) {
 		return dao.getStores(request);
 	}
 
@@ -42,7 +41,7 @@ public class StoreService {
 	public Store getStoreById(String id) {
 		StoreGetRequest request = new StoreGetRequest();
 		request.setId(Sets.newHashSet(id));
-		return getStores(request).get(0);
+		return getStores(request).getList().get(0);
 	}
 
 	/**

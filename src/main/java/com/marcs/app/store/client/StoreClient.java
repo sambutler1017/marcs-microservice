@@ -30,7 +30,7 @@ public class StoreClient {
 	 * @return List of store objects {@link Store}
 	 */
 	public List<Store> getStores(StoreGetRequest request) {
-		return controller.getStores(request);
+		return controller.getStores(request).getList();
 	}
 
 	/**

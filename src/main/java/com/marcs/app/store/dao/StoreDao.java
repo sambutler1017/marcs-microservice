@@ -3,8 +3,6 @@ package com.marcs.app.store.dao;
 import static com.marcs.app.store.mapper.StoreMapper.*;
 import static com.marcs.app.user.mapper.UserProfileMapper.*;
 
-import java.util.List;
-
 import javax.sql.DataSource;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -15,6 +13,7 @@ import com.marcs.app.store.client.domain.Store;
 import com.marcs.app.store.client.domain.request.StoreGetRequest;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.common.abstracts.BaseDao;
+import com.marcs.common.page.Page;
 import com.marcs.sql.SqlParamBuilder;
 
 /**
@@ -37,11 +36,11 @@ public class StoreDao extends BaseDao {
 	 * @return List of store objects {@link Store}
 	 * @since May 13, 2020
 	 */
-	public List<Store> getStores(StoreGetRequest request) {
+	public Page<Store> getStores(StoreGetRequest request) {
 		MapSqlParameterSource params = SqlParamBuilder.with(request).useAllParams().withParam(ID, request.getId())
 				.withParam(REGIONAL_ID, request.getRegionalId()).withParam(MANAGER_ID, request.getManagerId())
 				.withParam(NAME, request.getName()).build();
-		return getList("getStores", params, STORE_MAPPER);
+		return getPage("getStoresPage", params, STORE_MAPPER);
 	}
 
 	/**
