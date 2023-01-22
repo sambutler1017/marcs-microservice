@@ -2,8 +2,6 @@ package com.marcs.app.blockOutDate.dao;
 
 import static com.marcs.app.blockOutDate.mapper.BlockOutDateMapper.*;
 
-import java.util.List;
-
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -11,10 +9,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.google.common.collect.Sets;
 import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
 import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
 import com.marcs.common.abstracts.BaseDao;
+import com.marcs.common.page.Page;
 import com.marcs.sql.SqlParamBuilder;
 
 /**
@@ -36,13 +34,11 @@ public class BlockOutDateDao extends BaseDao {
 	 * @param request to filter stores on
 	 * @return List of block out date objects {@link BlockOutDate}
 	 */
-	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) {
-		SqlParamBuilder builder = SqlParamBuilder.with(request).withParam(ID, request.getId())
-				.withParam(INSERT_USER_ID, request.getInsertUserId());
+	public Page<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) {
+		MapSqlParameterSource params = SqlParamBuilder.with(request).usePagenation().withParam(ID, request.getId())
+				.withParam(INSERT_USER_ID, request.getInsertUserId()).build();
 
-		MapSqlParameterSource params = builder.build();
-
-		return getList("getBlockOutDates", params, BLOCK_OUT_DATE_MAPPER);
+		return getPage("getBlockOutDatesPage", params, BLOCK_OUT_DATE_MAPPER);
 	}
 
 	/**
@@ -53,16 +49,13 @@ public class BlockOutDateDao extends BaseDao {
 	 * @param blockDate The block out date body to be updated.
 	 * @return {@link BlockOutDate} with the updated fields.
 	 */
-	public BlockOutDate updateBlockOutDateById(int id, BlockOutDate currentBlockOutDate, BlockOutDate blockDate)
-			throws Exception {
-
+	public BlockOutDate updateBlockOutDateById(int id, BlockOutDate currentBlockOutDate, BlockOutDate blockDate) {
 		blockDate = mapNonNullBlockOutDateFields(blockDate, currentBlockOutDate);
 
-		SqlParamBuilder builder = SqlParamBuilder.with().withParam(ID, id)
+		MapSqlParameterSource params = SqlParamBuilder.with().withParam(ID, id)
 				.withParam(START_DATE, blockDate.getStartDate()).withParam(END_DATE, blockDate.getEndDate())
-				.withParam(INSERT_USER_ID, blockDate.getInsertUserId());
+				.withParam(INSERT_USER_ID, blockDate.getInsertUserId()).build();
 
-		MapSqlParameterSource params = builder.build();
 		update("updateBlockOutDateById", params);
 
 		blockDate.setId(id);
@@ -73,17 +66,16 @@ public class BlockOutDateDao extends BaseDao {
 	 * This will create a new block out date with the passed in request body
 	 * 
 	 * @param blockDate The block out date that needs to be created.
-	 * @return The block out date with the insert time stamp and unique id.
+	 * @return The block out date unique id.
 	 */
-	public BlockOutDate createBlockOutDate(BlockOutDate blockDate) {
+	public int createBlockOutDate(BlockOutDate blockDate) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		SqlParamBuilder builder = SqlParamBuilder.with().withParam(START_DATE, blockDate.getStartDate())
-				.withParam(END_DATE, blockDate.getEndDate()).withParam(INSERT_USER_ID, blockDate.getInsertUserId());
-
-		MapSqlParameterSource params = builder.build();
+		MapSqlParameterSource params = SqlParamBuilder.with().withParam(START_DATE, blockDate.getStartDate())
+				.withParam(END_DATE, blockDate.getEndDate()).withParam(INSERT_USER_ID, blockDate.getInsertUserId())
+				.build();
 
 		post("insertBlockOutDate", params, keyHolder);
-		return getBlockOutDates(new BlockOutDateGetRequest(Sets.newHashSet(keyHolder.getKey().intValue()))).get(0);
+		return keyHolder.getKey().intValue();
 	}
 
 	/**

@@ -53,7 +53,7 @@ public class ManageBlockOutDateService {
 		}
 
 		blockDate.setInsertUserId(jwtHolder.getUserId());
-		return dao.createBlockOutDate(blockDate);
+		return blockOutDateService.getBlockOutDateById(dao.createBlockOutDate(blockDate));
 	}
 
 	/**

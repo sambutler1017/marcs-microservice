@@ -29,7 +29,7 @@ public class BlockOutDateClient {
 	 * @return List of block out date objects {@link BlockOutDate}
 	 */
 	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) {
-		return controller.getBlockOutDates(request);
+		return controller.getBlockOutDates(request).getList();
 	}
 
 	/**

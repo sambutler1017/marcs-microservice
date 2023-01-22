@@ -20,8 +20,7 @@
       @INCLUDE(search)
 
 @NAME(getStoresBase)
-  FROM
-    stores st
+  FROM stores st
   @INCLUDE(storeFilters)
 
 @NAME(getStoresPage)

@@ -2,8 +2,6 @@ package com.marcs.app.blockOutDate.rest;
 
 import static org.springframework.http.MediaType.*;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +16,7 @@ import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
 import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
 import com.marcs.app.blockOutDate.service.BlockOutDateService;
 import com.marcs.app.blockOutDate.service.ManageBlockOutDateService;
+import com.marcs.common.page.Page;
 
 @RestApiController
 @RequestMapping("api/block-out-date-app/block-out-dates")
@@ -36,7 +35,7 @@ public class BlockOutDateController {
 	 * @return List of block out date objects {@link BlockOutDate}
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
-	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) {
+	public Page<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) {
 		return blockOutDateService.getBlockOutDates(request);
 	}
 

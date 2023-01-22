@@ -1,7 +1,5 @@
 package com.marcs.app.blockOutDate.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +7,7 @@ import com.google.common.collect.Sets;
 import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
 import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
 import com.marcs.app.blockOutDate.dao.BlockOutDateDao;
+import com.marcs.common.page.Page;
 
 /**
  * Block out date Service class that handles all service calls to the dao
@@ -28,7 +27,7 @@ public class BlockOutDateService {
 	 * @param request to filter stores on
 	 * @return List of block out date objects {@link BlockOutDate}
 	 */
-	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) {
+	public Page<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) {
 		return dao.getBlockOutDates(request);
 	}
 
@@ -40,7 +39,9 @@ public class BlockOutDateService {
 	 */
 	public BlockOutDate getBlockOutDateById(int id) throws Exception {
 		try {
-			return getBlockOutDates(new BlockOutDateGetRequest(Sets.newHashSet(id))).get(0);
+			BlockOutDateGetRequest request = new BlockOutDateGetRequest();
+			request.setId(Sets.newHashSet(id));
+			return getBlockOutDates(request).getList().get(0);
 		}
 		catch(Exception e) {
 			throw new Exception(String.format("Block out date id '%d' does not exist!", id));

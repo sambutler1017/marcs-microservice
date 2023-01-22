@@ -2,7 +2,7 @@ package com.marcs.app.blockOutDate.client.domain.request;
 
 import java.util.Set;
 
-import com.marcs.common.search.CommonParam;
+import com.marcs.common.page.domain.PageParam;
 
 /**
  * This class handles lookups passed to the DAO.
@@ -10,19 +10,15 @@ import com.marcs.common.search.CommonParam;
  * @author Sam Butler
  * @since September 9, 2021
  */
-public class BlockOutDateGetRequest implements CommonParam {
+public class BlockOutDateGetRequest implements PageParam {
 
     private Set<Integer> id;
 
     private Set<Integer> insertUserId;
 
-    public BlockOutDateGetRequest() {
+    private int pageSize;
 
-    }
-
-    public BlockOutDateGetRequest(Set<Integer> id) {
-        this.id = id;
-    }
+    private int rowOffset;
 
     public Set<Integer> getId() {
         return id;
@@ -38,5 +34,21 @@ public class BlockOutDateGetRequest implements CommonParam {
 
     public void setInsertUserId(Set<Integer> insertUserId) {
         this.insertUserId = insertUserId;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getRowOffset() {
+        return rowOffset;
+    }
+
+    public void setRowOffset(int rowOffset) {
+        this.rowOffset = rowOffset;
     }
 }
