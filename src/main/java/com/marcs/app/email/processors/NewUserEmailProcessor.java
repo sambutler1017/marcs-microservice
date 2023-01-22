@@ -1,11 +1,10 @@
 package com.marcs.app.email.processors;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.stream.Collectors;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.marcs.app.email.client.domain.UserEmail;
 import com.marcs.app.user.client.domain.User;
 
 /**
@@ -20,14 +19,11 @@ public class NewUserEmailProcessor extends EmailProcessor<User> {
     private User newUser;
 
     @Override
-    public void process() throws Exception {
-        String filePath = String.format("%s/NewUserEmail.html", BASE_HTML_PATH);
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-        String emailContent = br.lines().collect(Collectors.joining(" "));
+    public List<UserEmail> process() throws Exception {
+        String emailContent = readEmailTemplate("NewUserEmail.html");
 
-        send(buildUserEmail(newUser.getEmail(), "Welcome to Marc's!",
-                emailContent.replace("::USER_NAME::", newUser.getFirstName())));
-        br.close();
+        return List.of(send(buildUserEmail(newUser.getEmail(), "Welcome to Marc's!",
+                emailContent.replace("::USER_NAME::", newUser.getFirstName()))));
     }
 
     @Override

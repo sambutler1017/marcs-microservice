@@ -1,18 +1,16 @@
 package com.marcs.app.email.processors;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Sets;
+import com.marcs.app.email.client.domain.UserEmail;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
@@ -32,6 +30,10 @@ import com.marcs.common.enums.WebRole;
  */
 @Service
 public class VacationReportEmailProcessor extends EmailProcessor<Void> {
+    private static final String EMAIL_DYNAMIC_CARDS = "::REPLACE_CARDS::";
+    private static final String EMAIL_DYNAMIC_DATE = "::DATE_TODAY::";
+    private static final String EMAIL_DYNAMIC_DATA_NAME = "::DATA_NAME::";
+    private static final String EMAIL_DYNAMIC_DATA_DATE = "::DATA_DATE::";
 
     @Autowired
     private UserProfileClient userClient;
@@ -40,33 +42,40 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
     private VacationController vacationController;
 
     @Override
-    public void process() throws Exception {
-        String filePath = String.format("%s/WeeklyVacationsReport.html", BASE_HTML_PATH);
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-        String emailContent = br.lines().collect(Collectors.joining(" "));
-
+    public List<UserEmail> process() throws Exception {
+        String emailContent = readEmailTemplate("WeeklyVacationsReport.html");
         List<User> usersWithNotifications = getUsersWithEmailReportsEnabled();
+        List<UserEmail> emails = new ArrayList<>();
+
         for (User user : usersWithNotifications) {
-            VacationGetRequest vRequest = new VacationGetRequest();
-            vRequest.setStatus(Sets.newHashSet(VacationStatus.APPROVED));
+            VacationGetRequest req = new VacationGetRequest();
+            req.setStatus(Sets.newHashSet(VacationStatus.APPROVED));
             if (user.getWebRole().equals(WebRole.REGIONAL) || user.getWebRole().equals(WebRole.DISTRICT_MANAGER)) {
-                vRequest.setRegionalId(Sets.newHashSet(user.getId()));
+                req.setRegionalId(Sets.newHashSet(user.getId()));
             }
 
-            send(buildUserEmail(user.getEmail(), "Weekly Report",
-                    emailContent
-                            .replace("::REPLACE_CARDS::",
-                                    buildHTMLCard(vacationController.getVacationsForReport(vRequest)))
-                            .replace("::DATE_TODAY::",
-                                    LocalDate.now(TimeZoneUtil.SYSTEM_ZONE)
-                                            .with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
-                                            .format(DateTimeFormatter.ofPattern("MMMM d, yyyy")))));
+            emails.add(send(user.getEmail(), "Weekly Report", buildEmailBody(emailContent, req)));
         }
-        br.close();
+        return emails;
     }
 
     @Override
     public void setParams(Void params) {
+    }
+
+    /**
+     * Helper method for replacing the dynamic fields in the email message.
+     * 
+     * @param content The content to replace with.
+     * @param req     The vacation get Request for the email cards.
+     * @return String of the email content.
+     */
+    private String buildEmailBody(String content, VacationGetRequest req) throws Exception {
+        String vacationCards = buildHTMLCard(vacationController.getVacationsForReport(req));
+        LocalDate dt = LocalDate.now(TimeZoneUtil.SYSTEM_ZONE).with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
+        content = content.replace(EMAIL_DYNAMIC_CARDS, vacationCards);
+        content = content.replace(EMAIL_DYNAMIC_DATE, formatDate(dt));
+        return content;
     }
 
     /**
@@ -100,7 +109,8 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
         for (Vacation vac : vacs) {
             String replaceName = String.format("%s (%s)", vac.getFullName(), vac.getStoreId());
             String replaceDate = String.format("%s - %s", formatDate(vac.getStartDate()), formatDate(vac.getEndDate()));
-            htmlCards += defaultCard.replace("::DATA_NAME::", replaceName).replace("::DATA_DATE::", replaceDate);
+            htmlCards += defaultCard.replace(EMAIL_DYNAMIC_DATA_NAME, replaceName).replace(EMAIL_DYNAMIC_DATA_DATE,
+                    replaceDate);
         }
         return htmlCards;
     }

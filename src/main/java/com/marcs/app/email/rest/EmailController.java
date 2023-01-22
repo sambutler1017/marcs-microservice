@@ -1,5 +1,7 @@
 package com.marcs.app.email.rest;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.marcs.annotations.interfaces.RestApiController;
+import com.marcs.app.email.client.domain.UserEmail;
 import com.marcs.app.email.service.EmailService;
 import com.marcs.app.user.client.domain.User;
 
@@ -30,8 +33,8 @@ public class EmailController {
      * @throws Exception
      */
     @PostMapping("/forgot-password")
-    public void forgotPassword(@RequestBody String email) throws Exception {
-        service.sendForgotPasswordEmail(email);
+    public List<UserEmail> forgotPassword(@RequestBody String email) throws Exception {
+        return service.sendForgotPasswordEmail(email);
     }
 
     /**
@@ -42,8 +45,8 @@ public class EmailController {
      * @throws Exception
      */
     @PostMapping("/report")
-    public void sendVacationReport() throws Exception {
-        service.sendVacationReport();
+    public List<UserEmail> sendVacationReport() throws Exception {
+        return service.sendVacationReport();
     }
 
     /**
@@ -56,8 +59,8 @@ public class EmailController {
      * @throws Exception
      */
     @PostMapping("/new-user")
-    public void sendNewUserEmail(User newUser) throws Exception {
-        service.sendNewUserEmail(newUser);
+    public List<UserEmail> sendNewUserEmail(User newUser) throws Exception {
+        return service.sendNewUserEmail(newUser);
     }
 
     /**
@@ -67,8 +70,8 @@ public class EmailController {
      * @throws Exception
      */
     @PostMapping("/{id}/user/account-update")
-    public void sendUserAccountUpdateStatusEmail(@PathVariable int userId) throws Exception {
-        service.sendUserAccountUpdateStatusEmail(userId);
+    public List<UserEmail> sendUserAccountUpdateStatusEmail(@PathVariable int userId) throws Exception {
+        return service.sendUserAccountUpdateStatusEmail(userId);
     }
 
     /**
@@ -79,7 +82,7 @@ public class EmailController {
      * @throws Exception
      */
     @PostMapping("/contact")
-    public void sendContactAdminEmail(@RequestBody String message) throws Exception {
-        service.sendContactAdminEmail(message);
+    public List<UserEmail> sendContactAdminEmail(@RequestBody String message) throws Exception {
+        return service.sendContactAdminEmail(message);
     }
 }

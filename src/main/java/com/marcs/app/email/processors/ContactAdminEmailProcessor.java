@@ -1,14 +1,13 @@
 package com.marcs.app.email.processors;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Sets;
+import com.marcs.app.email.client.domain.UserEmail;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
@@ -22,35 +21,47 @@ import com.marcs.common.enums.WebRole;
  */
 @Service
 public class ContactAdminEmailProcessor extends EmailProcessor<String> {
+    private static final String EMAIL_DYNAMIC_NAME = "::USER_NAME::";
+    private static final String EMAIL_DYNAMIC_BODY = "::EMAIL_BODY::";
 
     @Autowired
     private UserProfileClient userClient;
 
-    private String email;
+    private String emailMessage;
 
     @Override
-    public void process() throws Exception {
+    public List<UserEmail> process() throws Exception {
         final User emailUser = userClient.getCurrentUser();
-        final String filePath = String.format("%s/ContactAdminEmail.html", BASE_HTML_PATH);
-        final BufferedReader br = new BufferedReader(new FileReader(filePath));
-        final String emailContent = br.lines().collect(Collectors.joining(" "));
-        br.close();
+        String emailContent = readEmailTemplate("ContactAdminEmail.html");
 
         final UserGetRequest request = new UserGetRequest();
         request.setWebRole(Sets.newHashSet(WebRole.ADMIN));
         final List<User> adminUsers = userClient.getUsers(request);
 
+        List<UserEmail> emails = new ArrayList<>();
         for (final User user : adminUsers) {
-            send(buildUserEmail(user.getEmail(), "New Message", emailContent
-                    .replace("::USER_NAME::",
-                            String.format("%s %s (%s)", emailUser.getFirstName().trim(),
-                                    emailUser.getLastName().trim(), emailUser.getWebRole().toString()))
-                    .replace("::EMAIL_BODY::", email)));
+            emails.add(send(user.getEmail(), "New Message", buildEmailBody(emailUser, emailContent)));
         }
+        return emails;
     }
 
     @Override
     public void setParams(final String params) {
-        this.email = params;
+        this.emailMessage = params;
+    }
+
+    /**
+     * Helper method for replacing the dynamic fields in the email message.
+     * 
+     * @param emailUser The email user.
+     * @param content   The content to replace with.
+     * @return String of the email content.
+     */
+    private String buildEmailBody(User emailUser, String content) {
+        String username = String.format("%s %s (%s)", emailUser.getFirstName().trim(),
+                emailUser.getLastName().trim(), emailUser.getWebRole().toString());
+        content = content.replace(EMAIL_DYNAMIC_NAME, username);
+        content = content.replace(EMAIL_DYNAMIC_BODY, emailMessage);
+        return content;
     }
 }

@@ -1,9 +1,6 @@
 package com.marcs.app.email.processors;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Sets;
+import com.marcs.app.email.client.domain.UserEmail;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
@@ -36,14 +34,15 @@ public class ForgotPasswordEmailProcessor extends EmailProcessor<String> {
     private String email;
 
     @Override
-    public void process() throws Exception {
+    public List<UserEmail> process() throws Exception {
         String content = getForgotPasswordContent(email);
 
         if (!"".equals(content)) {
-            send(buildUserEmail(email, "Forgot Password", content));
+            return List.of(send(buildUserEmail(email, "Forgot Password", content)));
         } else {
             LOGGER.warn("Email could not be processed. No user found for email '{}'", email);
         }
+        return null;
     }
 
     @Override
@@ -61,10 +60,7 @@ public class ForgotPasswordEmailProcessor extends EmailProcessor<String> {
      * @throws Exception
      */
     private String getForgotPasswordContent(String email) throws Exception {
-        String filePath = String.format("%s/ForgotPasswordEmail.html", BASE_HTML_PATH);
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-        String emailContent = br.lines().collect(Collectors.joining(" "));
-        br.close();
+        final String emailContent = readEmailTemplate("ForgotPasswordEmail.html");
 
         UserGetRequest request = new UserGetRequest();
         request.setEmail(Sets.newHashSet(email));

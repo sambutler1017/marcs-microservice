@@ -1,12 +1,11 @@
 package com.marcs.app.email.processors;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.stream.Collectors;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.marcs.app.email.client.domain.UserEmail;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 
@@ -24,15 +23,13 @@ public class UserAccountStatusUpadteEmailProcessor extends EmailProcessor<Intege
     private int userId;
 
     @Override
-    public void process() throws Exception {
+    public List<UserEmail> process() throws Exception {
         User emailUser = userClient.getUserById(userId);
-        String filePath = String.format("%s/UserAccount%s.html", BASE_HTML_PATH, emailUser.getAccountStatus().name());
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-        String emailContent = br.lines().collect(Collectors.joining(" "));
+        String emailContent = readEmailTemplate(
+                String.format("UserAccount%s.html", emailUser.getAccountStatus().name()));
 
-        send(buildUserEmail(emailUser.getEmail(), "Marc's Account Update!",
-                emailContent.replace("::USER_NAME::", emailUser.getFirstName())));
-        br.close();
+        return List.of(send(buildUserEmail(emailUser.getEmail(), "Marc's Account Update!",
+                emailContent.replace("::USER_NAME::", emailUser.getFirstName()))));
     }
 
     @Override

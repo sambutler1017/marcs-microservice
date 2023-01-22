@@ -1,5 +1,8 @@
 package com.marcs.app.email.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,8 +47,13 @@ public class EmailService {
      * @return The {@link UserEmail} object that was sent.
      * @throws Exception
      */
-    public <T> void sendEmail(EmailProcessor<T> p) throws Exception {
-        p.process();
+    public <T> List<UserEmail> sendEmail(EmailProcessor<T> p) throws Exception {
+        List<UserEmail> emails = p.process();
+        emails.stream().map(e -> {
+            e.setBody(null);
+            return e;
+        }).collect(Collectors.toList());
+        return emails;
     }
 
     /**
@@ -55,9 +63,9 @@ public class EmailService {
      * @param email Email to search for and send an email too.
      * @throws Exception
      */
-    public void sendForgotPasswordEmail(String email) throws Exception {
+    public List<UserEmail> sendForgotPasswordEmail(String email) throws Exception {
         forgotPasswordEmailProcessor.setParams(email);
-        sendEmail(forgotPasswordEmailProcessor);
+        return sendEmail(forgotPasswordEmailProcessor);
     }
 
     /**
@@ -67,8 +75,8 @@ public class EmailService {
      * 
      * @throws Exception
      */
-    public void sendVacationReport() throws Exception {
-        sendEmail(vacationReportEmailProcessor);
+    public List<UserEmail> sendVacationReport() throws Exception {
+        return sendEmail(vacationReportEmailProcessor);
     }
 
     /**
@@ -80,9 +88,9 @@ public class EmailService {
      * 
      * @throws Exception
      */
-    public void sendNewUserEmail(User newUser) throws Exception {
+    public List<UserEmail> sendNewUserEmail(User newUser) throws Exception {
         newUserEmailProcessor.setParams(newUser);
-        sendEmail(newUserEmailProcessor);
+        return sendEmail(newUserEmailProcessor);
     }
 
     /**
@@ -91,9 +99,9 @@ public class EmailService {
      * @param userId The id of the user to send an email update too.
      * @throws Exception
      */
-    public void sendUserAccountUpdateStatusEmail(int userId) throws Exception {
+    public List<UserEmail> sendUserAccountUpdateStatusEmail(int userId) throws Exception {
         userAccountStatusUpadteEmailProcessor.setParams(userId);
-        sendEmail(userAccountStatusUpadteEmailProcessor);
+        return sendEmail(userAccountStatusUpadteEmailProcessor);
     }
 
     /**
@@ -103,8 +111,8 @@ public class EmailService {
      * @param message The message to send to admin.
      * @throws Exception
      */
-    public void sendContactAdminEmail(String message) throws Exception {
+    public List<UserEmail> sendContactAdminEmail(String message) throws Exception {
         contactAdminEmailProcessor.setParams(message);
-        sendEmail(contactAdminEmailProcessor);
+        return sendEmail(contactAdminEmailProcessor);
     }
 }

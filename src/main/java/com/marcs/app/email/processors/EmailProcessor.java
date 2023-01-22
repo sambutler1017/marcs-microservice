@@ -1,6 +1,11 @@
 package com.marcs.app.email.processors;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +43,7 @@ public abstract class EmailProcessor<T> {
      * @return {@link UserEmail} object to send.
      * @throws Exception
      */
-    public abstract void process() throws Exception;
+    public abstract List<UserEmail> process() throws Exception;
 
     /**
      * Set any params to be passed in with the email to be processed.
@@ -46,12 +51,25 @@ public abstract class EmailProcessor<T> {
     public abstract void setParams(T params);
 
     /**
+     * Overloaded method to send an email with the given to, subject, and body of
+     * the email to be sent.
+     * 
+     * @param to      The email to send too.
+     * @param subject Subject of the email
+     * @param body    What to include in the email
+     * @return The user email that was created.
+     */
+    protected UserEmail send(String to, String subject, String body) throws Exception {
+        UserEmail userEmail = buildUserEmail(to, subject, body);
+        return send(userEmail);
+    }
+
+    /**
      * {@link UserEmail} object to send a email too. Default from user will be the
      * admin email. Common method for sending an email.
      * 
      * @param userEmail UserEmail object to get the mail properties from
      * @return {@link UserEmail} object with the time it sent.
-     * @throws Exception
      */
     protected UserEmail send(UserEmail userEmail) throws Exception {
         Content content = new Content("text/html", userEmail.getBody());
@@ -87,5 +105,24 @@ public abstract class EmailProcessor<T> {
         userEmail.setSubject(subject);
         userEmail.setBody(body);
         return userEmail;
+    }
+
+    /**
+     * Method for processing email templates and returning their content.
+     * 
+     * @param fileName The file name to pull.
+     * @return The String of the read email template.
+     */
+    protected String readEmailTemplate(String fileName) {
+        final String filePath = String.format("%s/%s", BASE_HTML_PATH, fileName);
+        String emailContent = "";
+
+        try (final BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            emailContent = br.lines().collect(Collectors.joining(" "));
+        } catch (IOException e) {
+            LOGGER.warn("Could not process email template: '{}'", fileName);
+        }
+
+        return emailContent;
     }
 }
