@@ -2,13 +2,13 @@ package com.marcs.app.user.client;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.app.user.rest.UserProfileController;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This class exposes the user endpoint's to other app's to pull data across the
@@ -31,7 +31,7 @@ public class UserProfileClient {
 	 * @throws Exception
 	 */
 	public List<User> getUsers() throws Exception {
-		return controller.getUsers(new UserGetRequest());
+		return controller.getUsers(new UserGetRequest()).getList();
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class UserProfileClient {
 	 * @throws Exception
 	 */
 	public List<User> getUsers(UserGetRequest request) throws Exception {
-		return controller.getUsers(request);
+		return controller.getUsers(request).getList();
 	}
 
 	/**

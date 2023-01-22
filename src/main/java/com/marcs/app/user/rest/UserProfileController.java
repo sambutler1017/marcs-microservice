@@ -4,13 +4,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
-import com.marcs.app.user.client.domain.Application;
-import com.marcs.app.user.client.domain.User;
-import com.marcs.app.user.client.domain.request.UserGetRequest;
-import com.marcs.app.user.service.ManageUserProfileService;
-import com.marcs.app.user.service.UserProfileService;
-import com.marcs.common.enums.AccountStatus;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.marcs.app.user.client.domain.Application;
+import com.marcs.app.user.client.domain.User;
+import com.marcs.app.user.client.domain.request.UserGetRequest;
+import com.marcs.app.user.service.ManageUserProfileService;
+import com.marcs.app.user.service.UserProfileService;
+import com.marcs.common.enums.AccountStatus;
+import com.marcs.common.page.Page;
 
 @RequestMapping("api/user-app/user-profile")
 @RestController
@@ -40,7 +41,7 @@ public class UserProfileController {
 	 * @throws Exception
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
-	public List<User> getUsers(UserGetRequest request) throws Exception {
+	public Page<User> getUsers(UserGetRequest request) throws Exception {
 		return userProfileService.getUsers(request);
 	}
 

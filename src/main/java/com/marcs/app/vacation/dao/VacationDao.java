@@ -1,6 +1,6 @@
 package com.marcs.app.vacation.dao;
 
-import static com.marcs.app.vacation.mapper.VacationMapper.*;
+import static com.marcs.app.vacation.mapper.VacationMapper.VACATION_MAPPER;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class VacationDao extends BaseDao {
 				.withParamTextEnumCollection(WEB_ROLE_TEXT_ID, request.getWebRole())
 				.withParamTextEnumCollection(STATUS, request.getStatus()).build();
 
-		return getPage(getSql("getVacations", params), params, VACATION_MAPPER);
+		return getList(getSql("getVacations", params), params, VACATION_MAPPER);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class VacationDao extends BaseDao {
 				.withParam(USER_ID, request.getUserId()).withParam(REGIONAL_ID, request.getRegionalId())
 				.withParam("reportFilter", true).withParamTextEnumCollection(STATUS, request.getStatus()).build();
 
-		return getPage(getSql("getVacations", params), params, VACATION_MAPPER);
+		return getList(getSql("getVacations", params), params, VACATION_MAPPER);
 	}
 
 	/**

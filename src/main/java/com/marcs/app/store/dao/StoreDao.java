@@ -7,16 +7,16 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.stereotype.Repository;
+
 import com.marcs.app.store.client.domain.Store;
 import com.marcs.app.store.client.domain.request.StoreGetRequest;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.sql.SqlParamBuilder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.stereotype.Repository;
 
 /**
  * Class that handles all the dao calls to the database for stores
@@ -46,7 +46,7 @@ public class StoreDao extends BaseDao {
 				.withParam(REGIONAL_ID, request.getRegionalId())
 				.withParam(MANAGER_ID, request.getManagerId())
 				.withParam(NAME, request.getName()).build();
-		return getPage(getSql("getStores", params), params, STORE_MAPPER);
+		return getList(getSql("getStores", params), params, STORE_MAPPER);
 	}
 
 	/**

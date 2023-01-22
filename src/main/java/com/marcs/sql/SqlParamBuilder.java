@@ -1,16 +1,20 @@
 package com.marcs.sql;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+
+import com.marcs.common.date.TimeZoneUtil;
 import com.marcs.common.enums.TextEnum;
+import com.marcs.common.page.domain.PageParam;
 import com.marcs.common.search.CommonParam;
 import com.marcs.common.search.SearchField;
 import com.marcs.common.search.SearchFieldParams;
 import com.marcs.common.search.SearchParam;
-
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 /**
  * Sql builder to create all query binding parameters for making querys to the
@@ -61,7 +65,7 @@ public class SqlParamBuilder {
     }
 
     /**
-     * Add a parameter to the sql map.
+     * Add {@link Object} parameter to the sql map.
      * 
      * @param name  The name of the parameter.
      * @param value The value of the parameter.
@@ -73,8 +77,19 @@ public class SqlParamBuilder {
     }
 
     /**
-     * Add parameter to sql map and check that the text enum is not null, if not get
-     * the text id.
+     * Add {@link String} parameter to the sql map.
+     * 
+     * @param name  The name of the parameter.
+     * @param value The value of the parameter.
+     * @return this builder object {@link SqlParamBuilder}
+     */
+    public SqlParamBuilder withParam(String name, String value) {
+        return withParam(name, value == null ? null : value.trim());
+    }
+
+    /**
+     * Add {@link TextEnum} parameter to sql map and check that the text enum is not
+     * null, if not get the text id.
      * 
      * @param name  The name of the parameter.
      * @param value The value of the parameter
@@ -85,8 +100,8 @@ public class SqlParamBuilder {
     }
 
     /**
-     * Add parameter to sql map and check that the text enum is not null, if not get
-     * the text id.
+     * Add {@link Boolean} parameter to sql map and check that the text enum is not
+     * null, if not get the text id.
      * 
      * @param name  The name of the parameter.
      * @param value The value of the parameter
@@ -94,6 +109,45 @@ public class SqlParamBuilder {
      */
     public SqlParamBuilder withParam(String name, Boolean value) {
         return withParam(name, value == null ? null : value ? 1 : 0);
+    }
+
+    /**
+     * Add {@link LocalDateTime} parameter to sql map and check that the text enum
+     * is not null, if not get the text id.
+     * 
+     * @param name  The name of the parameter.
+     * @param value The value of the parameter
+     * @return this builder object {@link SqlParamBuilder}
+     */
+    public SqlParamBuilder withParam(String name, LocalDateTime dt) {
+        return withParam(name, dt.toString());
+    }
+
+    /**
+     * Add {@link LocalDate} parameter to sql map and check that the text enum
+     * is not null, if not get the text id.
+     * 
+     * @param name  The name of the parameter.
+     * @param value The value of the parameter
+     * @return this builder object {@link SqlParamBuilder}
+     */
+    public SqlParamBuilder withParam(String name, LocalDate dt) {
+        return withParam(name, dt.toString());
+    }
+
+    /**
+     * Add {@link LocalDateTime} parameter to sql map. If the value is null it will
+     * add the default date time now value.
+     * 
+     * @param name  The name of the parameter.
+     * @param value The value of the parameter
+     * @return this builder object {@link SqlParamBuilder}
+     */
+    public SqlParamBuilder withParamDefault(String name, LocalDateTime dt) {
+        if (dt == null) {
+            return withParam(name, LocalDateTime.now(TimeZoneUtil.SYSTEM_ZONE));
+        }
+        return withParam(name, dt.toString());
     }
 
     /**
@@ -158,11 +212,33 @@ public class SqlParamBuilder {
     }
 
     /**
+     * Adds paging ability to the request.
+     * 
+     * @return {@link SqlParamBuilder} with the pagenation.
+     */
+    public SqlParamBuilder usePagenation() {
+        if (!(commonParam instanceof PageParam)) {
+            return this;
+        }
+
+        PageParam pageParam = (PageParam) commonParam;
+
+        if (pageParam.getPageSize() == 0) {
+            return this;
+        }
+
+        this.sqlParams.addValue("pageSize", pageParam.getPageSize());
+        this.sqlParams.addValue("rowOffset", pageParam.getRowOffset());
+        return this;
+    }
+
+    /**
      * Will add all search field capabilities to the sql builder.
      * 
      * @return {@link SqlParamBuilder} object.
      */
     public SqlParamBuilder useAllParams() {
+        usePagenation();
         useSearch();
         return useSearchField();
     }

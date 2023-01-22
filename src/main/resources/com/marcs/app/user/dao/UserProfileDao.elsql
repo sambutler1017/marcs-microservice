@@ -28,15 +28,22 @@
     @AND(:searchEnabled = true)
       @INCLUDE(search)
 
-@NAME(getUsers)
-  SELECT @INCLUDE(userProfileFields), @INCLUDE(storeFields), @INCLUDE(userStatusFields)
-  FROM
-    user_profile up
-    JOIN web_role wr ON up.web_role_id = wr.id
-    LEFT JOIN stores st ON up.store_id = st.id
-    JOIN user_status us ON up.id = us.user_id
+@NAME(getUsersBase)
+  FROM user_profile up
+  JOIN web_role wr ON up.web_role_id = wr.id
+  LEFT JOIN stores st ON up.store_id = st.id
+  JOIN user_status us ON up.id = us.user_id
   @INCLUDE(userFilters)
-  ORDER BY st.name, up.web_role_id DESC
+
+@NAME(getUsersPage)
+  @PAGING(:rowOffset, :pageSize)
+    SELECT @INCLUDE(userProfileFields), @INCLUDE(storeFields), @INCLUDE(userStatusFields)
+    @INCLUDE(getUsersBase)
+    ORDER BY st.name , up.web_role_id DESC , up.last_name ASC
+
+@NAME(getUsersPageTotalCount)
+  SELECT COUNT(*)
+  @INCLUDE(getUsersBase)
 
 @NAME(getApplications)
   SELECT 
@@ -56,13 +63,12 @@
   ORDER BY a.id
 
 @NAME(insertUser)
-  INSERT INTO user_profile (`first_name`,`last_name`,`email`,`store_id`,`web_role_id`,`hire_date`)
+  INSERT INTO user_profile (first_name,last_name,email,store_id,web_role_id,hire_date)
   VALUES (:first_name, :last_name, :email, :store_id, :web_role_id, :hire_date)
 
 @NAME(deleteUser)
   DELETE FROM user_profile
-  WHERE
-    id = :id
+  WHERE id = :id
 
 @NAME(updateUserProfile)
   UPDATE user_profile 

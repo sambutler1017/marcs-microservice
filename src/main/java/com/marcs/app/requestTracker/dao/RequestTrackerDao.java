@@ -38,7 +38,7 @@ public class RequestTrackerDao extends BaseDao {
 	 */
 	public List<UserRequest<Void>> getCurrentUserRequests(long userId) throws Exception {
 		MapSqlParameterSource params = parameterSource(USER_ID, userId);
-		return getPage(getSql("getUserRequest", params), params, getUserRequestMapper(Void.class));
+		return getList(getSql("getUserRequest", params), params, getUserRequestMapper(Void.class));
 	}
 
 	/**

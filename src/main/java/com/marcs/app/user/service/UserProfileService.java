@@ -12,6 +12,7 @@ import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.app.user.dao.UserProfileDao;
 import com.marcs.common.exceptions.BaseException;
+import com.marcs.common.page.Page;
 import com.marcs.jwt.utility.JwtHolder;
 
 /**
@@ -39,7 +40,7 @@ public class UserProfileService {
 	 * @return User profile object {@link User}
 	 * @throws Exception
 	 */
-	public List<User> getUsers(UserGetRequest request) throws Exception {
+	public Page<User> getUsers(UserGetRequest request) throws Exception {
 		return dao.getUsers(request);
 	}
 
@@ -96,7 +97,7 @@ public class UserProfileService {
 	public boolean doesEmailExist(String email) throws Exception {
 		UserGetRequest request = new UserGetRequest();
 		request.setEmail(Sets.newHashSet(email));
-		List<User> users = getUsers(request);
+		List<User> users = getUsers(request).getList();
 
 		return users.size() > 0;
 	}
@@ -112,9 +113,9 @@ public class UserProfileService {
 	public User forgotPassword(String email) throws Exception {
 		UserGetRequest request = new UserGetRequest();
 		request.setEmail(Sets.newHashSet(email));
-		List<User> users = getUsers(request);
+		List<User> users = getUsers(request).getList();
 
-		if(users.size() == 0) {
+		if (users.size() == 0) {
 			throw new BaseException(String.format("User not found for email '%s'", email));
 		}
 

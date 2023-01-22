@@ -1,7 +1,7 @@
 package com.marcs.app.user.dao;
 
-import static com.marcs.app.user.mapper.ApplicationMapper.*;
-import static com.marcs.app.user.mapper.UserProfileMapper.*;
+import static com.marcs.app.user.mapper.ApplicationMapper.APPLICATION_MAPPER;
+import static com.marcs.app.user.mapper.UserProfileMapper.USER_MAPPER;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +21,7 @@ import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.common.date.TimeZoneUtil;
 import com.marcs.common.exceptions.UserNotFoundException;
+import com.marcs.common.page.Page;
 import com.marcs.sql.SqlParamBuilder;
 
 /**
@@ -44,17 +45,17 @@ public class UserProfileDao extends BaseDao {
 	 * @return User profile object {@link User}
 	 * @throws Exception
 	 */
-	public List<User> getUsers(UserGetRequest request) throws Exception {
+	public Page<User> getUsers(UserGetRequest request) throws Exception {
 		MapSqlParameterSource params = SqlParamBuilder.with(request).useAllParams().withParam(ID, request.getId())
 				.withParam(EMAIL, request.getEmail()).withParam(STORE_ID, request.getStoreId())
 				.withParam(REGIONAL_ID, request.getRegionalId()).withParam(FIRST_NAME, request.getFirstName())
 				.withParam(LAST_NAME, request.getLastName()).withParam(STORE_NAME, request.getStoreName())
 				.withParam(EMAIL_REPORTS_ENABLED, request.getEmailReportsEnabled())
-				.withParam("excludedUserIds", request.getExcludedUserIds())
+				.withParam(EXCLUDED_USER_IDS, request.getExcludedUserIds())
 				.withParamTextEnumCollection(ACCOUNT_STATUS, request.getAccountStatus())
 				.withParamTextEnumCollection(WEB_ROLE_TEXT_ID, request.getWebRole()).build();
 
-		return getPage(getSql("getUsers", params), params, USER_MAPPER);
+		return getPage("getUsersPage", params, USER_MAPPER);
 	}
 
 	/**
@@ -69,9 +70,8 @@ public class UserProfileDao extends BaseDao {
 		try {
 			UserGetRequest request = new UserGetRequest();
 			request.setId(Sets.newHashSet(id));
-			return getUsers(request).get(0);
-		}
-		catch(Exception e) {
+			return getUsers(request).getList().get(0);
+		} catch (Exception e) {
 			throw new UserNotFoundException(String.format("User not found for id: %d", id));
 		}
 	}
@@ -86,7 +86,7 @@ public class UserProfileDao extends BaseDao {
 	 */
 	public List<Application> getUserApps(int userId) throws Exception {
 		MapSqlParameterSource params = parameterSource(USER_ID, userId);
-		return getPage(getSql("getApplications", params), params, APPLICATION_MAPPER);
+		return getList(getSql("getApplications", params), params, APPLICATION_MAPPER);
 	}
 
 	/**
@@ -101,10 +101,8 @@ public class UserProfileDao extends BaseDao {
 		MapSqlParameterSource params = SqlParamBuilder.with().useAllParams().withParam(FIRST_NAME, user.getFirstName())
 				.withParam(LAST_NAME, user.getLastName()).withParam(EMAIL, user.getEmail())
 				.withParam(WEB_ROLE_ID, user.getWebRole().getRank())
-				.withParam(STORE_ID, user.getStoreId() == null ? null : user.getStoreId().trim())
-				.withParam(	HIRE_DATE,
-							user.getHireDate() == null ? LocalDateTime.now(TimeZoneUtil.SYSTEM_ZONE).toString()
-									: user.getHireDate().toString())
+				.withParam(STORE_ID, user.getStoreId())
+				.withParamDefault(HIRE_DATE, user.getHireDate())
 				.build();
 
 		post(getSql("insertUser", params), params, keyHolder);
@@ -169,15 +167,22 @@ public class UserProfileDao extends BaseDao {
 	 * @return {@link User} with the replaced fields.
 	 */
 	private User mapNonNullUserFields(User destination, User source) {
-		if(destination.getFirstName() == null) destination.setFirstName(source.getFirstName());
-		if(destination.getLastName() == null) destination.setLastName(source.getLastName());
-		if(destination.getEmail() == null) destination.setEmail(source.getEmail());
-		if(destination.getStoreId() == null) destination.setStoreId(source.getStoreId());
-		if(destination.getWebRole() == null) destination.setWebRole(source.getWebRole());
-		if(destination.isAppAccess() == null) destination.setAppAccess(source.isAppAccess());
-		if(destination.isEmailReportsEnabled() == null)
+		if (destination.getFirstName() == null)
+			destination.setFirstName(source.getFirstName());
+		if (destination.getLastName() == null)
+			destination.setLastName(source.getLastName());
+		if (destination.getEmail() == null)
+			destination.setEmail(source.getEmail());
+		if (destination.getStoreId() == null)
+			destination.setStoreId(source.getStoreId());
+		if (destination.getWebRole() == null)
+			destination.setWebRole(source.getWebRole());
+		if (destination.isAppAccess() == null)
+			destination.setAppAccess(source.isAppAccess());
+		if (destination.isEmailReportsEnabled() == null)
 			destination.setEmailReportsEnabled(source.isEmailReportsEnabled());
-		if(destination.getHireDate() == null) destination.setHireDate(source.getHireDate());
+		if (destination.getHireDate() == null)
+			destination.setHireDate(source.getHireDate());
 		return destination;
 	}
 }

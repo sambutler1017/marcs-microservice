@@ -6,14 +6,14 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.stereotype.Repository;
+
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.sql.SqlParamBuilder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.stereotype.Repository;
 
 /**
  * Class that handles all the dao calls to the database for users
@@ -43,6 +43,6 @@ public class VacationReportsDao extends BaseDao {
                                 .withParam(STORE_ID, request.getStoreId())
                                 .withParamTextEnumCollection(WEB_ROLE_TEXT_ID, request.getWebRole())
                                 .withParamTextEnumCollection(STATUS, request.getStatus()).build();
-                return getPage(getSql("getVacations", params), params, VACATION_MAPPER);
+                return getList(getSql("getVacations", params), params, VACATION_MAPPER);
         }
 }

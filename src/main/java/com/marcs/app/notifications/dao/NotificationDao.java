@@ -1,6 +1,6 @@
 package com.marcs.app.notifications.dao;
 
-import static com.marcs.app.notifications.mapper.NotificationMapper.*;
+import static com.marcs.app.notifications.mapper.NotificationMapper.NOTIFICATION_MAPPER;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,7 +48,7 @@ public class NotificationDao extends BaseDao {
                 .withParam(RECEIVER_ID, request.getReceiverId()).withParam(READ_FLAG, request.getRead())
                 .withParamTextEnumCollection(NOTIFICATION_TYPE, request.getType()).build();
 
-        return getPage(getSql("getNotifications", params), params, NOTIFICATION_MAPPER);
+        return getList(getSql("getNotifications", params), params, NOTIFICATION_MAPPER);
     }
 
     /**

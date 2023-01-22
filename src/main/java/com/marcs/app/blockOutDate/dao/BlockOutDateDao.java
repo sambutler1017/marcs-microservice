@@ -6,17 +6,17 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import com.google.common.collect.Sets;
-import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
-import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
-import com.marcs.common.abstracts.BaseDao;
-import com.marcs.sql.SqlParamBuilder;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
+import com.google.common.collect.Sets;
+import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
+import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
+import com.marcs.common.abstracts.BaseDao;
+import com.marcs.sql.SqlParamBuilder;
 
 /**
  * Class that handles all the dao calls to the database for block out dates
@@ -45,7 +45,7 @@ public class BlockOutDateDao extends BaseDao {
 
 		MapSqlParameterSource params = builder.build();
 
-		return getPage(getSql("getBlockOutDates", params), params, BLOCK_OUT_DATE_MAPPER);
+		return getList(getSql("getBlockOutDates", params), params, BLOCK_OUT_DATE_MAPPER);
 	}
 
 	/**

@@ -6,14 +6,14 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.stereotype.Repository;
+
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.sql.SqlParamBuilder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.stereotype.Repository;
 
 /**
  * Class that handles all the dao calls to the database for users
@@ -49,6 +49,6 @@ public class UserReportsDao extends BaseDao {
                                 .withParam("excludedUserIds", request.getExcludedUserIds())
                                 .withParamTextEnumCollection(ACCOUNT_STATUS, request.getAccountStatus())
                                 .withParamTextEnumCollection(WEB_ROLE_TEXT_ID, request.getWebRole()).build();
-                return getPage(getSql("getUsers", params), params, USER_MAPPER);
+                return getList(getSql("getUsers", params), params, USER_MAPPER);
         }
 }

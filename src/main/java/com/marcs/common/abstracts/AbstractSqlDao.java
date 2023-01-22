@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
+import com.marcs.common.page.Page;
 import com.opengamma.elsql.ElSqlBundle;
 import com.opengamma.elsql.ElSqlConfig;
 
@@ -76,7 +77,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
     }
 
     /**
-     * Querys the database for a page of data. It will return the data as a list of
+     * Querys the database for a list of data. It will return the data as a list of
      * the called object.
      * 
      * @param <T>    The object type of the method to cast the rows too.
@@ -85,8 +86,39 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param mapper The mapper to return the data as.
      * @return List of the returned data.
      */
-    public <T> List<T> getPage(String sql, MapSqlParameterSource params, RowMapper<T> mapper) {
+    public <T> List<T> getList(String sql, MapSqlParameterSource params, RowMapper<T> mapper) {
         return getTemplate().query(sql, params, mapper);
+    }
+
+    /**
+     * Querys the database for a page of data. It will return the data as a list of
+     * the called object.
+     * 
+     * @param <T>    The object type of the method to cast the rows too.
+     * @param name   The sql Fragment Name.
+     * @param params Params to be inserted into the query.
+     * @param mapper The mapper to return the data as.
+     * @return List of the returned data.
+     */
+    public <T> Page<T> getPage(String name, MapSqlParameterSource params, RowMapper<T> mapper) {
+        return getPage(name + "TotalCount", name, params, mapper);
+    }
+
+    /**
+     * Querys the database for a page of data. It will return the data as a list of
+     * the called object.
+     * 
+     * @param <T>           The object type of the method to cast the rows too.
+     * @param totalCountSql The total count sql fragment.
+     * @param sql           The sql Fragment Name.
+     * @param params        Params to be inserted into the query.
+     * @param mapper        The mapper to return the data as.
+     * @return List of the returned data.
+     */
+    private <T> Page<T> getPage(String totalCountSql, String sql, MapSqlParameterSource params, RowMapper<T> mapper) {
+        int totalCount = get(getSql(totalCountSql, params), params, Integer.class);
+        List<T> list = getList(getSql(sql, params), params, mapper);
+        return new Page<T>(totalCount, list);
     }
 
     /**

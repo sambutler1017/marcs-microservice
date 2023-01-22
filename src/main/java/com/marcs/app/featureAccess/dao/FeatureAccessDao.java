@@ -9,12 +9,12 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import com.marcs.app.featureAccess.client.domain.Feature;
-import com.marcs.common.abstracts.BaseDao;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
+
+import com.marcs.app.featureAccess.client.domain.Feature;
+import com.marcs.common.abstracts.BaseDao;
 
 /**
  * DAO for handing feature access for a user
@@ -40,7 +40,7 @@ public class FeatureAccessDao extends BaseDao {
     public Map<String, List<Map<String, String>>> getFeatureAccess(int roleId) throws Exception {
         MapSqlParameterSource params = parameterSource(WEB_ROLE_ID, roleId);
         return mapSingleton(
-                getPage(getSql("getFeatureAccess", params), params, FEATURE_ACCESS_MAPPER));
+                getList(getSql("getFeatureAccess", params), params, FEATURE_ACCESS_MAPPER));
     }
 
     /**
