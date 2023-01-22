@@ -42,9 +42,9 @@ public class WebNotifierService {
      * @param sessionUUID The unique session id for the user.
      */
     public void send(Notification body, String sessionUUID) {
-        LOGGER.info("Sending Web Notification to '{}' with type '{}'",
-                    String.format("%s-%s", body.getDestination(), sessionUUID), body.getType());
-        sendNotification(String.format("%s-%s", body.getDestination(), sessionUUID), body);
+        String destination = String.format("%s-%s", body.getDestination(), sessionUUID);
+        LOGGER.info("Sending Web Notification to '{}' with type '{}'", destination, body.getType());
+        sendNotification(destination, body);
     }
 
     /**
