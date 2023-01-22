@@ -33,7 +33,6 @@ public class ManageBlockOutDateService {
 	 * @param id        The id of the block out date to update.
 	 * @param blockDate The block out date body to be updated.
 	 * @return {@link BlockOutDate} with the updated fields.
-	 * @throws Exception
 	 */
 	public BlockOutDate updateBlockOutDateById(int id, BlockOutDate blockDate) throws Exception {
 		blockDate.setInsertUserId(jwtHolder.getUserId());
@@ -46,7 +45,6 @@ public class ManageBlockOutDateService {
 	 * 
 	 * @param blockDate The block out date that needs to be created.
 	 * @return The block out date with the insert time stamp and unique id.
-	 * @throws Exception
 	 */
 	public BlockOutDate createBlockOutDate(BlockOutDate blockDate) throws Exception {
 		if(jwtHolder.getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
@@ -62,7 +60,6 @@ public class ManageBlockOutDateService {
 	 * Delete a block out date for the given id.
 	 * 
 	 * @param id The id of the block out date to be deleted.
-	 * @throws Exception
 	 */
 	public void deleteBlockOutDate(int id) throws Exception {
 		blockOutDateService.getBlockOutDateById(id);

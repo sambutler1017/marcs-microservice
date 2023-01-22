@@ -30,9 +30,8 @@ public class VacationService {
 	 * Get list of vacations for the current request.
 	 * 
 	 * @return {@link Vacation} object.
-	 * @throws Exception
 	 */
-	public List<Vacation> getVacations(VacationGetRequest request) throws Exception {
+	public List<Vacation> getVacations(VacationGetRequest request) {
 		return dao.getVacations(request);
 	}
 
@@ -40,9 +39,8 @@ public class VacationService {
 	 * Gets the current logged in users vacations.
 	 * 
 	 * @return {@link Vacation} object.
-	 * @throws Exception
 	 */
-	public List<Vacation> getCurrentUserVacations() throws Exception {
+	public List<Vacation> getCurrentUserVacations() {
 		return getVacationsByUserId(jwtHolder.getUserId());
 	}
 
@@ -51,9 +49,8 @@ public class VacationService {
 	 * 
 	 * @param id The id of the vacation inserted.
 	 * @return {@link Vacation} object.
-	 * @throws Exception
 	 */
-	public Vacation getVacationById(int id) throws Exception {
+	public Vacation getVacationById(int id) {
 		VacationGetRequest request = new VacationGetRequest();
 		request.setId(Sets.newHashSet(id));
 		return getVacations(request).get(0);
@@ -64,9 +61,8 @@ public class VacationService {
 	 * 
 	 * @param userId The user id to get vacations for.
 	 * @return {@link List<Vacation>} for the user.
-	 * @throws Exception
 	 */
-	public List<Vacation> getVacationsByUserId(int userId) throws Exception {
+	public List<Vacation> getVacationsByUserId(int userId) {
 		VacationGetRequest request = new VacationGetRequest();
 		request.setUserId(Sets.newHashSet(userId));
 		return getVacations(request);
@@ -76,9 +72,8 @@ public class VacationService {
 	 * Get vacations for a report based on the current day.
 	 * 
 	 * @return {@link List<Vacation>} for the user.
-	 * @throws Exception
 	 */
-	public List<Vacation> getVacationsForReport(VacationGetRequest request) throws Exception {
+	public List<Vacation> getVacationsForReport(VacationGetRequest request) {
 		return dao.getVacationsForReport(request);
 	}
 }

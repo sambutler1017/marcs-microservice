@@ -1,7 +1,5 @@
 package com.marcs.app.user.service;
 
-import java.security.NoSuchAlgorithmException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
@@ -11,7 +9,6 @@ import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.PasswordUpdate;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.dao.UserCredentialsDao;
-import com.marcs.common.exceptions.BaseException;
 import com.marcs.common.exceptions.InsufficientPermissionsException;
 import com.marcs.jwt.utility.JwtHolder;
 
@@ -46,7 +43,7 @@ public class UserCredentialsService {
      * @param pass   Contains the hashed password.
      * @throws Exception
      */
-    public void insertUserPassword(int userId, String pass) throws Exception {
+    public void insertUserPassword(int userId, String pass) {
         dao.insertUserPassword(userId, BCrypt.hashpw(pass, BCrypt.gensalt()));
     }
 
@@ -61,7 +58,7 @@ public class UserCredentialsService {
      * @throws Exception If the user can not be authenticated or the function was
      *                   not able to hash the new password.
      */
-    public User updateUserPassword(PasswordUpdate passUpdate) throws Exception {
+    public User updateUserPassword(PasswordUpdate passUpdate) {
         authClient.authenticateUser(jwtHolder.getEmail(), passUpdate.getCurrentPassword()).getBody();
         return passwordUpdate(jwtHolder.getUserId(), passUpdate.getNewPassword());
     }
@@ -75,7 +72,7 @@ public class UserCredentialsService {
      * @throws Exception If the user can not be authenticated or the function was
      *                   not able to hash the new password.
      */
-    public User updateUserPasswordById(int userId, PasswordUpdate passUpdate) throws Exception {
+    public User updateUserPasswordById(int userId, PasswordUpdate passUpdate) {
         User updatingUser = userProfileClient.getUserById(userId);
         if(userId != updatingUser.getId() && jwtHolder.getWebRole().getRank() <= updatingUser.getWebRole().getRank()) {
             throw new InsufficientPermissionsException(String
@@ -111,17 +108,10 @@ public class UserCredentialsService {
      * @return user associated to that id with the updated information
      * @throws Exception
      */
-    private User passwordUpdate(int userId, String password) throws Exception {
-        try {
-            if(password != null && password.trim() != "") {
-                return dao.updateUserPassword(userId, BCrypt.hashpw(password, BCrypt.gensalt()));
-            }
-            else {
-                return userProfileClient.getCurrentUser();
-            }
+    private User passwordUpdate(int userId, String password) {
+        if(password != null && password.trim() != "") {
+            dao.updateUserPassword(userId, BCrypt.hashpw(password, BCrypt.gensalt()));
         }
-        catch(NoSuchAlgorithmException e) {
-            throw new BaseException("Could not hash password!");
-        }
+        return userProfileClient.getCurrentUser();
     }
 }

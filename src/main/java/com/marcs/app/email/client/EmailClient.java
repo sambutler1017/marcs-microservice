@@ -25,7 +25,7 @@ public class EmailClient {
      * @param email Email to search for and send an email too.
      * @throws Exception
      */
-    public void forgotPassword(String email) throws Exception {
+    public void forgotPassword(String email) {
         controller.forgotPassword(email);
     }
 
@@ -35,7 +35,7 @@ public class EmailClient {
      * 
      * @throws Exception
      */
-    public void sendVacationReport() throws Exception {
+    public void sendVacationReport() {
         controller.sendVacationReport();
     }
 
@@ -48,7 +48,7 @@ public class EmailClient {
      * 
      * @throws Exception
      */
-    public void sendNewUserEmail(User newUser) throws Exception {
+    public void sendNewUserEmail(User newUser) {
         controller.sendNewUserEmail(newUser);
     }
 
@@ -58,7 +58,7 @@ public class EmailClient {
      * @param userId The id of the user to send an email update too.
      * @throws Exception
      */
-    public void sendUserAccountUpdateStatusEmail(int userId) throws Exception {
+    public void sendUserAccountUpdateStatusEmail(int userId) {
         controller.sendUserAccountUpdateStatusEmail(userId);
     }
 }

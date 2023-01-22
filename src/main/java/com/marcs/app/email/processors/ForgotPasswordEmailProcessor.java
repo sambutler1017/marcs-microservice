@@ -34,12 +34,13 @@ public class ForgotPasswordEmailProcessor extends EmailProcessor<String> {
     private String email;
 
     @Override
-    public List<UserEmail> process() throws Exception {
+    public List<UserEmail> process() {
         String content = getForgotPasswordContent(email);
 
-        if (!"".equals(content)) {
+        if(!"".equals(content)) {
             return List.of(send(buildUserEmail(email, "Forgot Password", content)));
-        } else {
+        }
+        else {
             LOGGER.warn("Email could not be processed. No user found for email '{}'", email);
         }
         return null;
@@ -57,19 +58,18 @@ public class ForgotPasswordEmailProcessor extends EmailProcessor<String> {
      * 
      * @param email The users email to search for and send an email too.
      * @return {@link String} of the email content with the replaced link.
-     * @throws Exception
      */
-    private String getForgotPasswordContent(String email) throws Exception {
+    private String getForgotPasswordContent(String email) {
         final String emailContent = readEmailTemplate("ForgotPasswordEmail.html");
 
         UserGetRequest request = new UserGetRequest();
         request.setEmail(Sets.newHashSet(email));
         List<User> users = userClient.getUsers(request);
 
-        if (users.size() < 1)
+        if(users.size() < 1)
             return "";
         else
             return emailContent.replace("::FORGOT_PASSWORD_LINK::",
-                    RESET_LINK + jwtTokenUtil.generateToken(users.get(0), true));
+                                        RESET_LINK + jwtTokenUtil.generateToken(users.get(0), true));
     }
 }

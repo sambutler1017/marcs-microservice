@@ -31,23 +31,19 @@ public class AuthenticationController {
      *
      * @param authenticationRequest A email and password request.
      * @return a new JWT.
-     * @throws Exception - if authentication request does not match a user.
      */
     @PostMapping(path = "/authenticate", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<AuthToken> authenticateUser(@RequestBody AuthenticationRequest authenticationRequest)
-            throws Exception {
+    public ResponseEntity<AuthToken> authenticateUser(@RequestBody AuthenticationRequest authenticationRequest) {
         return ResponseEntity.ok(service.authenticate(authenticationRequest));
     }
 
     /**
      * Reauthenticates a user and generates a new token.
      *
-     * @param authenticationRequest A email and password request.
      * @return a new JWT.
-     * @throws Exception If user does not exist.
      */
     @PostMapping(path = "/reauthenticate", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<AuthToken> reauthenticateUser() throws Exception {
+    public ResponseEntity<AuthToken> reauthenticateUser() {
         return ResponseEntity.ok(service.reauthenticate());
     }
 }

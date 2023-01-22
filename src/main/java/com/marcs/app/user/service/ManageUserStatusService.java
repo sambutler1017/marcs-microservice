@@ -43,7 +43,7 @@ public class ManageUserStatusService {
      * @return {@link UserStatus} object
      * @throws Exception
      */
-    public UserStatus insertUserStatus(UserStatus userStatus) throws Exception {
+    public UserStatus insertUserStatus(UserStatus userStatus) {
         return dao.insertUserStatus(userStatus, userStatus.getUserId());
     }
 
@@ -54,7 +54,7 @@ public class ManageUserStatusService {
      * @return {@link UserStatus} object
      * @throws Exception
      */
-    public UserStatus updateUserStatusByUserId(int id, UserStatus userStatus) throws Exception {
+    public UserStatus updateUserStatusByUserId(int id, UserStatus userStatus) {
         userStatus.setUpdatedUserId(jwtHolder.getUserId());
         UserStatus updatedStatus = dao.updateUserStatusByUserId(id, userStatus);
         currentStoreManagerCheck(id);
@@ -70,7 +70,7 @@ public class ManageUserStatusService {
      * @return {@link UserStatus} object
      * @throws Exception
      */
-    public UserStatus updateUserAppAccessByUserId(int id, Boolean appAccess) throws Exception {
+    public UserStatus updateUserAppAccessByUserId(int id, Boolean appAccess) {
         return dao.updateUserStatusByUserId(id, new UserStatus(jwtHolder.getUserId(), null, appAccess));
     }
 
@@ -83,7 +83,7 @@ public class ManageUserStatusService {
      * @param userId The id of the user to check
      * @throws Exception
      */
-    private void currentStoreManagerCheck(int userId) throws Exception {
+    private void currentStoreManagerCheck(int userId) {
         User user = userProfileClient.getUserById(userId);
         if(user.getWebRole().equals(WebRole.STORE_MANAGER)) {
             storeClient.updateStoreManagerOfStore(user.getId(), user.getStoreId());

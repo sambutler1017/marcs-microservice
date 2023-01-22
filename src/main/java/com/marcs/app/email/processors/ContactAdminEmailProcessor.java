@@ -30,7 +30,7 @@ public class ContactAdminEmailProcessor extends EmailProcessor<String> {
     private String emailMessage;
 
     @Override
-    public List<UserEmail> process() throws Exception {
+    public List<UserEmail> process() {
         final User emailUser = userClient.getCurrentUser();
         String emailContent = readEmailTemplate("ContactAdminEmail.html");
 
@@ -39,7 +39,7 @@ public class ContactAdminEmailProcessor extends EmailProcessor<String> {
         final List<User> adminUsers = userClient.getUsers(request);
 
         List<UserEmail> emails = new ArrayList<>();
-        for (final User user : adminUsers) {
+        for(final User user : adminUsers) {
             emails.add(send(user.getEmail(), "New Message", buildEmailBody(emailUser, emailContent)));
         }
         return emails;
@@ -58,8 +58,8 @@ public class ContactAdminEmailProcessor extends EmailProcessor<String> {
      * @return String of the email content.
      */
     private String buildEmailBody(User emailUser, String content) {
-        String username = String.format("%s %s (%s)", emailUser.getFirstName().trim(),
-                emailUser.getLastName().trim(), emailUser.getWebRole().toString());
+        String username = String.format("%s %s (%s)", emailUser.getFirstName().trim(), emailUser.getLastName().trim(),
+                                        emailUser.getWebRole().toString());
         content = content.replace(EMAIL_DYNAMIC_NAME, username);
         content = content.replace(EMAIL_DYNAMIC_BODY, emailMessage);
         return content;

@@ -2,12 +2,12 @@ package com.marcs.app.blockOutDate.client;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
 import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
 import com.marcs.app.blockOutDate.rest.BlockOutDateController;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This class exposes the block out date endpoint's to other app's to pull data
@@ -27,9 +27,8 @@ public class BlockOutDateClient {
 	 * 
 	 * @param request to filter block out dates on
 	 * @return List of block out date objects {@link BlockOutDate}
-	 * @throws Exception
 	 */
-	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) throws Exception {
+	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) {
 		return controller.getBlockOutDates(request);
 	}
 
@@ -38,7 +37,6 @@ public class BlockOutDateClient {
 	 * 
 	 * @param request to filter stores on
 	 * @return Block out date object {@link BlockOutDate}
-	 * @throws Exception
 	 */
 	public BlockOutDate getBlockOutDateById(int id) throws Exception {
 		return controller.getBlockOutDateById(id);
@@ -49,7 +47,6 @@ public class BlockOutDateClient {
 	 * 
 	 * @param blockDate The block out date that needs to be created.
 	 * @return The block out date with the insert time stamp and unique id.
-	 * @throws Exception
 	 */
 	public BlockOutDate createBlockOutDate(BlockOutDate blockDate) throws Exception {
 		return controller.createBlockOutDate(blockDate);
@@ -59,7 +56,6 @@ public class BlockOutDateClient {
 	 * Delete a block out date for the given id.
 	 * 
 	 * @param id The id of the block out date to be deleted.
-	 * @throws Exception
 	 */
 	public void deleteBlockOutDate(int id) throws Exception {
 		controller.deleteBlockOutDate(id);

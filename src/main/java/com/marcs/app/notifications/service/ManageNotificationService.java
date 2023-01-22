@@ -59,7 +59,7 @@ public class ManageNotificationService {
      * @param id The id to be deleted
      * @throws Exception
      */
-    public void deleteNotification(int id) throws Exception {
+    public void deleteNotification(int id) {
         dao.deleteNotification(id);
     }
 }

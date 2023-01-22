@@ -1,14 +1,8 @@
 package com.marcs.app.notifications.rest;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.*;
 
 import java.util.List;
-
-import com.marcs.annotations.interfaces.RestApiController;
-import com.marcs.app.notifications.client.domain.Notification;
-import com.marcs.app.notifications.client.domain.request.NotificationGetRequest;
-import com.marcs.app.notifications.service.ManageNotificationService;
-import com.marcs.app.notifications.service.NotificationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.marcs.annotations.interfaces.RestApiController;
+import com.marcs.app.notifications.client.domain.Notification;
+import com.marcs.app.notifications.client.domain.request.NotificationGetRequest;
+import com.marcs.app.notifications.service.ManageNotificationService;
+import com.marcs.app.notifications.service.NotificationService;
 
 @RestApiController
 @RequestMapping("api/notification-app/notifications")
@@ -40,7 +40,7 @@ public class NotificationController {
      * @throws Exception
      */
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public List<Notification> getNotifications(NotificationGetRequest request) throws Exception {
+    public List<Notification> getNotifications(NotificationGetRequest request) {
         return notificationService.getNotifications(request);
     }
 
@@ -67,7 +67,7 @@ public class NotificationController {
      * @throws Exception If the notification can not be found
      */
     @GetMapping(path = "/current-user", produces = APPLICATION_JSON_VALUE)
-    public List<Notification> getCurrentUserNotifications(NotificationGetRequest req) throws Exception {
+    public List<Notification> getCurrentUserNotifications(NotificationGetRequest req) {
         return notificationService.getCurrentUserNotifications(req);
     }
 
@@ -102,10 +102,9 @@ public class NotificationController {
      * to be deleted then it will return an exception.
      * 
      * @param id The id to be deleted
-     * @throws Exception
      */
     @DeleteMapping(path = "/{id}")
-    public void deleteNotification(@PathVariable int id) throws Exception {
+    public void deleteNotification(@PathVariable int id) {
         manageNotificationService.deleteNotification(id);
     }
 }

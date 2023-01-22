@@ -3,13 +3,13 @@ package com.marcs.app.featureAccess.rest;
 import java.util.List;
 import java.util.Map;
 
-import com.marcs.annotations.interfaces.RestApiController;
-import com.marcs.app.featureAccess.service.FeatureAccessService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.marcs.annotations.interfaces.RestApiController;
+import com.marcs.app.featureAccess.service.FeatureAccessService;
 
 /**
  * Gets feature access for a user
@@ -31,7 +31,7 @@ public class FeatureAccessController {
      * @throws Exception
      */
     @GetMapping("/{webRoleId}")
-    public Map<String, List<Map<String, String>>> getFeatureAccess(@PathVariable int webRoleId) throws Exception {
+    public Map<String, List<Map<String, String>>> getFeatureAccess(@PathVariable int webRoleId) {
         return service.getFeatureAccess(webRoleId);
     }
 }

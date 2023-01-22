@@ -23,22 +23,19 @@ public class AuthenticationClient {
     /**
      * Verifies user credentials passed as a JWTRequest
      *
-     * @param email    - Entered email at login.
-     * @param password - Password entered at login.
-     * @throws Exception
+     * @param email    Entered email at login.
+     * @param password Password entered at login.
      */
-    public ResponseEntity<AuthToken> authenticateUser(String email, String password) throws Exception {
+    public ResponseEntity<AuthToken> authenticateUser(String email, String password) {
         return controller.authenticateUser(new AuthenticationRequest(email, password));
     }
 
     /**
      * Reauthenticates a user and generates a new token.
      *
-     * @param authenticationRequest A email and password request.
      * @return a new JWT.
-     * @throws Exception
      */
-    public ResponseEntity<AuthToken> reauthenticateUser() throws Exception {
+    public ResponseEntity<AuthToken> reauthenticateUser() {
         return controller.reauthenticateUser();
     }
 }

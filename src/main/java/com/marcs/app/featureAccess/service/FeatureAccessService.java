@@ -3,10 +3,10 @@ package com.marcs.app.featureAccess.service;
 import java.util.List;
 import java.util.Map;
 
-import com.marcs.app.featureAccess.dao.FeatureAccessDao;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.marcs.app.featureAccess.dao.FeatureAccessDao;
 
 /**
  * Feature Access Service
@@ -25,7 +25,7 @@ public class FeatureAccessService {
      * 
      * @return {@link Map} of the list of feature access.
      */
-    public Map<String, List<Map<String, String>>> getFeatureAccess(int roleId) throws Exception {
+    public Map<String, List<Map<String, String>>> getFeatureAccess(int roleId) {
         return dao.getFeatureAccess(roleId);
     }
 }

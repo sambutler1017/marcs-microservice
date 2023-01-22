@@ -90,11 +90,10 @@ public class JwtTokenUtil implements Serializable {
     /**
      * generate token for reset password as false by default.
      * 
-     * @param user - User info to be added to the token
+     * @param user User info to be added to the token
      * @return String of the new JWT token
-     * @throws Exception
      */
-    public String generateToken(User user) throws Exception {
+    public String generateToken(User user) {
         return generateToken(user, false);
     }
 
@@ -107,7 +106,7 @@ public class JwtTokenUtil implements Serializable {
      * @return String of the new JWT token
      * @throws Exception
      */
-    public String generateToken(User user, boolean reset) throws Exception {
+    public String generateToken(User user, boolean reset) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(UserJwtClaims.USER_ID, user.getId());
         claims.put(UserJwtClaims.FIRST_NAME, user.getFirstName());

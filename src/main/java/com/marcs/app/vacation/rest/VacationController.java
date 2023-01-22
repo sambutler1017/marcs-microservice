@@ -33,10 +33,9 @@ public class VacationController {
 	 * Get list of vacations for the current request.
 	 * 
 	 * @return {@link Vacation} object.
-	 * @throws Exception
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
-	public List<Vacation> getVacations(VacationGetRequest request) throws Exception {
+	public List<Vacation> getVacations(VacationGetRequest request) {
 		return vacationService.getVacations(request);
 	}
 
@@ -44,10 +43,9 @@ public class VacationController {
 	 * Gets the current logged in users vacations.
 	 * 
 	 * @return {@link Vacation} object.
-	 * @throws Exception
 	 */
 	@GetMapping(path = "/current-user", produces = APPLICATION_JSON_VALUE)
-	public List<Vacation> getCurrentUserVacations() throws Exception {
+	public List<Vacation> getCurrentUserVacations() {
 		return vacationService.getCurrentUserVacations();
 	}
 
@@ -56,10 +54,9 @@ public class VacationController {
 	 * 
 	 * @param id The id of the vacation inserted.
 	 * @return {@link Vacation} object.
-	 * @throws Exception
 	 */
 	@GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
-	public Vacation getVacationById(@PathVariable int id) throws Exception {
+	public Vacation getVacationById(@PathVariable int id) {
 		return vacationService.getVacationById(id);
 	}
 
@@ -68,10 +65,9 @@ public class VacationController {
 	 * 
 	 * @param userId The user id to get vacations for.
 	 * @return {@link Lst<Vacation>} for the user.
-	 * @throws Exception
 	 */
 	@GetMapping(path = "/{userId}/user", produces = APPLICATION_JSON_VALUE)
-	public List<Vacation> getVacationsByUserId(@PathVariable int userId) throws Exception {
+	public List<Vacation> getVacationsByUserId(@PathVariable int userId) {
 		return vacationService.getVacationsByUserId(userId);
 	}
 
@@ -80,10 +76,9 @@ public class VacationController {
 	 * 
 	 * @param userId The user id to get vacations for.
 	 * @return {@link Lst<Vacation>} for the user.
-	 * @throws Exception
 	 */
 	@GetMapping(path = "/report", produces = APPLICATION_JSON_VALUE)
-	public List<Vacation> getVacationsForReport(VacationGetRequest request) throws Exception {
+	public List<Vacation> getVacationsForReport(VacationGetRequest request) {
 		return vacationService.getVacationsForReport(request);
 	}
 
@@ -93,10 +88,9 @@ public class VacationController {
 	 * @param id  The user id to get vacations for.
 	 * @param vac The vacation to be inserted.
 	 * @return {@link Vacation} for the user.
-	 * @throws Exception
 	 */
 	@PostMapping(path = "/{id}/user", produces = APPLICATION_JSON_VALUE)
-	public Vacation createVacation(@PathVariable int id, @RequestBody Vacation vac) throws Exception {
+	public Vacation createVacation(@PathVariable int id, @RequestBody Vacation vac) {
 		return manageVacationService.createVacation(id, vac);
 	}
 
@@ -106,7 +100,6 @@ public class VacationController {
 	 * 
 	 * @param vac The vacation to be inserted.
 	 * @return {@link Vacation} for the user.
-	 * @throws Exception
 	 */
 	@PostMapping(path = "/request", produces = APPLICATION_JSON_VALUE)
 	public Vacation requestVacation(@RequestBody Vacation vac) throws Exception {
@@ -119,7 +112,6 @@ public class VacationController {
 	 * @param id   The user id to get vacations for.
 	 * @param vacs The list of vacations to be inserted.
 	 * @return {@link List<Vacation>} for the user.
-	 * @throws Exception
 	 */
 	@PostMapping(path = "/{id}/user/batch", produces = APPLICATION_JSON_VALUE)
 	public List<Vacation> createBatchVacations(@PathVariable int id, @RequestBody List<Vacation> vacs)
@@ -142,10 +134,9 @@ public class VacationController {
 	 * @param id  The id of the vacation to be updates.
 	 * @param vac What to update the vacation dates too.
 	 * @return Vacation object of the updated information.
-	 * @throws Exception
 	 */
 	@PutMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
-	public Vacation updateVacationDatesById(@PathVariable int id, @RequestBody Vacation vac) throws Exception {
+	public Vacation updateVacationDatesById(@PathVariable int id, @RequestBody Vacation vac) {
 		return manageVacationService.updateVacationDatesById(id, vac);
 	}
 
@@ -155,10 +146,9 @@ public class VacationController {
 	 * @param id  The id of the vacation inserted.
 	 * @param vac What to update on for the vacation.
 	 * @return {@link Vacation} object.
-	 * @throws Exception
 	 */
 	@PutMapping(path = "/{id}/info", produces = APPLICATION_JSON_VALUE)
-	public Vacation updateVacationInfoById(@PathVariable int id, @RequestBody Vacation vac) throws Exception {
+	public Vacation updateVacationInfoById(@PathVariable int id, @RequestBody Vacation vac) {
 		return manageVacationService.updateVacationInfoById(id, vac);
 	}
 
@@ -167,10 +157,9 @@ public class VacationController {
 	 * 
 	 * @param userId The user id to get vacations for.
 	 * @return {@link Lst<Vacation>} for the user.
-	 * @throws Exception
 	 */
 	@DeleteMapping()
-	public void deleteAllCurrentUserVacations() throws Exception {
+	public void deleteAllCurrentUserVacations() {
 		manageVacationService.deleteAllCurrentUserVacations();
 	}
 
@@ -179,10 +168,9 @@ public class VacationController {
 	 * 
 	 * @param id The id for the vacation
 	 * @return {@link Lst<Vacation>} for the user.
-	 * @throws Exception
 	 */
 	@DeleteMapping("/{id}")
-	public void deleteVacationById(@PathVariable int id) throws Exception {
+	public void deleteVacationById(@PathVariable int id) {
 		manageVacationService.deleteVacationById(id);
 	}
 
@@ -191,10 +179,9 @@ public class VacationController {
 	 * 
 	 * @param userId The user id to get vacations for.
 	 * @return {@link Lst<Vacation>} for the user.
-	 * @throws Exception
 	 */
 	@DeleteMapping("/{userId}/user")
-	public void deleteAllVacationsByUserId(@PathVariable int userId) throws Exception {
+	public void deleteAllVacationsByUserId(@PathVariable int userId) {
 		manageVacationService.deleteAllVacationsByUserId(userId);
 	}
 

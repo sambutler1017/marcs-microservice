@@ -1,6 +1,6 @@
 package com.marcs.app.user.rest;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.*;
 
 import java.util.List;
 
@@ -38,10 +38,9 @@ public class UserProfileController {
 	 * 
 	 * @param request to filter on
 	 * @return list of user objects
-	 * @throws Exception
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
-	public Page<User> getUsers(UserGetRequest request) throws Exception {
+	public Page<User> getUsers(UserGetRequest request) {
 		return userProfileService.getUsers(request);
 	}
 
@@ -49,10 +48,9 @@ public class UserProfileController {
 	 * Gets the current logged in user information.
 	 * 
 	 * @return The user currently logged in.
-	 * @throws Exception
 	 */
 	@GetMapping(path = "/current-user", produces = APPLICATION_JSON_VALUE)
-	public User getCurrentUser() throws Exception {
+	public User getCurrentUser() {
 		return userProfileService.getCurrentUser();
 	}
 
@@ -61,10 +59,9 @@ public class UserProfileController {
 	 * 
 	 * @param id of the user
 	 * @return user associated to that id
-	 * @throws Exception
 	 */
 	@GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
-	public User getUserById(@PathVariable int id) throws Exception {
+	public User getUserById(@PathVariable int id) {
 		return userProfileService.getUserById(id);
 	}
 
@@ -72,10 +69,9 @@ public class UserProfileController {
 	 * End point to a get a list of users apps that they have access too
 	 * 
 	 * @return List of Application objects {@link Application}
-	 * @throws Exception
 	 */
 	@GetMapping(path = "/application-access", produces = APPLICATION_JSON_VALUE)
-	public List<Application> getUserApps() throws Exception {
+	public List<Application> getUserApps() {
 		return userProfileService.getUserApps();
 	}
 
@@ -83,10 +79,9 @@ public class UserProfileController {
 	 * End point to a get a list of users apps that they have access too
 	 * 
 	 * @return List of Application objects {@link Application}
-	 * @throws Exception
 	 */
 	@GetMapping(path = "/{id}/application-access", produces = APPLICATION_JSON_VALUE)
-	public List<Application> getUserAppsById(@PathVariable int id) throws Exception {
+	public List<Application> getUserAppsById(@PathVariable int id) {
 		return userProfileService.getUserAppsById(id);
 	}
 
@@ -96,10 +91,9 @@ public class UserProfileController {
 	 * 
 	 * @param email The email to check
 	 * @return {@link Boolean} to see if the email exists
-	 * @throws Exception
 	 */
 	@GetMapping("/check-email")
-	public boolean doesEmailExist(@RequestParam String email) throws Exception {
+	public boolean doesEmailExist(@RequestParam String email) {
 		return userProfileService.doesEmailExist(email);
 	}
 
@@ -108,7 +102,6 @@ public class UserProfileController {
 	 * 
 	 * @param user The user to create.
 	 * @return {@link User} object of the users data.
-	 * @throws Exception
 	 */
 	@PostMapping(produces = APPLICATION_JSON_VALUE)
 	public User createUser(@RequestBody User user) throws Exception {
@@ -121,10 +114,9 @@ public class UserProfileController {
 	 * 
 	 * @param user The user to create.
 	 * @return {@link User} object of the users data.
-	 * @throws Exception
 	 */
 	@PostMapping(path = "/add-user", produces = APPLICATION_JSON_VALUE)
-	public User addNewUser(@RequestBody User user) throws Exception {
+	public User addNewUser(@RequestBody User user) {
 		return manageUserProfileService.addNewUser(user);
 	}
 
@@ -134,7 +126,6 @@ public class UserProfileController {
 	 * email to reset their passowrd.
 	 * 
 	 * @return user associated to that id with the updated information
-	 * @throws Exception
 	 */
 	@PostMapping(path = "/forgot-password", produces = APPLICATION_JSON_VALUE)
 	public User forgotPassword(@RequestBody String email) throws Exception {
@@ -147,10 +138,9 @@ public class UserProfileController {
 	 * 
 	 * @param user what information on the user needs to be updated.
 	 * @return user associated to that id with the updated information
-	 * @throws Exception
 	 */
 	@PutMapping(produces = APPLICATION_JSON_VALUE)
-	public User updateUserProfile(@RequestBody User user) throws Exception {
+	public User updateUserProfile(@RequestBody User user) {
 		return manageUserProfileService.updateUserProfile(user);
 	}
 
@@ -159,10 +149,9 @@ public class UserProfileController {
 	 * 
 	 * @param id of the user
 	 * @return user associated to that id with the updated information
-	 * @throws Exception
 	 */
 	@PutMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
-	public User updateUserProfileById(@PathVariable int id, @RequestBody User user) throws Exception {
+	public User updateUserProfileById(@PathVariable int id, @RequestBody User user) {
 		return manageUserProfileService.updateUserProfileById(id, user);
 	}
 
@@ -171,10 +160,9 @@ public class UserProfileController {
 	 * 
 	 * @param userId The user Id to be updated.
 	 * @return The user object with the updated information.
-	 * @throws Exception
 	 */
 	@PutMapping(path = "/{id}/last-login", produces = APPLICATION_JSON_VALUE)
-	public User updateUserLastLoginToNow(@PathVariable int id) throws Exception {
+	public User updateUserLastLoginToNow(@PathVariable int id) {
 		return manageUserProfileService.updateUserLastLoginToNow(id);
 	}
 
@@ -182,10 +170,9 @@ public class UserProfileController {
 	 * Delete the user for the given id.
 	 * 
 	 * @param id The id of the user being deleted
-	 * @throws Exception
 	 */
 	@DeleteMapping("/{id}")
-	public void deleteUser(@PathVariable int id) throws Exception {
+	public void deleteUser(@PathVariable int id) {
 		manageUserProfileService.deleteUser(id);
 	}
 }

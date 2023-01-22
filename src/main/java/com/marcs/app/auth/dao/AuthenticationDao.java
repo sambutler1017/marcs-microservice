@@ -1,12 +1,12 @@
 package com.marcs.app.auth.dao;
 
+import java.util.Optional;
+
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.marcs.common.abstracts.BaseDao;
-import com.marcs.common.exceptions.UserNotFoundException;
 
 /**
  * Class that handles all the dao calls to the database for users
@@ -17,7 +17,6 @@ import com.marcs.common.exceptions.UserNotFoundException;
 @Repository
 public class AuthenticationDao extends BaseDao {
 
-    @Autowired
     public AuthenticationDao(DataSource source) {
         super(source);
     }
@@ -27,14 +26,8 @@ public class AuthenticationDao extends BaseDao {
      * 
      * @param email The email assocaited with the user.
      * @return {@link String} hashed password
-     * @throws Exception If there is not user for the given email.
      */
-    public String getUserAuthPassword(String email) throws Exception {
-        try {
-            return get(getSql("getUserHashedPassword"), parameterSource(EMAIL, email), String.class);
-        }
-        catch(Exception e) {
-            throw new UserNotFoundException(String.format("User not found for email: %s", email));
-        }
+    public Optional<String> getUserAuthPassword(String email) {
+        return getOptional("getUserHashedPassword", parameterSource(EMAIL, email), String.class);
     }
 }

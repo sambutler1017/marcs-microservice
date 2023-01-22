@@ -35,10 +35,9 @@ public class StoreController {
 	 * 
 	 * @param request to filter stores on
 	 * @return List of store objects {@link Store}
-	 * @throws Exception
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
-	public List<Store> getStores(StoreGetRequest request) throws Exception {
+	public List<Store> getStores(StoreGetRequest request) {
 		return storeService.getStores(request);
 	}
 
@@ -47,10 +46,9 @@ public class StoreController {
 	 * 
 	 * @param id The id of the store to get.
 	 * @return {@link Store} object
-	 * @throws Exception
 	 */
 	@GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
-	public Store getStoreById(@PathVariable String id) throws Exception {
+	public Store getStoreById(@PathVariable String id) {
 		return storeService.getStoreById(id);
 	}
 
@@ -58,10 +56,9 @@ public class StoreController {
 	 * Get the regional of the passed in store ID.
 	 * 
 	 * @return The regional of that store
-	 * @throws Exception
 	 */
 	@GetMapping(path = "/regional/{storeId}", produces = APPLICATION_JSON_VALUE)
-	public User getRegionalOfStoreById(@PathVariable String storeId) throws Exception {
+	public User getRegionalOfStoreById(@PathVariable String storeId) {
 		return storeService.getRegionalOfStoreById(storeId);
 	}
 
@@ -69,10 +66,9 @@ public class StoreController {
 	 * Get the manager of the passed in store ID.
 	 * 
 	 * @return The manager of that store
-	 * @throws Exception
 	 */
 	@GetMapping(path = "/manager/{storeId}", produces = APPLICATION_JSON_VALUE)
-	public User getManagerOfStoreById(@PathVariable String storeId) throws Exception {
+	public User getManagerOfStoreById(@PathVariable String storeId) {
 		return storeService.getManagerOfStoreById(storeId);
 	}
 
@@ -83,10 +79,9 @@ public class StoreController {
 	 * @param storeId The store Id to update the manager at.
 	 * @param store   The information to be updated
 	 * @return {@link Store} object with the updated information.
-	 * @throws Exception
 	 */
 	@PutMapping(path = "/{storeId}", produces = APPLICATION_JSON_VALUE)
-	public Store updateStore(@PathVariable String storeId, @RequestBody Store store) throws Exception {
+	public Store updateStore(@PathVariable String storeId, @RequestBody Store store) {
 		return manageStoreService.updateStore(storeId, store);
 	}
 
@@ -98,10 +93,9 @@ public class StoreController {
 	 * @param userId  The user id of the manager.
 	 * @param storeId The store Id to update the manager at.
 	 * @return {@link Store} object with the updated manager.
-	 * @throws Exception
 	 */
 	@PutMapping(path = "{userId}/manager/{storeId}", produces = APPLICATION_JSON_VALUE)
-	public Store updateStoreManagerOfStore(@PathVariable int userId, @PathVariable String storeId) throws Exception {
+	public Store updateStoreManagerOfStore(@PathVariable int userId, @PathVariable String storeId) {
 		return manageStoreService.updateStoreManagerOfStore(userId, storeId);
 	}
 
@@ -111,10 +105,9 @@ public class StoreController {
 	 * @param userId  The user id of the regional.
 	 * @param storeId The store Id to update the regional at.
 	 * @return {@link Store} object with the updated regional.
-	 * @throws Exception
 	 */
 	@PutMapping(path = "{userId}/regional/{storeId}", produces = APPLICATION_JSON_VALUE)
-	public Store updateRegionalOfStore(@PathVariable int userId, @PathVariable String storeId) throws Exception {
+	public Store updateRegionalOfStore(@PathVariable int userId, @PathVariable String storeId) {
 		return manageStoreService.updateRegionalOfStore(userId, storeId);
 	}
 
@@ -124,10 +117,9 @@ public class StoreController {
 	 * 
 	 * @param store The information to be created
 	 * @return {@link Store} object with the created information.
-	 * @throws Exception
 	 */
 	@PostMapping(produces = APPLICATION_JSON_VALUE)
-	public Store createStore(@RequestBody Store store) throws Exception {
+	public Store createStore(@RequestBody Store store) {
 		return manageStoreService.createStore(store);
 	}
 
@@ -135,10 +127,9 @@ public class StoreController {
 	 * This will delete a store for the given store id.
 	 * 
 	 * @param storeId The store id of the store to be deleted.
-	 * @throws Exception
 	 */
 	@DeleteMapping(path = "/{storeId}")
-	public void deleteStoreById(@PathVariable String storeId) throws Exception {
+	public void deleteStoreById(@PathVariable String storeId) {
 		manageStoreService.deleteStoreById(storeId);
 	}
 }

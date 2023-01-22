@@ -36,7 +36,7 @@ public class NotificationService {
      * @return List of {@link Notification} objects.
      * @throws Exception
      */
-    public List<Notification> getNotifications(NotificationGetRequest request) throws Exception {
+    public List<Notification> getNotifications(NotificationGetRequest request) {
         return dao.getNotifications(request);
     }
 
@@ -67,7 +67,7 @@ public class NotificationService {
      * @return List of {@link Notification} objects.
      * @throws Exception If the notification can not be found
      */
-    public List<Notification> getCurrentUserNotifications(NotificationGetRequest req) throws Exception {
+    public List<Notification> getCurrentUserNotifications(NotificationGetRequest req) {
         req.setReceiverId(Sets.newHashSet(jwtHolder.getUserId()));
         return getNotifications(req);
     }

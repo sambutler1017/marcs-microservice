@@ -53,7 +53,7 @@ public class NotificationClient {
      * @return List of {@link Notification} objects.
      * @throws Exception
      */
-    public List<Notification> getNotifications(NotificationGetRequest request) throws Exception {
+    public List<Notification> getNotifications(NotificationGetRequest request) {
         return controller.getNotifications(request);
     }
 
@@ -78,7 +78,7 @@ public class NotificationClient {
      * @return List of {@link Notification} objects.
      * @throws Exception If the notification can not be found
      */
-    public List<Notification> getCurrentUserNotifications(NotificationGetRequest req) throws Exception {
+    public List<Notification> getCurrentUserNotifications(NotificationGetRequest req) {
         return controller.getCurrentUserNotifications(req);
     }
 
@@ -162,7 +162,7 @@ public class NotificationClient {
      * @param id The id to be deleted
      * @throws Exception
      */
-    public void deleteNotification(int id) throws Exception {
+    public void deleteNotification(int id) {
         controller.deleteNotification(id);
     }
 

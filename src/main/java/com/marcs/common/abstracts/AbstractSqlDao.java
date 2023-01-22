@@ -1,8 +1,8 @@
 package com.marcs.common.abstracts;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -22,7 +22,6 @@ import com.opengamma.elsql.ElSqlConfig;
  * @since July 31, 2021
  */
 @Service
-@Scope("prototype")
 public abstract class AbstractSqlDao extends AbstractSqlGlobals {
 
     private final NamedParameterJdbcTemplate template;
@@ -48,45 +47,152 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
     }
 
     /**
-     * Does a get on the database for a single record. It will return the top most
-     * record if multiple rows are returned.
+     * Does a get on the database for a single record. It will then use the given
+     * mapper to serialize to an object.
      * 
-     * @param <T>    The object type of the method to cast the rows too.
-     * @param sql    The sql to run against the database.
-     * @param params Params to be inserted into the query.
-     * @param mapper The mapper to return the data as.
+     * @param <T>      The object type of the method to cast the rows too.
+     * @param fragment The name of the sql fragment.
+     * @param params   Params to be inserted into the query.
+     * @param mapper   The mapper to return the data as.
      * @return Object of the returned data.
      */
-    public <T> T get(String sql, MapSqlParameterSource params, RowMapper<T> mapper) {
+    public <T> T get(String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
+        String sql = getSql(fragment, params);
         return getTemplate().queryForObject(sql, params, mapper);
     }
 
     /**
-     * Does a get on the database for a single record. It will return the top most
-     * record if multiple rows are returned. It will return the type of the passed
-     * in class.
+     * Does a get on the database for a single record. It will then use the given
+     * mapper to serialize to an object.
      * 
-     * @param <T>    The object type of the method to cast the rows too.
-     * @param sql    The sql to run against the database.
-     * @param params Params to be inserted into the query.
-     * @param clazz  The class to map the data as.
+     * @param <T>      The object type of the method to cast the rows too.
+     * @param fragment The name of the sql fragment.
+     * @param mapper   The mapper to return the data as.
      * @return Object of the returned data.
      */
-    public <T> T get(String sql, MapSqlParameterSource params, Class<T> clazz) {
+    public <T> T get(String fragment, RowMapper<T> mapper) {
+        return get(fragment, new MapSqlParameterSource(), mapper);
+    }
+
+    /**
+     * Does a get on the database for a single record. It will return the type of
+     * the passed in class.
+     * 
+     * @param <T>      The object type of the method to cast the rows too.
+     * @param fragment The name of the sql fragment.
+     * @param params   Params to be inserted into the query.
+     * @param clazz    The class to map the data as.
+     * @return Object of the returned data.
+     */
+    public <T> T get(String fragment, MapSqlParameterSource params, Class<T> clazz) {
+        String sql = getSql(fragment, params);
         return getTemplate().queryForObject(sql, params, clazz);
     }
 
     /**
-     * Querys the database for a list of data. It will return the data as a list of
-     * the called object.
+     * Does a get on the database for a single record. It will return the type of
+     * the passed in class.
      * 
-     * @param <T>    The object type of the method to cast the rows too.
-     * @param sql    The sql to run against the database.
-     * @param params Params to be inserted into the query.
-     * @param mapper The mapper to return the data as.
+     * @param <T>      The object type of the method to cast the rows too.
+     * @param fragment The name of the sql fragment.
+     * @param params   Params to be inserted into the query.
+     * @param clazz    The class to map the data as.
+     * @return Object of the returned data.
+     */
+    public <T> T get(String fragment, Class<T> clazz) {
+        return get(fragment, new MapSqlParameterSource(), clazz);
+    }
+
+    /**
+     * Does a get on the database for a single record. If it does not exist it will
+     * return an empty {@link Optional}. Otherwise it will return the data wrapped
+     * in an optional with the desired mapper.
+     * 
+     * @param <T>      The object type of the method to cast the rows too.
+     * @param fragment The name of the sql fragment.
+     * @param params   Params to be inserted into the query.
+     * @param clazz    The class to map the data as.
+     * @return Object of the returned data.
+     */
+    public <T> Optional<T> getOptional(String fragment, MapSqlParameterSource params, Class<T> clazz) {
+        try {
+            return Optional.of(get(fragment, params, clazz));
+        }
+        catch(Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Does a get on the database for a single record. If it does not exist it will
+     * return an empty {@link Optional}. Otherwise it will return the data wrapped
+     * in an optional with the desired mapper.
+     * 
+     * @param <T>      The object type of the method to cast the rows too.
+     * @param fragment The name of the sql fragment.
+     * @param clazz    The class to map the data as.
+     * @return Object of the returned data.
+     */
+    public <T> Optional<T> getOptional(String fragment, Class<T> clazz) {
+        try {
+            return Optional.of(get(fragment, clazz));
+        }
+        catch(Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Does a get on the database for a single record. If it does not exist it will
+     * return an empty {@link Optional}. Otherwise it will return the data wrapped
+     * in an optional with the desired mapper.
+     * 
+     * @param <T>      The object type of the method to cast the rows too.
+     * @param fragment The name of the sql fragment.
+     * @param params   Params to be inserted into the query.
+     * @param mapper   The mapper to serialize the data as.
+     * @return Object of the returned data.
+     */
+    public <T> Optional<T> getOptional(String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
+        try {
+            return Optional.of(get(fragment, params, mapper));
+        }
+        catch(Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Does a get on the database for a single record. If it does not exist it will
+     * return an empty {@link Optional}. Otherwise it will return the data wrapped
+     * in an optional with the desired mapper.
+     * 
+     * @param <T>      The object type of the method to cast the rows too.
+     * @param fragment The name of the sql fragment.
+     * @param mapper   The mapper to serialize the data as.
+     * @return Object of the returned data.
+     */
+    public <T> Optional<T> getOptional(String fragment, RowMapper<T> mapper) {
+        try {
+            return Optional.of(get(fragment, mapper));
+        }
+        catch(Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Querys the database for a list of data. It will return the data as a list of
+     * the called mapper.
+     * 
+     * @param <T>      The object type of the method to cast the rows too.
+     * @param fragment The name of the sql fragment.
+     * @param params   Params to be inserted into the query.
+     * @param mapper   The mapper to return the data as.
      * @return List of the returned data.
      */
-    public <T> List<T> getList(String sql, MapSqlParameterSource params, RowMapper<T> mapper) {
+    public <T> List<T> getList(String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
+        String sql = getSql(fragment, params);
         return getTemplate().query(sql, params, mapper);
     }
 
@@ -94,82 +200,86 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * Querys the database for a page of data. It will return the data as a list of
      * the called object.
      * 
-     * @param <T>    The object type of the method to cast the rows too.
-     * @param name   The sql Fragment Name.
-     * @param params Params to be inserted into the query.
-     * @param mapper The mapper to return the data as.
+     * @param <T>      The object type of the method to cast the rows too.
+     * @param fragment The name of the sql fragment.
+     * @param params   Params to be inserted into the query.
+     * @param mapper   The mapper to return the data as.
      * @return List of the returned data.
      */
-    public <T> Page<T> getPage(String name, MapSqlParameterSource params, RowMapper<T> mapper) {
-        return getPage(name + "TotalCount", name, params, mapper);
+    public <T> Page<T> getPage(String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
+        return getPage(fragment + "TotalCount", fragment, params, mapper);
     }
 
     /**
      * Querys the database for a page of data. It will return the data as a list of
      * the called object.
      * 
-     * @param <T>           The object type of the method to cast the rows too.
-     * @param totalCountSql The total count sql fragment.
-     * @param sql           The sql Fragment Name.
-     * @param params        Params to be inserted into the query.
-     * @param mapper        The mapper to return the data as.
+     * @param <T>      The object type of the method to cast the rows too.
+     * @param total    The total count sql fragment.
+     * @param fragment The name of the sql fragment.
+     * @param params   Params to be inserted into the query.
+     * @param mapper   The mapper to return the data as.
      * @return List of the returned data.
      */
-    private <T> Page<T> getPage(String totalCountSql, String sql, MapSqlParameterSource params, RowMapper<T> mapper) {
-        int totalCount = get(getSql(totalCountSql, params), params, Integer.class);
-        List<T> list = getList(getSql(sql, params), params, mapper);
+    private <T> Page<T> getPage(String total, String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
+        int totalCount = get(total, params, Integer.class);
+        List<T> list = getList(fragment, params, mapper);
         return new Page<T>(totalCount, list);
+    }
+
+    /**
+     * Performs an update against the database.
+     * 
+     * @param fragment The name of the sql fragment.
+     * @param params   Params to be inserted into the query.
+     */
+    public int update(String fragment, MapSqlParameterSource params) {
+        String sql = getSql(fragment, params);
+        return getTemplate().update(sql, params);
+    }
+
+    /**
+     * Performs an update against the database with the given keyholder value.
+     * 
+     * @param fragment  The name of the sql fragment.
+     * @param params    Params to be inserted into the query.
+     * @param keyHolder The keyholder for the autoincrement id.
+     */
+    public int update(String fragment, MapSqlParameterSource params, KeyHolder keyHolder) {
+        String sql = getSql(fragment, params);
+        return getTemplate().update(sql, params, keyHolder);
     }
 
     /**
      * Does an insertion into the database with the given sql and params. It will
      * also get the auto incremented id of the table with the key holder.
      * 
-     * @param sql       The sql to run against the database.
+     * @param fragment  The name of the sql fragment.
      * @param params    Params to be inserted into the query.
      * @param keyHolder used to get the auto increment id.
      */
-    public int post(String sql, MapSqlParameterSource params, KeyHolder keyHolder) {
-        return getTemplate().update(sql, params, keyHolder);
+    public int post(String fragment, MapSqlParameterSource params, KeyHolder keyHolder) {
+        return update(fragment, params, keyHolder);
     }
 
     /**
      * Does an insertion into the database with the given sql and params.
      * 
-     * @param sql    The sql to run against the database.
-     * @param params Params to be inserted into the query.
+     * @param fragment The name of the sql fragment.
+     * @param params   Params to be inserted into the query.
      */
-    public int post(String sql, MapSqlParameterSource params) {
-        return getTemplate().update(sql, params);
+    public int post(String fragment, MapSqlParameterSource params) {
+        return update(fragment, params);
     }
 
     /**
      * Performs a delete on the database for the given sql.
      * 
-     * @param sql    The sql to run against the database.
-     * @param params Params to be inserted into the query.
+     * @param fragment The name of the sql fragment.
+     * @param params   Params to be inserted into the query.
      */
-    public int delete(String sql, MapSqlParameterSource params) {
-        return getTemplate().update(sql, params);
-    }
-
-    /**
-     * Performs an update against the database.
-     * 
-     * @param sql    The sql to run against the database.
-     * @param params Params to be inserted into the query.
-     */
-    public int update(String sql, MapSqlParameterSource params) {
-        return getTemplate().update(sql, params);
-    }
-
-    /**
-     * Will execute the given sql string against the active database.
-     * 
-     * @param sql The sql to be run.
-     */
-    protected void execute(String sql) {
-        getTemplate().update(sql, new MapSqlParameterSource());
+    public int delete(String fragment, MapSqlParameterSource params) {
+        return update(fragment, params);
     }
 
     /**

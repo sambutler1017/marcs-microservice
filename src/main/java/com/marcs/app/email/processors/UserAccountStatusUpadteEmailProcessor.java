@@ -23,13 +23,13 @@ public class UserAccountStatusUpadteEmailProcessor extends EmailProcessor<Intege
     private int userId;
 
     @Override
-    public List<UserEmail> process() throws Exception {
+    public List<UserEmail> process() {
         User emailUser = userClient.getUserById(userId);
-        String emailContent = readEmailTemplate(
-                String.format("UserAccount%s.html", emailUser.getAccountStatus().name()));
+        String emailContent = readEmailTemplate(String.format("UserAccount%s.html",
+                                                              emailUser.getAccountStatus().name()));
 
         return List.of(send(buildUserEmail(emailUser.getEmail(), "Marc's Account Update!",
-                emailContent.replace("::USER_NAME::", emailUser.getFirstName()))));
+                                           emailContent.replace("::USER_NAME::", emailUser.getFirstName()))));
     }
 
     @Override

@@ -27,9 +27,8 @@ public class UserCredentialsController {
      * 
      * @param id       The id of the new user.
      * @param authPass The password that was created.
-     * @throws Exception If the password can not be stored.
      */
-    public void insertUserPassword(@PathVariable int id, @RequestBody String pass) throws Exception {
+    public void insertUserPassword(@PathVariable int id, @RequestBody String pass) {
         service.insertUserPassword(id, pass);
     }
 
@@ -45,7 +44,7 @@ public class UserCredentialsController {
      *                   the new password.
      */
     @PutMapping(path = "/password", produces = APPLICATION_JSON_VALUE)
-    public User updateUserPassword(@RequestBody PasswordUpdate passUpdate) throws Exception {
+    public User updateUserPassword(@RequestBody PasswordUpdate passUpdate) {
         return service.updateUserPassword(passUpdate);
     }
 
@@ -58,7 +57,7 @@ public class UserCredentialsController {
      * @return {@link User} object of the user that was updated.
      */
     @PutMapping(path = "/password/{id}", produces = APPLICATION_JSON_VALUE)
-    public User updateUserPasswordById(@PathVariable int id, @RequestBody PasswordUpdate passUpdate) throws Exception {
+    public User updateUserPasswordById(@PathVariable int id, @RequestBody PasswordUpdate passUpdate) {
         return service.updateUserPasswordById(id, passUpdate);
     }
 

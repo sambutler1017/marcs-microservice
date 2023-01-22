@@ -2,11 +2,9 @@ package com.marcs.app.user.dao;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import com.marcs.app.user.client.domain.User;
 import com.marcs.common.abstracts.BaseDao;
 
 /**
@@ -18,10 +16,6 @@ import com.marcs.common.abstracts.BaseDao;
 @Repository
 public class UserCredentialsDao extends BaseDao {
 
-    @Autowired
-    private UserProfileDao userProfileDao;
-
-    @Autowired
     public UserCredentialsDao(DataSource source) {
         super(source);
     }
@@ -33,11 +27,10 @@ public class UserCredentialsDao extends BaseDao {
      * 
      * @param userId     The id to add the password for.
      * @param hashedPass Contains the hashed password.
-     * @throws Exception
      */
-    public void insertUserPassword(int userId, String hashedPass) throws Exception {
+    public void insertUserPassword(int userId, String hashedPass) {
         MapSqlParameterSource params = parameterSource(USER_ID, userId).addValue(PASSWORD, hashedPass);
-        post(getSql("insertUserPassword", params), params);
+        post("insertUserPassword", params);
     }
 
     /**
@@ -45,14 +38,8 @@ public class UserCredentialsDao extends BaseDao {
      * 
      * @param userId     Id of the use that is being updated.
      * @param hashedPass The password to set on the user profile.
-     * @return user associated to that id with the updated information
-     * @throws Exception
      */
-    public User updateUserPassword(int userId, String hashedPass) throws Exception {
-        User userProfile = userProfileDao.getUserById(userId);
-
-        MapSqlParameterSource params = parameterSource(PASSWORD, hashedPass).addValue(USER_ID, userProfile.getId());
-        update(getSql("updateUserPassword", params), params);
-        return userProfile;
+    public void updateUserPassword(int userId, String hashedPass) {
+        update("updateUserPassword", parameterSource(PASSWORD, hashedPass).addValue(USER_ID, userId));
     }
 }

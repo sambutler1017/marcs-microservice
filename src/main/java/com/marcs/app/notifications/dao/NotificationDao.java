@@ -1,13 +1,12 @@
 package com.marcs.app.notifications.dao;
 
-import static com.marcs.app.notifications.mapper.NotificationMapper.NOTIFICATION_MAPPER;
+import static com.marcs.app.notifications.mapper.NotificationMapper.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -28,7 +27,6 @@ import com.marcs.sql.SqlParamBuilder;
 @Repository
 public class NotificationDao extends BaseDao {
 
-    @Autowired
     public NotificationDao(DataSource source) {
         super(source);
     }
@@ -43,12 +41,12 @@ public class NotificationDao extends BaseDao {
      * @return List of {@link Notification} objects.
      * @throws Exception If no data is returned
      */
-    public List<Notification> getNotifications(NotificationGetRequest request) throws Exception {
+    public List<Notification> getNotifications(NotificationGetRequest request) {
         MapSqlParameterSource params = SqlParamBuilder.with(request).withParam(ID, request.getId())
                 .withParam(RECEIVER_ID, request.getReceiverId()).withParam(READ_FLAG, request.getRead())
                 .withParamTextEnumCollection(NOTIFICATION_TYPE, request.getType()).build();
 
-        return getList(getSql("getNotifications", params), params, NOTIFICATION_MAPPER);
+        return getList("getNotifications", params, NOTIFICATION_MAPPER);
     }
 
     /**
@@ -59,9 +57,9 @@ public class NotificationDao extends BaseDao {
      * @return {@link Notification} object.
      * @throws Exception
      */
-    public void markNotificationRead(int id) throws Exception {
+    public void markNotificationRead(int id) {
         MapSqlParameterSource params = SqlParamBuilder.with().withParam(READ_FLAG, true).withParam(ID, id).build();
-        update(getSql("markNotificationRead"), params);
+        update("markNotificationRead", params);
     }
 
     /**
@@ -72,12 +70,12 @@ public class NotificationDao extends BaseDao {
      * @return {@link Notification} That is created.
      * @throws Exception
      */
-    public Notification createNotification(Notification n) throws Exception {
+    public Notification createNotification(Notification n) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource params = SqlParamBuilder.with().withParam(NOTIFICATION_TYPE, n.getType())
                 .withParam(RECEIVER_ID, n.getReceiverId()).withParam(LINK_ID, n.getLinkId()).build();
 
-        post(getSql("createNotification"), params, keyHolder);
+        post("createNotification", params, keyHolder);
 
         n.setId(keyHolder.getKey().intValue());
         n.setInsertDate(LocalDateTime.now(TimeZoneUtil.SYSTEM_ZONE));
@@ -91,7 +89,7 @@ public class NotificationDao extends BaseDao {
      * @param id The id to be deleted
      * @throws Exception
      */
-    public void deleteNotification(int id) throws Exception {
-        delete(getSql("deleteNotification"), parameterSource(ID, id));
+    public void deleteNotification(int id) {
+        delete("deleteNotification", parameterSource(ID, id));
     }
 }

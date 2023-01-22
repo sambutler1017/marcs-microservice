@@ -36,9 +36,8 @@ public class ManageStoreService {
 	 * @param storeId The store Id to update the manager at.
 	 * @param store   The information to be updated
 	 * @return {@link Store} object with the updated information.
-	 * @throws Exception
 	 */
-	public Store updateStore(String storeId, Store store) throws Exception {
+	public Store updateStore(String storeId, Store store) {
 		storeService.getStoreById(storeId);
 		dao.updateStore(storeId, store);
 
@@ -56,9 +55,8 @@ public class ManageStoreService {
 	 * @param userId  The user id of the manager.
 	 * @param storeId The store Id to update the manager at.
 	 * @return {@link Store} object with the updated manager.
-	 * @throws Exception
 	 */
-	public Store updateStoreManagerOfStore(int userId, String storeId) throws Exception {
+	public Store updateStoreManagerOfStore(int userId, String storeId) {
 		if(!userProfileClient.getUserById(userId).getWebRole().equals(WebRole.STORE_MANAGER)) {
 			throw new BaseException(String
 					.format("User id '%d' is not a STORE_MANAGER web role. Can not update store manager of store!",
@@ -76,9 +74,8 @@ public class ManageStoreService {
 	 * @param userId  The user id of the regional.
 	 * @param storeId The store Id to update the regional at.
 	 * @return {@link Store} object with the updated regional.
-	 * @throws Exception
 	 */
-	public Store updateRegionalOfStore(int userId, String storeId) throws Exception {
+	public Store updateRegionalOfStore(int userId, String storeId) {
 		if(userProfileClient.getUserById(userId).getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
 			throw new BaseException(String
 					.format("User id '%d' is not a sufficient web role. Can not update overseer of store!", userId));
@@ -94,9 +91,8 @@ public class ManageStoreService {
 	 * 
 	 * @param store The information to be created
 	 * @return {@link Store} object with the created information.
-	 * @throws Exception
 	 */
-	public Store createStore(Store store) throws Exception {
+	public Store createStore(Store store) {
 		Assert.notNull(store.getId(), "Store ID is a required field");
 		Assert.notNull(store.getName(), "Store Name is a required field");
 		Assert.isTrue(store.getRegionalId() > 0, "Regional ID must be greater than 0");
@@ -108,9 +104,8 @@ public class ManageStoreService {
 	 * This will delete a store for the given store id.
 	 * 
 	 * @param storeId The store id of the store to be deleted.
-	 * @throws Exception
 	 */
-	public void deleteStoreById(String storeId) throws Exception {
+	public void deleteStoreById(String storeId) {
 		storeService.getStoreById(storeId);
 		dao.deleteStoreById(storeId);
 	}
@@ -120,9 +115,8 @@ public class ManageStoreService {
 	 * is no manager of the store, then it will do nothing.
 	 * 
 	 * @param storeId The store id of the manager to demote.
-	 * @throws Exception
 	 */
-	private void demoteStoreManagerOfStore(String storeId) throws Exception {
+	private void demoteStoreManagerOfStore(String storeId) {
 		int currentManagerId = storeService.getStoreById(storeId).getManagerId();
 		if(currentManagerId != 0) {
 			User updatedUserRole = new User();

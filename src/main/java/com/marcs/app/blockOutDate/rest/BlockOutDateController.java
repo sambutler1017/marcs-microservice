@@ -1,14 +1,8 @@
 package com.marcs.app.blockOutDate.rest;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.*;
 
 import java.util.List;
-
-import com.marcs.annotations.interfaces.RestApiController;
-import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
-import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
-import com.marcs.app.blockOutDate.service.BlockOutDateService;
-import com.marcs.app.blockOutDate.service.ManageBlockOutDateService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.marcs.annotations.interfaces.RestApiController;
+import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
+import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
+import com.marcs.app.blockOutDate.service.BlockOutDateService;
+import com.marcs.app.blockOutDate.service.ManageBlockOutDateService;
 
 @RestApiController
 @RequestMapping("api/block-out-date-app/block-out-dates")
@@ -34,10 +34,9 @@ public class BlockOutDateController {
 	 * 
 	 * @param request to filter block out dates on
 	 * @return List of block out date objects {@link BlockOutDate}
-	 * @throws Exception
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
-	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) throws Exception {
+	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) {
 		return blockOutDateService.getBlockOutDates(request);
 	}
 
@@ -46,7 +45,6 @@ public class BlockOutDateController {
 	 * 
 	 * @param request to filter stores on
 	 * @return Block out date object {@link BlockOutDate}
-	 * @throws Exception
 	 */
 	@GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public BlockOutDate getBlockOutDateById(@PathVariable int id) throws Exception {
@@ -60,7 +58,6 @@ public class BlockOutDateController {
 	 * @param id        The id of the block out date to update.
 	 * @param blockDate The block out date body to be updated.
 	 * @return {@link BlockOutDate} with the updated fields.
-	 * @throws Exception
 	 */
 	@PutMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public BlockOutDate updateBlockOutDateById(@PathVariable int id, @RequestBody BlockOutDate blockDate)
@@ -73,7 +70,6 @@ public class BlockOutDateController {
 	 * 
 	 * @param blockDate The block out date that needs to be created.
 	 * @return The block out date with the insert time stamp and unique id.
-	 * @throws Exception
 	 */
 	@PostMapping(produces = APPLICATION_JSON_VALUE)
 	public BlockOutDate createBlockOutDate(@RequestBody BlockOutDate blockDate) throws Exception {
@@ -84,7 +80,6 @@ public class BlockOutDateController {
 	 * Delete a block out date for the given id.
 	 * 
 	 * @param id The id of the block out date to be deleted.
-	 * @throws Exception
 	 */
 	@DeleteMapping(path = "/{id}")
 	public void deleteBlockOutDate(@PathVariable int id) throws Exception {

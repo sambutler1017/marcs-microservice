@@ -1,7 +1,5 @@
 package com.marcs.environment;
 
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -47,9 +45,8 @@ public class AppEnvironmentService {
      * Gets the signing key property for sending emails
      * 
      * @return {@link String} of the key
-     * @throws IOException
      */
-    public String getSendGridSigningKey() throws IOException {
+    public String getSendGridSigningKey() {
         return SENDGRID_API_KEY;
     }
 }

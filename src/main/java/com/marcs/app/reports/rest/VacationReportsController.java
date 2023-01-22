@@ -21,7 +21,6 @@ public class VacationReportsController {
 	 * This will generate a report for a list of users.
 	 * 
 	 * @return CSV download object
-	 * @throws Exception
 	 */
 	@GetMapping("/generate")
 	public ResponseEntity<Resource> generateUserVacations(VacationGetRequest request) throws Exception {

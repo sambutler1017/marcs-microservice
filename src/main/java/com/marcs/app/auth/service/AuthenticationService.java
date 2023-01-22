@@ -16,6 +16,7 @@ import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.date.TimeZoneUtil;
 import com.marcs.common.exceptions.BaseException;
 import com.marcs.common.exceptions.InvalidCredentialsException;
+import com.marcs.common.exceptions.UserNotFoundException;
 import com.marcs.jwt.utility.JwtHolder;
 import com.marcs.jwt.utility.JwtTokenUtil;
 
@@ -47,9 +48,8 @@ public class AuthenticationService {
      *
      * @param authenticationRequest A email and password request.
      * @return a new JWT.
-     * @throws Exception - if authentication request does not match a user.
      */
-    public AuthToken authenticate(AuthenticationRequest request) throws Exception {
+    public AuthToken authenticate(AuthenticationRequest request) {
         User user = verifyUser(request.getEmail(), request.getPassword());
 
         String token = jwtTokenUtil.generateToken(user);
@@ -62,9 +62,8 @@ public class AuthenticationService {
      * can not be returned from the current token, it will error and return null.
      * 
      * @return {@link AuthToken} from the token.
-     * @throws Exception If the user for that id does not exist.
      */
-    public AuthToken reauthenticate() throws Exception {
+    public AuthToken reauthenticate() {
         User u = userProfileClient.getUserById(jwtHolder.getUserId());
         userProfileClient.updateUserLastLoginToNow(u.getId());
 
@@ -78,10 +77,12 @@ public class AuthenticationService {
      *
      * @param email    Entered email at login.
      * @param password Password entered at login.
-     * @throws Exception Throw an exception if the credentials do not match.
      */
-    public User verifyUser(String email, String password) throws Exception {
-        if(BCrypt.checkpw(password, authDao.getUserAuthPassword(email))) {
+    public User verifyUser(String email, String password) {
+        String hashedPassword = authDao.getUserAuthPassword(email)
+                .orElseThrow(() -> new UserNotFoundException(String.format("User not found for email: %s", email)));
+
+        if(BCrypt.checkpw(password, hashedPassword)) {
             User authUser = getAuthenticatedUser(email);
             return userProfileClient.updateUserLastLoginToNow(authUser.getId());
         }
@@ -94,9 +95,8 @@ public class AuthenticationService {
      * Gets the user id from the jwtholder that needs to be reauthenticated.
      * 
      * @return {@link User} from the token.
-     * @throws Exception If the user for that id does not exist
      */
-    public User getUserToAuthenticate() throws Exception {
+    public User getUserToAuthenticate() {
         return validateUserAccess(userProfileClient.getUserById(jwtHolder.getUserId()));
     }
 
@@ -106,9 +106,8 @@ public class AuthenticationService {
      * 
      * @param email The email to search for.
      * @return {@link User} object of the authenticated user.
-     * @throws Exception
      */
-    private User getAuthenticatedUser(String email) throws Exception {
+    private User getAuthenticatedUser(String email) {
         UserGetRequest request = new UserGetRequest();
         request.setEmail(Sets.newHashSet(email));
         return userProfileClient.getUsers(request).get(0);

@@ -1,10 +1,10 @@
 package com.marcs.app.user.client;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.user.client.domain.UserStatus;
 import com.marcs.app.user.rest.UserStatusController;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This class exposes the user endpoint's to other app's to pull data across the
@@ -25,7 +25,7 @@ public class UserStatusClient {
      * @return {@link UserStatus} object
      * @throws Exception
      */
-    public UserStatus getUserStatusById(int id) throws Exception {
+    public UserStatus getUserStatusById(int id) {
         return controller.getUserStatusById(id);
     }
 
@@ -36,7 +36,7 @@ public class UserStatusClient {
      * @return {@link UserStatus} object
      * @throws Exception
      */
-    public UserStatus insertUserStatus(UserStatus userStatus) throws Exception {
+    public UserStatus insertUserStatus(UserStatus userStatus) {
         return controller.insertUserStatus(userStatus);
     }
 
@@ -47,8 +47,7 @@ public class UserStatusClient {
      * @return {@link UserStatus} object
      * @throws Exception
      */
-    public UserStatus updateUserStatusByUserId(int id, UserStatus userStatus)
-            throws Exception {
+    public UserStatus updateUserStatusByUserId(int id, UserStatus userStatus) {
         return controller.updateUserStatusByUserId(id, userStatus);
     }
 }

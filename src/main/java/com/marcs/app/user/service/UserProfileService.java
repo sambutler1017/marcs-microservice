@@ -38,9 +38,8 @@ public class UserProfileService {
 	 * 
 	 * @param request of the user
 	 * @return User profile object {@link User}
-	 * @throws Exception
 	 */
-	public Page<User> getUsers(UserGetRequest request) throws Exception {
+	public Page<User> getUsers(UserGetRequest request) {
 		return dao.getUsers(request);
 	}
 
@@ -48,9 +47,8 @@ public class UserProfileService {
 	 * Get the current user from the jwt token.
 	 * 
 	 * @return User profile object {@link User}
-	 * @throws Exception
 	 */
-	public User getCurrentUser() throws Exception {
+	public User getCurrentUser() {
 		return getUserById(jwtHolder.getUserId());
 	}
 
@@ -59,19 +57,19 @@ public class UserProfileService {
 	 * 
 	 * @param id of the user
 	 * @return User profile object {@link User}
-	 * @throws Exception
 	 */
-	public User getUserById(int id) throws Exception {
-		return dao.getUserById(id);
+	public User getUserById(int id) {
+		UserGetRequest request = new UserGetRequest();
+		request.setId(Sets.newHashSet(id));
+		return getUsers(request).getList().get(0);
 	}
 
 	/**
 	 * Service to get a list of Applications for the logged in user
 	 * 
 	 * @return List of Application objects {@link Application}
-	 * @throws Exception
 	 */
-	public List<Application> getUserApps() throws Exception {
+	public List<Application> getUserApps() {
 		return getUserAppsById(jwtHolder.getUserId());
 	}
 
@@ -79,10 +77,8 @@ public class UserProfileService {
 	 * End point to a get a list of users apps that they have access too
 	 * 
 	 * @return List of Application objects {@link Application}
-	 * @throws Exception
-	 * @since May 13, 2020
 	 */
-	public List<Application> getUserAppsById(int id) throws Exception {
+	public List<Application> getUserAppsById(int id) {
 		return dao.getUserApps(id);
 	}
 
@@ -92,9 +88,8 @@ public class UserProfileService {
 	 * 
 	 * @param email The email to check
 	 * @return {@link Boolean} to see if the email exists
-	 * @throws Exception
 	 */
-	public boolean doesEmailExist(String email) throws Exception {
+	public boolean doesEmailExist(String email) {
 		UserGetRequest request = new UserGetRequest();
 		request.setEmail(Sets.newHashSet(email));
 		List<User> users = getUsers(request).getList();
@@ -108,14 +103,13 @@ public class UserProfileService {
 	 * email to reset their passowrd.
 	 * 
 	 * @return user associated to that id with the updated information
-	 * @throws Exception
 	 */
 	public User forgotPassword(String email) throws Exception {
 		UserGetRequest request = new UserGetRequest();
 		request.setEmail(Sets.newHashSet(email));
 		List<User> users = getUsers(request).getList();
 
-		if (users.size() == 0) {
+		if(users.size() == 0) {
 			throw new BaseException(String.format("User not found for email '%s'", email));
 		}
 

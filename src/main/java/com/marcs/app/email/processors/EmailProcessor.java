@@ -43,7 +43,7 @@ public abstract class EmailProcessor<T> {
      * @return {@link UserEmail} object to send.
      * @throws Exception
      */
-    public abstract List<UserEmail> process() throws Exception;
+    public abstract List<UserEmail> process();
 
     /**
      * Set any params to be passed in with the email to be processed.
@@ -59,7 +59,7 @@ public abstract class EmailProcessor<T> {
      * @param body    What to include in the email
      * @return The user email that was created.
      */
-    protected UserEmail send(String to, String subject, String body) throws Exception {
+    protected UserEmail send(String to, String subject, String body) {
         UserEmail userEmail = buildUserEmail(to, subject, body);
         return send(userEmail);
     }
@@ -71,19 +71,24 @@ public abstract class EmailProcessor<T> {
      * @param userEmail UserEmail object to get the mail properties from
      * @return {@link UserEmail} object with the time it sent.
      */
-    protected UserEmail send(UserEmail userEmail) throws Exception {
+    protected UserEmail send(UserEmail userEmail) {
         Content content = new Content("text/html", userEmail.getBody());
         Mail mail = new Mail(userEmail.getFrom(), userEmail.getSubject(), userEmail.getRecipient(), content);
 
-        SendGrid sg = new SendGrid(appEnvironmentService.getSendGridSigningKey());
-        Request request = new Request();
-        request.setMethod(Method.POST);
-        request.setEndpoint("mail/send");
-        request.setBody(mail.build());
+        try {
+            SendGrid sg = new SendGrid(appEnvironmentService.getSendGridSigningKey());
+            Request request = new Request();
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
 
-        Response res = sg.api(request);
-        LOGGER.info("Email sent to '{}' with status code : {}", userEmail.getRecipient().getEmail(),
-                res.getStatusCode());
+            Response res = sg.api(request);
+            LOGGER.info("Email sent to '{}' with status code : {}", userEmail.getRecipient().getEmail(),
+                        res.getStatusCode());
+        }
+        catch(IOException e) {
+            LOGGER.info("Email could not be sent. Error processing Email");
+        }
 
         userEmail.setSentDate(LocalDateTime.now(TimeZoneUtil.SYSTEM_ZONE));
         return userEmail;
@@ -117,9 +122,10 @@ public abstract class EmailProcessor<T> {
         final String filePath = String.format("%s/%s", BASE_HTML_PATH, fileName);
         String emailContent = "";
 
-        try (final BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try(final BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             emailContent = br.lines().collect(Collectors.joining(" "));
-        } catch (IOException e) {
+        }
+        catch(IOException e) {
             LOGGER.warn("Could not process email template: '{}'", fileName);
         }
 

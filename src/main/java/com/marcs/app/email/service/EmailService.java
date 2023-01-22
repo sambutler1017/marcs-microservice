@@ -47,7 +47,7 @@ public class EmailService {
      * @return The {@link UserEmail} object that was sent.
      * @throws Exception
      */
-    public <T> List<UserEmail> sendEmail(EmailProcessor<T> p) throws Exception {
+    public <T> List<UserEmail> sendEmail(EmailProcessor<T> p) {
         List<UserEmail> emails = p.process();
         emails.stream().map(e -> {
             e.setBody(null);
@@ -63,7 +63,7 @@ public class EmailService {
      * @param email Email to search for and send an email too.
      * @throws Exception
      */
-    public List<UserEmail> sendForgotPasswordEmail(String email) throws Exception {
+    public List<UserEmail> sendForgotPasswordEmail(String email) {
         forgotPasswordEmailProcessor.setParams(email);
         return sendEmail(forgotPasswordEmailProcessor);
     }
@@ -75,7 +75,7 @@ public class EmailService {
      * 
      * @throws Exception
      */
-    public List<UserEmail> sendVacationReport() throws Exception {
+    public List<UserEmail> sendVacationReport() {
         return sendEmail(vacationReportEmailProcessor);
     }
 
@@ -88,7 +88,7 @@ public class EmailService {
      * 
      * @throws Exception
      */
-    public List<UserEmail> sendNewUserEmail(User newUser) throws Exception {
+    public List<UserEmail> sendNewUserEmail(User newUser) {
         newUserEmailProcessor.setParams(newUser);
         return sendEmail(newUserEmailProcessor);
     }
@@ -99,7 +99,7 @@ public class EmailService {
      * @param userId The id of the user to send an email update too.
      * @throws Exception
      */
-    public List<UserEmail> sendUserAccountUpdateStatusEmail(int userId) throws Exception {
+    public List<UserEmail> sendUserAccountUpdateStatusEmail(int userId) {
         userAccountStatusUpadteEmailProcessor.setParams(userId);
         return sendEmail(userAccountStatusUpadteEmailProcessor);
     }
@@ -111,7 +111,7 @@ public class EmailService {
      * @param message The message to send to admin.
      * @throws Exception
      */
-    public List<UserEmail> sendContactAdminEmail(String message) throws Exception {
+    public List<UserEmail> sendContactAdminEmail(String message) {
         contactAdminEmailProcessor.setParams(message);
         return sendEmail(contactAdminEmailProcessor);
     }

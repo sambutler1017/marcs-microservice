@@ -45,7 +45,6 @@ public class ManageUserProfileService {
 	 * 
 	 * @param user The user to create.
 	 * @return {@link User} object of the users data.
-	 * @throws Exception
 	 */
 	public User createUser(User user, AccountStatus accountStatus) throws Exception {
 		User newUser = dao.insertUser(user);
@@ -62,9 +61,8 @@ public class ManageUserProfileService {
 	 * 
 	 * @param user The user to create.
 	 * @return {@link User} object of the users data.
-	 * @throws Exception
 	 */
-	public User addNewUser(User user) throws Exception {
+	public User addNewUser(User user) {
 		user.setPassword("marcs123!");
 		user.setAppAccess(true);
 
@@ -79,10 +77,9 @@ public class ManageUserProfileService {
 	 * Update the user profile for the given user object.
 	 * 
 	 * @param user what information on the user needs to be updated.
-	 * @return user associated to that id with the updated information
-	 * @throws Exception
+	 * @return user associated to that id with the updated information.
 	 */
-	public User updateUserProfile(User user) throws Exception {
+	public User updateUserProfile(User user) {
 		return updateUserProfile(jwtHolder.getUserId(), user);
 	}
 
@@ -90,10 +87,9 @@ public class ManageUserProfileService {
 	 * Updates a user for the given id.
 	 * 
 	 * @param id of the user
-	 * @return user associated to that id with the updated information
-	 * @throws Exception
+	 * @return user associated to that id with the updated information.
 	 */
-	public User updateUserProfileById(int id, User user) throws Exception {
+	public User updateUserProfileById(int id, User user) {
 		User updatingUser = userProfileService.getUserById(id);
 		if(id != updatingUser.getId() && jwtHolder.getWebRole().getRank() <= updatingUser.getWebRole().getRank()) {
 			throw new InsufficientPermissionsException(String
@@ -109,19 +105,18 @@ public class ManageUserProfileService {
 	 * 
 	 * @param userId The user Id to be updated.
 	 * @return The user object with the updated information.
-	 * @throws Exception
 	 */
-	public User updateUserLastLoginToNow(int userId) throws Exception {
-		return dao.updateUserLastLoginToNow(userId);
+	public User updateUserLastLoginToNow(int userId) {
+		dao.updateUserLastLoginToNow(userId);
+		return userProfileService.getUserById(userId);
 	}
 
 	/**
 	 * Delete the user for the given id.
 	 * 
-	 * @param id The id of the user being deleted
-	 * @throws Exception
+	 * @param id The id of the user being deleted.
 	 */
-	public void deleteUser(int id) throws Exception {
+	public void deleteUser(int id) {
 		userProfileService.getUserById(id);
 		dao.deleteUser(id);
 	}
@@ -130,10 +125,11 @@ public class ManageUserProfileService {
 	 * Update the user for the given user object.
 	 * 
 	 * @param user what information on the user needs to be updated.
-	 * @return user associated to that id with the updated information
-	 * @throws Exception
+	 * @return user associated to that id with the updated information.
 	 */
-	private User updateUserProfile(int userId, User user) throws Exception {
-		return dao.updateUserProfile(userId, user);
+	private User updateUserProfile(int userId, User user) {
+		User currentUser = userProfileService.getUserById(userId);
+		dao.updateUserProfile(userId, user, currentUser);
+		return userProfileService.getUserById(userId);
 	}
 }

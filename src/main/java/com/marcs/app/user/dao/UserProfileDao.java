@@ -1,26 +1,23 @@
 package com.marcs.app.user.dao;
 
-import static com.marcs.app.user.mapper.ApplicationMapper.APPLICATION_MAPPER;
-import static com.marcs.app.user.mapper.UserProfileMapper.USER_MAPPER;
+import static com.marcs.app.user.mapper.ApplicationMapper.*;
+import static com.marcs.app.user.mapper.UserProfileMapper.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.google.common.collect.Sets;
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.common.date.TimeZoneUtil;
-import com.marcs.common.exceptions.UserNotFoundException;
 import com.marcs.common.page.Page;
 import com.marcs.sql.SqlParamBuilder;
 
@@ -33,7 +30,6 @@ import com.marcs.sql.SqlParamBuilder;
 @Repository
 public class UserProfileDao extends BaseDao {
 
-	@Autowired
 	public UserProfileDao(DataSource source) {
 		super(source);
 	}
@@ -43,9 +39,8 @@ public class UserProfileDao extends BaseDao {
 	 * 
 	 * @param request of the user
 	 * @return User profile object {@link User}
-	 * @throws Exception
 	 */
-	public Page<User> getUsers(UserGetRequest request) throws Exception {
+	public Page<User> getUsers(UserGetRequest request) {
 		MapSqlParameterSource params = SqlParamBuilder.with(request).useAllParams().withParam(ID, request.getId())
 				.withParam(EMAIL, request.getEmail()).withParam(STORE_ID, request.getStoreId())
 				.withParam(REGIONAL_ID, request.getRegionalId()).withParam(FIRST_NAME, request.getFirstName())
@@ -59,34 +54,14 @@ public class UserProfileDao extends BaseDao {
 	}
 
 	/**
-	 * This method returns a user profile object containing profile type information
-	 * about the user
-	 * 
-	 * @param id of the user
-	 * @return User profile object {@link UserProfile}
-	 * @throws Exception
-	 */
-	public User getUserById(int id) throws Exception {
-		try {
-			UserGetRequest request = new UserGetRequest();
-			request.setId(Sets.newHashSet(id));
-			return getUsers(request).getList().get(0);
-		} catch (Exception e) {
-			throw new UserNotFoundException(String.format("User not found for id: %d", id));
-		}
-	}
-
-	/**
 	 * End point to a get a list of users apps that they have access too
 	 * 
 	 * @param userId The user id to get the apps for.
 	 * @return List of Application objects {@link Application}
-	 * @throws Exception
-	 * @since May 13, 2020
 	 */
-	public List<Application> getUserApps(int userId) throws Exception {
+	public List<Application> getUserApps(int userId) {
 		MapSqlParameterSource params = parameterSource(USER_ID, userId);
-		return getList(getSql("getApplications", params), params, APPLICATION_MAPPER);
+		return getList("getApplications", params, APPLICATION_MAPPER);
 	}
 
 	/**
@@ -94,18 +69,15 @@ public class UserProfileDao extends BaseDao {
 	 * 
 	 * @param user The user to create.
 	 * @return {@link User} object of the users data.
-	 * @throws Exception
 	 */
-	public User insertUser(User user) throws Exception {
+	public User insertUser(User user) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		MapSqlParameterSource params = SqlParamBuilder.with().useAllParams().withParam(FIRST_NAME, user.getFirstName())
 				.withParam(LAST_NAME, user.getLastName()).withParam(EMAIL, user.getEmail())
-				.withParam(WEB_ROLE_ID, user.getWebRole().getRank())
-				.withParam(STORE_ID, user.getStoreId())
-				.withParamDefault(HIRE_DATE, user.getHireDate())
-				.build();
+				.withParam(WEB_ROLE_ID, user.getWebRole().getRank()).withParam(STORE_ID, user.getStoreId())
+				.withParamDefault(HIRE_DATE, user.getHireDate()).build();
 
-		post(getSql("insertUser", params), params, keyHolder);
+		post("insertUser", params, keyHolder);
 		user.setId(keyHolder.getKey().intValue());
 		return user;
 	}
@@ -114,25 +86,22 @@ public class UserProfileDao extends BaseDao {
 	 * Update the user for the given user object. Null out password field so that it
 	 * is not returned on the {@link User} object
 	 * 
-	 * @param userId Id of the usre being updated.
-	 * @param user   what information on the user needs to be updated.
-	 * @return user associated to that id with the updated information
-	 * @throws Exception
+	 * @param userId      Id of the usre being updated.
+	 * @param updateInfo  The user information to be updated.
+	 * @param currentInfo The current user info.
 	 */
-	public User updateUserProfile(int userId, User user) throws Exception {
-		User userProfile = getUserById(userId);
-		user.setPassword(null);
-		user = mapNonNullUserFields(user, userProfile);
+	public void updateUserProfile(int userId, User updateInfo, User currentInfo) {
+		updateInfo.setPassword(null);
+		updateInfo = mapNonNullUserFields(updateInfo, currentInfo);
 
-		MapSqlParameterSource params = SqlParamBuilder.with().withParam(FIRST_NAME, user.getFirstName())
-				.withParam(LAST_NAME, user.getLastName()).withParam(EMAIL, user.getEmail())
-				.withParam(STORE_ID, user.getStoreId().trim() == "" ? null : user.getStoreId())
-				.withParam(WEB_ROLE_ID, user.getWebRole().getRank()).withParam(HIRE_DATE, user.getHireDate())
-				.withParam(ID, userId).withParam(EMAIL_REPORTS_ENABLED, user.isEmailReportsEnabled()).build();
+		MapSqlParameterSource params = SqlParamBuilder.with().withParam(FIRST_NAME, updateInfo.getFirstName())
+				.withParam(LAST_NAME, updateInfo.getLastName()).withParam(EMAIL, updateInfo.getEmail())
+				.withParam(STORE_ID, updateInfo.getStoreId().trim() == "" ? null : updateInfo.getStoreId())
+				.withParam(WEB_ROLE_ID, updateInfo.getWebRole().getRank())
+				.withParam(HIRE_DATE, updateInfo.getHireDate()).withParam(ID, userId)
+				.withParam(EMAIL_REPORTS_ENABLED, updateInfo.isEmailReportsEnabled()).build();
 
-		update(getSql("updateUserProfile", params), params);
-
-		return getUserById(userId);
+		update("updateUserProfile", params);
 	}
 
 	/**
@@ -140,14 +109,11 @@ public class UserProfileDao extends BaseDao {
 	 * 
 	 * @param userId The user Id to be updated.
 	 * @return The user object with the updated information.
-	 * @throws Exception
 	 */
-	public User updateUserLastLoginToNow(int userId) throws Exception {
+	public void updateUserLastLoginToNow(int userId) {
 		MapSqlParameterSource params = SqlParamBuilder.with()
 				.withParam(LAST_LOGIN_DATE, LocalDateTime.now(TimeZoneUtil.SYSTEM_ZONE)).withParam(ID, userId).build();
-		update(getSql("updateUserLastLoginToNow", params), params);
-
-		return getUserById(userId);
+		update("updateUserLastLoginToNow", params);
 	}
 
 	/**
@@ -155,8 +121,8 @@ public class UserProfileDao extends BaseDao {
 	 * 
 	 * @param id The id of the user being deleted
 	 */
-	public void deleteUser(int id) throws Exception {
-		delete(getSql("deleteUser"), parameterSource(ID, id));
+	public void deleteUser(int id) {
+		delete("deleteUser", parameterSource(ID, id));
 	}
 
 	/**
@@ -167,22 +133,15 @@ public class UserProfileDao extends BaseDao {
 	 * @return {@link User} with the replaced fields.
 	 */
 	private User mapNonNullUserFields(User destination, User source) {
-		if (destination.getFirstName() == null)
-			destination.setFirstName(source.getFirstName());
-		if (destination.getLastName() == null)
-			destination.setLastName(source.getLastName());
-		if (destination.getEmail() == null)
-			destination.setEmail(source.getEmail());
-		if (destination.getStoreId() == null)
-			destination.setStoreId(source.getStoreId());
-		if (destination.getWebRole() == null)
-			destination.setWebRole(source.getWebRole());
-		if (destination.isAppAccess() == null)
-			destination.setAppAccess(source.isAppAccess());
-		if (destination.isEmailReportsEnabled() == null)
+		if(destination.getFirstName() == null) destination.setFirstName(source.getFirstName());
+		if(destination.getLastName() == null) destination.setLastName(source.getLastName());
+		if(destination.getEmail() == null) destination.setEmail(source.getEmail());
+		if(destination.getStoreId() == null) destination.setStoreId(source.getStoreId());
+		if(destination.getWebRole() == null) destination.setWebRole(source.getWebRole());
+		if(destination.isAppAccess() == null) destination.setAppAccess(source.isAppAccess());
+		if(destination.isEmailReportsEnabled() == null)
 			destination.setEmailReportsEnabled(source.isEmailReportsEnabled());
-		if (destination.getHireDate() == null)
-			destination.setHireDate(source.getHireDate());
+		if(destination.getHireDate() == null) destination.setHireDate(source.getHireDate());
 		return destination;
 	}
 }

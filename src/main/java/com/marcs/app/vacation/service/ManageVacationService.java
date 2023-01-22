@@ -48,9 +48,8 @@ public class ManageVacationService {
 	 * @param id  The user id to get vacations for.
 	 * @param vac The vacation to be inserted.
 	 * @return {@link List<Vacation>} for the user.
-	 * @throws Exception
 	 */
-	public Vacation createVacation(int id, Vacation vac) throws Exception {
+	public Vacation createVacation(int id, Vacation vac) {
 		userClient.getUserById(id);
 		return vacationService.getVacationById(dao.createVacation(id, vac));
 	}
@@ -61,7 +60,6 @@ public class ManageVacationService {
 	 * 
 	 * @param vac The vacation to be inserted.
 	 * @return {@link Vacation} for the user.
-	 * @throws Exception
 	 */
 	public Vacation requestVacation(Vacation vac) throws Exception {
 		vac.setStatus(VacationStatus.PENDING);
@@ -76,9 +74,8 @@ public class ManageVacationService {
 	 * @param id   The user id to get vacations for.
 	 * @param vacs The list of vacations to be inserted.
 	 * @return {@link Lst<Vacation>} for the user.
-	 * @throws Exception
 	 */
-	public List<Vacation> createBatchVacations(int id, List<Vacation> vacs) throws Exception {
+	public List<Vacation> createBatchVacations(int id, List<Vacation> vacs) {
 		userClient.getUserById(id);
 		for(Vacation vac : vacs) {
 			createVacation(id, vac);
@@ -111,9 +108,8 @@ public class ManageVacationService {
 	 * @param id  The id of the vacation to be updates.
 	 * @param vac What to update the vacation dates too.
 	 * @return Vacation object of the updated information.
-	 * @throws Exception
 	 */
-	public Vacation updateVacationDatesById(int id, Vacation vac) throws Exception {
+	public Vacation updateVacationDatesById(int id, Vacation vac) {
 		Vacation currentVac = vacationService.getVacationById(id);
 
 		vac.setStartDate(vac.getStartDate() == null ? currentVac.getStartDate() : vac.getStartDate());
@@ -129,9 +125,8 @@ public class ManageVacationService {
 	 * @param id  The id of the vacation inserted.
 	 * @param vac What to update on for the vacation.
 	 * @return {@link Vacation} object.
-	 * @throws Exception
 	 */
-	public Vacation updateVacationInfoById(int id, Vacation vac) throws Exception {
+	public Vacation updateVacationInfoById(int id, Vacation vac) {
 		Vacation currentVac = vacationService.getVacationById(id);
 
 		vac.setNotes(vac.getNotes() == null ? currentVac.getNotes() : vac.getNotes());
@@ -147,9 +142,8 @@ public class ManageVacationService {
 	 * 
 	 * @param userId The user id to get vacations for.
 	 * @return {@link Lst<Vacation>} for the user.
-	 * @throws Exception
 	 */
-	public void deleteAllCurrentUserVacations() throws Exception {
+	public void deleteAllCurrentUserVacations() {
 		deleteAllVacationsByUserId(jwtHolder.getUserId());
 	}
 
@@ -158,9 +152,8 @@ public class ManageVacationService {
 	 * 
 	 * @param id The id for the vacation
 	 * @return {@link List<Vacation>} for the user.
-	 * @throws Exception
 	 */
-	public void deleteVacationById(int id) throws Exception {
+	public void deleteVacationById(int id) {
 		dao.deleteVacationById(id);
 	}
 
@@ -169,9 +162,8 @@ public class ManageVacationService {
 	 * 
 	 * @param userId The user id to get vacations for.
 	 * @return {@link Lst<Vacation>} for the user.
-	 * @throws Exception
 	 */
-	public void deleteAllVacationsByUserId(int userId) throws Exception {
+	public void deleteAllVacationsByUserId(int userId) {
 		dao.deleteAllVacationsByUserId(userId);
 	}
 
@@ -179,9 +171,8 @@ public class ManageVacationService {
 	 * Method for sending web notification to the user that is being updated.
 	 * 
 	 * @param userId The userId to the notification too.
-	 * @throws Exception
 	 */
-	private void notifyUserBeingUpdated(int userId) throws Exception {
+	private void notifyUserBeingUpdated(int userId) {
 		Notification n = new Notification();
 		n.setType(NotificationType.REQUEST_TRACKER);
 		subscriptionNotifierClient.sendToUser(n, userId);

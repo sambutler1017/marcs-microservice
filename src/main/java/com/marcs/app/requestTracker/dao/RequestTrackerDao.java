@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +24,6 @@ import com.marcs.sql.SqlParamBuilder;
 @Repository
 public class RequestTrackerDao extends BaseDao {
 
-	@Autowired
 	public RequestTrackerDao(DataSource source) {
 		super(source);
 	}
@@ -38,7 +36,7 @@ public class RequestTrackerDao extends BaseDao {
 	 */
 	public List<UserRequest<Void>> getCurrentUserRequests(long userId) throws Exception {
 		MapSqlParameterSource params = parameterSource(USER_ID, userId);
-		return getList(getSql("getUserRequest", params), params, getUserRequestMapper(Void.class));
+		return getList("getUserRequest", params, getUserRequestMapper(Void.class));
 	}
 
 	/**
@@ -71,7 +69,7 @@ public class RequestTrackerDao extends BaseDao {
 	 */
 	private <T> UserRequest<T> getUserRequestById(long id, RequestType type, Class<T> clazz) {
 		MapSqlParameterSource params = SqlParamBuilder.with().withParam(REQUEST_ID, id).withParam(TYPE, type).build();
-		return get(getSql("getUserRequest", params), params, getUserRequestMapper(clazz));
+		return get("getUserRequest", params, getUserRequestMapper(clazz));
 	}
 
 	/**

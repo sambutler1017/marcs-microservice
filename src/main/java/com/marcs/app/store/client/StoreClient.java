@@ -2,13 +2,13 @@ package com.marcs.app.store.client;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.store.client.domain.Store;
 import com.marcs.app.store.client.domain.request.StoreGetRequest;
 import com.marcs.app.store.rest.StoreController;
 import com.marcs.app.user.client.domain.User;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This class exposes the manager endpoint's to other app's to pull data across
@@ -28,9 +28,8 @@ public class StoreClient {
 	 * 
 	 * @param request to filter stores on
 	 * @return List of store objects {@link Store}
-	 * @throws Exception
 	 */
-	public List<Store> getStores(StoreGetRequest request) throws Exception {
+	public List<Store> getStores(StoreGetRequest request) {
 		return controller.getStores(request);
 	}
 
@@ -39,9 +38,8 @@ public class StoreClient {
 	 * 
 	 * @param id The id of the store to get.
 	 * @return {@link Store} object
-	 * @throws Exception
 	 */
-	public Store getStoreById(String id) throws Exception {
+	public Store getStoreById(String id) {
 		return controller.getStoreById(id);
 	}
 
@@ -49,9 +47,8 @@ public class StoreClient {
 	 * Get the regional of the passed in store ID.
 	 * 
 	 * @return The regional of that store
-	 * @throws Exception
 	 */
-	public User getRegionalOfStoreById(String storeId) throws Exception {
+	public User getRegionalOfStoreById(String storeId) {
 		return controller.getRegionalOfStoreById(storeId);
 	}
 
@@ -59,9 +56,8 @@ public class StoreClient {
 	 * Get the manager of the passed in store ID.
 	 * 
 	 * @return The manager of that store
-	 * @throws Exception
 	 */
-	public User getManagerOfStoreById(String storeId) throws Exception {
+	public User getManagerOfStoreById(String storeId) {
 		return controller.getManagerOfStoreById(storeId);
 	}
 
@@ -73,9 +69,8 @@ public class StoreClient {
 	 * @param userId  The user id of the manager.
 	 * @param storeId The store Id to update the manager at.
 	 * @return {@link Store} object with the updated manager.
-	 * @throws Exception
 	 */
-	public Store updateStoreManagerOfStore(int userId, String storeId) throws Exception {
+	public Store updateStoreManagerOfStore(int userId, String storeId) {
 		return controller.updateStoreManagerOfStore(userId, storeId);
 	}
 
@@ -85,9 +80,8 @@ public class StoreClient {
 	 * @param userId  The user id of the regional.
 	 * @param storeId The store Id to update the regional at.
 	 * @return {@link Store} object with the updated regional.
-	 * @throws Exception
 	 */
-	public Store updateRegionalOfStore(int userId, String storeId) throws Exception {
+	public Store updateRegionalOfStore(int userId, String storeId) {
 		return controller.updateRegionalOfStore(userId, storeId);
 	}
 }

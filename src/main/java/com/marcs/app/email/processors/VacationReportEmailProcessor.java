@@ -42,15 +42,15 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
     private VacationController vacationController;
 
     @Override
-    public List<UserEmail> process() throws Exception {
+    public List<UserEmail> process() {
         String emailContent = readEmailTemplate("WeeklyVacationsReport.html");
         List<User> usersWithNotifications = getUsersWithEmailReportsEnabled();
         List<UserEmail> emails = new ArrayList<>();
 
-        for (User user : usersWithNotifications) {
+        for(User user : usersWithNotifications) {
             VacationGetRequest req = new VacationGetRequest();
             req.setStatus(Sets.newHashSet(VacationStatus.APPROVED));
-            if (user.getWebRole().equals(WebRole.REGIONAL) || user.getWebRole().equals(WebRole.DISTRICT_MANAGER)) {
+            if(user.getWebRole().equals(WebRole.REGIONAL) || user.getWebRole().equals(WebRole.DISTRICT_MANAGER)) {
                 req.setRegionalId(Sets.newHashSet(user.getId()));
             }
 
@@ -60,8 +60,7 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
     }
 
     @Override
-    public void setParams(Void params) {
-    }
+    public void setParams(Void params) {}
 
     /**
      * Helper method for replacing the dynamic fields in the email message.
@@ -70,7 +69,7 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
      * @param req     The vacation get Request for the email cards.
      * @return String of the email content.
      */
-    private String buildEmailBody(String content, VacationGetRequest req) throws Exception {
+    private String buildEmailBody(String content, VacationGetRequest req) {
         String vacationCards = buildHTMLCard(vacationController.getVacationsForReport(req));
         LocalDate dt = LocalDate.now(TimeZoneUtil.SYSTEM_ZONE).with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
         content = content.replace(EMAIL_DYNAMIC_CARDS, vacationCards);
@@ -85,7 +84,7 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
      * @return List of users
      * @throws Exception
      */
-    private List<User> getUsersWithEmailReportsEnabled() throws Exception {
+    private List<User> getUsersWithEmailReportsEnabled() {
         UserGetRequest request = new UserGetRequest();
         request.setWebRole(Sets.newHashSet(WebRole.REGIONAL, WebRole.DISTRICT_MANAGER, WebRole.ADMIN));
         request.setEmailReportsEnabled(true);
@@ -99,18 +98,18 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
      * @return Formatted String
      */
     private String buildHTMLCard(List<Vacation> vacs) {
-        if (vacs.size() == 0) {
+        if(vacs.size() == 0) {
             return "No Vacations";
         }
 
         String htmlCards = "";
         String defaultCard = "<div class=\"card\"><div class=\"card-data\">::DATA_NAME::</div><div class=\"card-date\">::DATA_DATE::</div></div>";
 
-        for (Vacation vac : vacs) {
+        for(Vacation vac : vacs) {
             String replaceName = String.format("%s (%s)", vac.getFullName(), vac.getStoreId());
             String replaceDate = String.format("%s - %s", formatDate(vac.getStartDate()), formatDate(vac.getEndDate()));
             htmlCards += defaultCard.replace(EMAIL_DYNAMIC_DATA_NAME, replaceName).replace(EMAIL_DYNAMIC_DATA_DATE,
-                    replaceDate);
+                                                                                           replaceDate);
         }
         return htmlCards;
     }

@@ -27,9 +27,8 @@ public class UserCredentialsClient {
      * 
      * @param id       The id of the new user.
      * @param authPass The password that was created.
-     * @throws Exception If the password can not be stored.
      */
-    public void insertUserPassword(int id, String pass) throws Exception {
+    public void insertUserPassword(int id, String pass) {
         controller.insertUserPassword(id, pass);
     }
 
@@ -41,10 +40,8 @@ public class UserCredentialsClient {
      * @param passUpdate Object the holds the current password and new user password
      *                   to change it too.
      * @return {@link User} object of the user that was updated.
-     * @throws Exception If the user can not be authenticated or it failed to hash
-     *                   the new password.
      */
-    public User updateUserPassword(PasswordUpdate passUpdate) throws Exception {
+    public User updateUserPassword(PasswordUpdate passUpdate) {
         return controller.updateUserPassword(passUpdate);
     }
 
@@ -56,7 +53,7 @@ public class UserCredentialsClient {
      *                   to change it too.
      * @return {@link User} object of the user that was updated.
      */
-    public User updateUserPasswordById(int id, PasswordUpdate passUpdate) throws Exception {
+    public User updateUserPasswordById(int id, PasswordUpdate passUpdate) {
         return controller.updateUserPasswordById(id, passUpdate);
     }
 

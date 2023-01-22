@@ -28,9 +28,8 @@ public class UserProfileClient {
 	 * 
 	 * @param request of the user
 	 * @return User profile object {@link User}
-	 * @throws Exception
 	 */
-	public List<User> getUsers() throws Exception {
+	public List<User> getUsers() {
 		return controller.getUsers(new UserGetRequest()).getList();
 	}
 
@@ -39,9 +38,8 @@ public class UserProfileClient {
 	 * 
 	 * @param request of the user
 	 * @return User profile object {@link User}
-	 * @throws Exception
 	 */
-	public List<User> getUsers(UserGetRequest request) throws Exception {
+	public List<User> getUsers(UserGetRequest request) {
 		return controller.getUsers(request).getList();
 	}
 
@@ -49,9 +47,8 @@ public class UserProfileClient {
 	 * Gets the current logged in user information.
 	 * 
 	 * @return The user currently logged in.
-	 * @throws Exception
 	 */
-	public User getCurrentUser() throws Exception {
+	public User getCurrentUser() {
 		return controller.getCurrentUser();
 	}
 
@@ -60,9 +57,8 @@ public class UserProfileClient {
 	 * 
 	 * @param id of the user
 	 * @return User profile object
-	 * @throws Exception
 	 */
-	public User getUserById(int id) throws Exception {
+	public User getUserById(int id) {
 		return controller.getUserById(id);
 	}
 
@@ -70,9 +66,8 @@ public class UserProfileClient {
 	 * Client method to a get a list of users apps that they have access too
 	 * 
 	 * @return List of Application objects {@link Application}
-	 * @throws Exception
 	 */
-	public List<Application> getUserApps() throws Exception {
+	public List<Application> getUserApps() {
 		return controller.getUserApps();
 	}
 
@@ -80,10 +75,9 @@ public class UserProfileClient {
 	 * Client method to a get a list of users apps for a given id
 	 * 
 	 * @return List of Application objects {@link Application}
-	 * @throws Exception
 	 * @since May 13, 2020
 	 */
-	public List<Application> getUserAppsById(int id) throws Exception {
+	public List<Application> getUserAppsById(int id) {
 		return controller.getUserAppsById(id);
 	}
 
@@ -92,7 +86,6 @@ public class UserProfileClient {
 	 * 
 	 * @param user The user to be created.
 	 * @return The user that would be created.
-	 * @throws Exception
 	 */
 	public User createUser(User user) throws Exception {
 		return controller.createUser(user);
@@ -103,9 +96,8 @@ public class UserProfileClient {
 	 * 
 	 * @param user The user to be created.
 	 * @return The user that would be created.
-	 * @throws Exception
 	 */
-	public User addNewUser(User user) throws Exception {
+	public User addNewUser(User user) {
 		return controller.addNewUser(user);
 	}
 
@@ -115,9 +107,8 @@ public class UserProfileClient {
 	 * 
 	 * @param user what information on the user needs to be updated.
 	 * @return user associated to that id with the updated information
-	 * @throws Exception
 	 */
-	public User updateUserProfile(User user) throws Exception {
+	public User updateUserProfile(User user) {
 		return controller.updateUserProfile(user);
 	}
 
@@ -126,9 +117,8 @@ public class UserProfileClient {
 	 * 
 	 * @param id of the user
 	 * @return user associated to that id with the updated information
-	 * @throws Exception
 	 */
-	public User updateUserProfileById(int id, User user) throws Exception {
+	public User updateUserProfileById(int id, User user) {
 		return controller.updateUserProfileById(id, user);
 	}
 
@@ -137,9 +127,8 @@ public class UserProfileClient {
 	 * 
 	 * @param userId The user Id to be updated.
 	 * @return The user object with the updated information.
-	 * @throws Exception
 	 */
-	public User updateUserLastLoginToNow(int id) throws Exception {
+	public User updateUserLastLoginToNow(int id) {
 		return controller.updateUserLastLoginToNow(id);
 	}
 
@@ -148,7 +137,7 @@ public class UserProfileClient {
 	 * 
 	 * @param id The id of the user being deleted
 	 */
-	public void deleteUser(int id) throws Exception {
+	public void deleteUser(int id) {
 		controller.deleteUser(id);
 	}
 }

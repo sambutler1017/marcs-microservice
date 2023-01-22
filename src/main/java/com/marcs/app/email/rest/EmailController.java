@@ -33,7 +33,7 @@ public class EmailController {
      * @throws Exception
      */
     @PostMapping("/forgot-password")
-    public List<UserEmail> forgotPassword(@RequestBody String email) throws Exception {
+    public List<UserEmail> forgotPassword(@RequestBody String email) {
         return service.sendForgotPasswordEmail(email);
     }
 
@@ -45,7 +45,7 @@ public class EmailController {
      * @throws Exception
      */
     @PostMapping("/report")
-    public List<UserEmail> sendVacationReport() throws Exception {
+    public List<UserEmail> sendVacationReport() {
         return service.sendVacationReport();
     }
 
@@ -59,7 +59,7 @@ public class EmailController {
      * @throws Exception
      */
     @PostMapping("/new-user")
-    public List<UserEmail> sendNewUserEmail(User newUser) throws Exception {
+    public List<UserEmail> sendNewUserEmail(User newUser) {
         return service.sendNewUserEmail(newUser);
     }
 
@@ -70,7 +70,7 @@ public class EmailController {
      * @throws Exception
      */
     @PostMapping("/{id}/user/account-update")
-    public List<UserEmail> sendUserAccountUpdateStatusEmail(@PathVariable int userId) throws Exception {
+    public List<UserEmail> sendUserAccountUpdateStatusEmail(@PathVariable int userId) {
         return service.sendUserAccountUpdateStatusEmail(userId);
     }
 
@@ -82,7 +82,7 @@ public class EmailController {
      * @throws Exception
      */
     @PostMapping("/contact")
-    public List<UserEmail> sendContactAdminEmail(@RequestBody String message) throws Exception {
+    public List<UserEmail> sendContactAdminEmail(@RequestBody String message) {
         return service.sendContactAdminEmail(message);
     }
 }
