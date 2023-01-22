@@ -3,7 +3,6 @@ package com.marcs.app.notifications.dao;
 import static com.marcs.app.notifications.mapper.NotificationMapper.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -16,6 +15,7 @@ import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.app.notifications.client.domain.request.NotificationGetRequest;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.common.date.TimeZoneUtil;
+import com.marcs.common.page.Page;
 import com.marcs.sql.SqlParamBuilder;
 
 /**
@@ -41,12 +41,12 @@ public class NotificationDao extends BaseDao {
      * @return List of {@link Notification} objects.
      * @throws Exception If no data is returned
      */
-    public List<Notification> getNotifications(NotificationGetRequest request) {
-        MapSqlParameterSource params = SqlParamBuilder.with(request).withParam(ID, request.getId())
+    public Page<Notification> getNotifications(NotificationGetRequest request) {
+        MapSqlParameterSource params = SqlParamBuilder.with(request).usePagenation().withParam(ID, request.getId())
                 .withParam(RECEIVER_ID, request.getReceiverId()).withParam(READ_FLAG, request.getRead())
                 .withParamTextEnumCollection(NOTIFICATION_TYPE, request.getType()).build();
 
-        return getList("getNotifications", params, NOTIFICATION_MAPPER);
+        return getPage("getNotificationsPage", params, NOTIFICATION_MAPPER);
     }
 
     /**

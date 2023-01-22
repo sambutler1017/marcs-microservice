@@ -2,8 +2,6 @@ package com.marcs.app.notifications.rest;
 
 import static org.springframework.http.MediaType.*;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +16,7 @@ import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.app.notifications.client.domain.request.NotificationGetRequest;
 import com.marcs.app.notifications.service.ManageNotificationService;
 import com.marcs.app.notifications.service.NotificationService;
+import com.marcs.common.page.Page;
 
 @RestApiController
 @RequestMapping("api/notification-app/notifications")
@@ -36,11 +35,11 @@ public class NotificationController {
      * Vacations)
      * 
      * @param request The request with how to filter the request.
-     * @return List of {@link Notification} objects.
+     * @return Page of {@link Notification} objects.
      * @throws Exception
      */
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public List<Notification> getNotifications(NotificationGetRequest request) {
+    public Page<Notification> getNotifications(NotificationGetRequest request) {
         return notificationService.getNotifications(request);
     }
 
@@ -63,11 +62,11 @@ public class NotificationController {
      * return an empty list.
      * 
      * @param read Boolean deciding if it should filter out read notifications
-     * @return List of {@link Notification} objects.
+     * @return Page of {@link Notification} objects.
      * @throws Exception If the notification can not be found
      */
     @GetMapping(path = "/current-user", produces = APPLICATION_JSON_VALUE)
-    public List<Notification> getCurrentUserNotifications(NotificationGetRequest req) {
+    public Page<Notification> getCurrentUserNotifications(NotificationGetRequest req) {
         return notificationService.getCurrentUserNotifications(req);
     }
 

@@ -1,18 +1,30 @@
-@NAME(getNotifications)
-  SELECT 
-    id, notification_type, receiver_id, read_flag, link_id, insert_date
-  FROM
-    notifications
+@NAME(notificationFields)
+  n.id, n.notification_type, n.receiver_id, n.read_flag, n.link_id, n.insert_date
+
+@NAME(notificationFilters)
   @WHERE
     @AND(:id)
-      id IN (:id)
+      n.id IN (:id)
     @AND(:receiver_id)
-      receiver_id IN (:receiver_id)
+      n.receiver_id IN (:receiver_id)
     @AND(:read_flag)
-      read_flag = :read_flag
+      n.read_flag = :read_flag
     @AND(:notification_type)
-      notification_type IN (:notification_type)
-  ORDER BY read_flag, insert_date DESC
+      n.notification_type IN (:notification_type)
+
+@NAME(getNotificationsBase)
+  FROM notifications n
+  @INCLUDE(notificationFilters)
+
+@NAME(getNotificationsPage)
+  @PAGING(:rowOffset, :pageSize)
+    SELECT @INCLUDE(notificationFields)
+    @INCLUDE(getNotificationsBase)
+    ORDER BY n.read_flag, n.insert_date DESC
+
+@NAME(getNotificationsPageTotalCount)
+  SELECT COUNT(*)
+  @INCLUDE(getNotificationsBase)
 
 @NAME(markNotificationRead)
   UPDATE notifications SET read_flag = :read_flag

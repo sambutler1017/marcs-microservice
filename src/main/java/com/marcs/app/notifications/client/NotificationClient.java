@@ -54,7 +54,7 @@ public class NotificationClient {
      * @throws Exception
      */
     public List<Notification> getNotifications(NotificationGetRequest request) {
-        return controller.getNotifications(request);
+        return controller.getNotifications(request).getList();
     }
 
     /**
@@ -79,7 +79,7 @@ public class NotificationClient {
      * @throws Exception If the notification can not be found
      */
     public List<Notification> getCurrentUserNotifications(NotificationGetRequest req) {
-        return controller.getCurrentUserNotifications(req);
+        return controller.getCurrentUserNotifications(req).getList();
     }
 
     /**

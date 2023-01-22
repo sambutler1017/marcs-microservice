@@ -4,9 +4,9 @@
 @NAME(blockOutDatesFilters)
   @WHERE
     @AND(:id)
-      id = :id
+      bod.id = :id
     @AND(:insert_user_id)
-      insert_user_id = :insert_user_id
+      bod.insert_user_id = :insert_user_id
 
 @NAME(getBlockOutDatesBase)
   FROM block_out_dates bod

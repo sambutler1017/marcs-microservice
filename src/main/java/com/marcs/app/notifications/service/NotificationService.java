@@ -9,6 +9,7 @@ import com.google.common.collect.Sets;
 import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.app.notifications.client.domain.request.NotificationGetRequest;
 import com.marcs.app.notifications.dao.NotificationDao;
+import com.marcs.common.page.Page;
 import com.marcs.jwt.utility.JwtHolder;
 
 /**
@@ -36,7 +37,7 @@ public class NotificationService {
      * @return List of {@link Notification} objects.
      * @throws Exception
      */
-    public List<Notification> getNotifications(NotificationGetRequest request) {
+    public Page<Notification> getNotifications(NotificationGetRequest request) {
         return dao.getNotifications(request);
     }
 
@@ -53,7 +54,7 @@ public class NotificationService {
         NotificationGetRequest request = new NotificationGetRequest();
         request.setId(Sets.newHashSet(id));
 
-        List<Notification> notifications = getNotifications(request);
+        List<Notification> notifications = getNotifications(request).getList();
         if(notifications.isEmpty()) {
             throw new Exception(String.format("Notification not found for id '%d'", id));
         }
@@ -67,7 +68,7 @@ public class NotificationService {
      * @return List of {@link Notification} objects.
      * @throws Exception If the notification can not be found
      */
-    public List<Notification> getCurrentUserNotifications(NotificationGetRequest req) {
+    public Page<Notification> getCurrentUserNotifications(NotificationGetRequest req) {
         req.setReceiverId(Sets.newHashSet(jwtHolder.getUserId()));
         return getNotifications(req);
     }
