@@ -9,7 +9,11 @@ import com.marcs.common.search.CommonParam;
  * @since January 22, 2023
  */
 public interface PageParam extends CommonParam {
+    public int getPageSize();
+
+    public void setPageSize(int pageSize);
+
     public int getRowOffset();
 
-    public int getPageSize();
+    public void setRowOffset(int rowOffset);
 }
