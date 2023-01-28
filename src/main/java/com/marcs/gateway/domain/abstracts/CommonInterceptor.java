@@ -76,7 +76,8 @@ public abstract class CommonInterceptor implements Filter {
     }
 
     /**
-     * Appends the allowed origins to the response.
+     * Appends the allowed origins to the response so that it can resolve the CORS
+     * policy set by the UI.
      * 
      * @param res The response to modify.
      * @return The updated response.
