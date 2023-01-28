@@ -1,6 +1,10 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.user.dao;
 
-import static com.marcs.app.user.mapper.UserStatusMapper.*;
+import static com.marcs.app.user.mapper.UserStatusMapper.USER_STATUS_MAPPER;
 
 import javax.sql.DataSource;
 
@@ -87,10 +91,13 @@ public class UserStatusDao extends BaseDao {
      * @return {@link UserStatus} with the replaced fields.
      */
     private UserStatus mapNonNullUserStatusFields(UserStatus destination, UserStatus source) {
-        if(destination.getAccountStatus() == null) destination.setAccountStatus(source.getAccountStatus());
-        if((destination.getUpdatedUserId() == null || destination.getUpdatedUserId() == 0)
-           && source.getUpdatedUserId() != 0) destination.setUpdatedUserId(source.getUpdatedUserId());
-        if(destination.isAppAccess() == null) destination.setAppAccess(source.isAppAccess());
+        if (destination.getAccountStatus() == null)
+            destination.setAccountStatus(source.getAccountStatus());
+        if ((destination.getUpdatedUserId() == null || destination.getUpdatedUserId() == 0)
+                && source.getUpdatedUserId() != 0)
+            destination.setUpdatedUserId(source.getUpdatedUserId());
+        if (destination.isAppAccess() == null)
+            destination.setAppAccess(source.isAppAccess());
         return destination;
     }
 }

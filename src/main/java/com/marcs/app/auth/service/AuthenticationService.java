@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.auth.service;
 
 import java.time.LocalDateTime;
@@ -54,7 +58,7 @@ public class AuthenticationService {
 
         String token = jwtTokenUtil.generateToken(user);
         return new AuthToken(token, LocalDateTime.now(TimeZoneUtil.SYSTEM_ZONE),
-                             jwtTokenUtil.getExpirationDateFromToken(token), user);
+                jwtTokenUtil.getExpirationDateFromToken(token), user);
     }
 
     /**
@@ -69,7 +73,7 @@ public class AuthenticationService {
 
         String token = jwtTokenUtil.generateToken(u);
         return new AuthToken(token, LocalDateTime.now(TimeZoneUtil.SYSTEM_ZONE),
-                             jwtTokenUtil.getExpirationDateFromToken(token), u);
+                jwtTokenUtil.getExpirationDateFromToken(token), u);
     }
 
     /**
@@ -82,11 +86,10 @@ public class AuthenticationService {
         String hashedPassword = authDao.getUserAuthPassword(email)
                 .orElseThrow(() -> new UserNotFoundException(String.format("User not found for email: %s", email)));
 
-        if(BCrypt.checkpw(password, hashedPassword)) {
+        if (BCrypt.checkpw(password, hashedPassword)) {
             User authUser = getAuthenticatedUser(email);
             return userProfileClient.updateUserLastLoginToNow(authUser.getId());
-        }
-        else {
+        } else {
             throw new InvalidCredentialsException(email);
         }
     }
@@ -120,7 +123,7 @@ public class AuthenticationService {
      * @return {@link User} object that they were authenticated.
      */
     private User validateUserAccess(User u) {
-        if(!u.isAppAccess()) {
+        if (!u.isAppAccess()) {
             throw new BaseException("User does not have app access!");
         }
         return u;

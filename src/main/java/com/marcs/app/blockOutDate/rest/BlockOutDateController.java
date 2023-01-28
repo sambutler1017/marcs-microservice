@@ -1,6 +1,10 @@
-package com.marcs.app.blockOutDate.rest;
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
+package com.marcs.app.blockoutdate.rest;
 
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.marcs.annotations.interfaces.RestApiController;
-import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
-import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
-import com.marcs.app.blockOutDate.service.BlockOutDateService;
-import com.marcs.app.blockOutDate.service.ManageBlockOutDateService;
+import com.marcs.app.blockoutdate.client.domain.BlockOutDate;
+import com.marcs.app.blockoutdate.client.domain.request.BlockOutDateGetRequest;
+import com.marcs.app.blockoutdate.service.BlockOutDateService;
+import com.marcs.app.blockoutdate.service.ManageBlockOutDateService;
 import com.marcs.common.page.Page;
 
 @RestApiController

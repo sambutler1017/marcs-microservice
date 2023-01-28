@@ -1,9 +1,13 @@
-package com.marcs.app.featureAccess.mapper;
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
+package com.marcs.app.featureaccess.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.marcs.app.featureAccess.client.domain.Feature;
+import com.marcs.app.featureaccess.client.domain.Feature;
 import com.marcs.common.abstracts.AbstractMapper;
 
 /**

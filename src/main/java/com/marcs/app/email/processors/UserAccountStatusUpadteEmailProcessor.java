@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.email.processors;
 
 import java.util.List;
@@ -26,10 +30,10 @@ public class UserAccountStatusUpadteEmailProcessor extends EmailProcessor<Intege
     public List<UserEmail> process() {
         User emailUser = userClient.getUserById(userId);
         String emailContent = readEmailTemplate(String.format("UserAccount%s.html",
-                                                              emailUser.getAccountStatus().name()));
+                emailUser.getAccountStatus().name()));
 
         return List.of(send(buildUserEmail(emailUser.getEmail(), "Marc's Account Update!",
-                                           emailContent.replace("::USER_NAME::", emailUser.getFirstName()))));
+                emailContent.replace("::USER_NAME::", emailUser.getFirstName()))));
     }
 
     @Override

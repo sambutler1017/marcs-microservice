@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +89,7 @@ public class ManageUserStatusService {
      */
     private void currentStoreManagerCheck(int userId) {
         User user = userProfileClient.getUserById(userId);
-        if(user.getWebRole().equals(WebRole.STORE_MANAGER)) {
+        if (user.getWebRole().equals(WebRole.STORE_MANAGER)) {
             storeClient.updateStoreManagerOfStore(user.getId(), user.getStoreId());
         }
     }

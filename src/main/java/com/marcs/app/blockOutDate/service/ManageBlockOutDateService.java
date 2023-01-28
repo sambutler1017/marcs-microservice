@@ -1,10 +1,14 @@
-package com.marcs.app.blockOutDate.service;
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
+package com.marcs.app.blockoutdate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
-import com.marcs.app.blockOutDate.dao.BlockOutDateDao;
+import com.marcs.app.blockoutdate.client.domain.BlockOutDate;
+import com.marcs.app.blockoutdate.dao.BlockOutDateDao;
 import com.marcs.common.enums.WebRole;
 import com.marcs.jwt.utility.JwtHolder;
 
@@ -47,9 +51,9 @@ public class ManageBlockOutDateService {
 	 * @return The block out date with the insert time stamp and unique id.
 	 */
 	public BlockOutDate createBlockOutDate(BlockOutDate blockDate) throws Exception {
-		if(jwtHolder.getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
-			throw new Exception(String.format(	"User with role '%s' does not have permission to create block out dates!",
-												jwtHolder.getWebRole().toString()));
+		if (jwtHolder.getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
+			throw new Exception(String.format("User with role '%s' does not have permission to create block out dates!",
+					jwtHolder.getWebRole().toString()));
 		}
 
 		blockDate.setInsertUserId(jwtHolder.getUserId());

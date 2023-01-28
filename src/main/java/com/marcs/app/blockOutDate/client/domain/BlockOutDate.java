@@ -1,4 +1,8 @@
-package com.marcs.app.blockOutDate.client.domain;
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
+package com.marcs.app.blockoutdate.client.domain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -7,25 +11,34 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * Class to represent a block out date object
  * 
  * @author Sam Butler
  * @since May 11, 2021
  */
+@Schema(description = "Block out date object.")
 public class BlockOutDate {
+
+    @Schema(description = "Block out date unique id.")
     private int id;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Schema(description = "The start date of the block out date.")
     private LocalDate startDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Schema(description = "The end date of the block out date.")
     private LocalDate endDate;
 
+    @Schema(description = "Insert user id.")
     private int insertUserId;
 
+    @Schema(description = "Block out date inserted.")
     private LocalDateTime insertDate;
 
     public int getId() {

@@ -1,6 +1,10 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.reports.dao;
 
-import static com.marcs.app.user.mapper.UserProfileMapper.*;
+import static com.marcs.app.user.mapper.UserProfileMapper.USER_MAPPER;
 
 import java.util.List;
 

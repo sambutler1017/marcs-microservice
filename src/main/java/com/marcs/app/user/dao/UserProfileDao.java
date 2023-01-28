@@ -1,7 +1,11 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.user.dao;
 
-import static com.marcs.app.user.mapper.ApplicationMapper.*;
-import static com.marcs.app.user.mapper.UserProfileMapper.*;
+import static com.marcs.app.user.mapper.ApplicationMapper.APPLICATION_MAPPER;
+import static com.marcs.app.user.mapper.UserProfileMapper.USER_MAPPER;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -133,15 +137,22 @@ public class UserProfileDao extends BaseDao {
 	 * @return {@link User} with the replaced fields.
 	 */
 	private User mapNonNullUserFields(User destination, User source) {
-		if(destination.getFirstName() == null) destination.setFirstName(source.getFirstName());
-		if(destination.getLastName() == null) destination.setLastName(source.getLastName());
-		if(destination.getEmail() == null) destination.setEmail(source.getEmail());
-		if(destination.getStoreId() == null) destination.setStoreId(source.getStoreId());
-		if(destination.getWebRole() == null) destination.setWebRole(source.getWebRole());
-		if(destination.isAppAccess() == null) destination.setAppAccess(source.isAppAccess());
-		if(destination.isEmailReportsEnabled() == null)
+		if (destination.getFirstName() == null)
+			destination.setFirstName(source.getFirstName());
+		if (destination.getLastName() == null)
+			destination.setLastName(source.getLastName());
+		if (destination.getEmail() == null)
+			destination.setEmail(source.getEmail());
+		if (destination.getStoreId() == null)
+			destination.setStoreId(source.getStoreId());
+		if (destination.getWebRole() == null)
+			destination.setWebRole(source.getWebRole());
+		if (destination.isAppAccess() == null)
+			destination.setAppAccess(source.isAppAccess());
+		if (destination.isEmailReportsEnabled() == null)
 			destination.setEmailReportsEnabled(source.isEmailReportsEnabled());
-		if(destination.getHireDate() == null) destination.setHireDate(source.getHireDate());
+		if (destination.getHireDate() == null)
+			destination.setHireDate(source.getHireDate());
 		return destination;
 	}
 }

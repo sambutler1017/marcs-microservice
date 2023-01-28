@@ -1,9 +1,13 @@
-package com.marcs.app.blockOutDate.mapper;
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
+package com.marcs.app.blockoutdate.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
+import com.marcs.app.blockoutdate.client.domain.BlockOutDate;
 import com.marcs.common.abstracts.AbstractMapper;
 
 /**

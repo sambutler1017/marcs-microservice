@@ -1,4 +1,10 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.user.client.domain;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * Object used to update a users password. This will hold a current password and
@@ -7,10 +13,13 @@ package com.marcs.app.user.client.domain;
  * @author Sam Butler
  * @since October 29, 2021
  */
+@Schema(description = "Password update object.")
 public class PasswordUpdate {
 
+    @Schema(description = "Current password.")
     private String currentPassword;
 
+    @Schema(description = "The new password.")
     private String newPassword;
 
     public PasswordUpdate() {

@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.auth.client.domain;
 
 import java.time.LocalDateTime;
@@ -27,7 +31,8 @@ public class AuthToken {
     @Schema(description = "Data to be attached to the auth token.")
     private User user;
 
-    public AuthToken() {}
+    public AuthToken() {
+    }
 
     public AuthToken(String t, LocalDateTime creation, LocalDateTime expire, User u) {
         token = t;

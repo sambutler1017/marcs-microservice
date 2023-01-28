@@ -1,4 +1,8 @@
-package com.marcs.app.featureAccess.service;
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
+package com.marcs.app.featureaccess.service;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +10,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.marcs.app.featureAccess.dao.FeatureAccessDao;
+import com.marcs.app.featureaccess.dao.FeatureAccessDao;
 
 /**
  * Feature Access Service

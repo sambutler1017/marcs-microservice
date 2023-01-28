@@ -1,6 +1,10 @@
-package com.marcs.app.blockOutDate.dao;
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
+package com.marcs.app.blockoutdate.dao;
 
-import static com.marcs.app.blockOutDate.mapper.BlockOutDateMapper.*;
+import static com.marcs.app.blockoutdate.mapper.BlockOutDateMapper.BLOCK_OUT_DATE_MAPPER;
 
 import javax.sql.DataSource;
 
@@ -9,8 +13,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
-import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
+import com.marcs.app.blockoutdate.client.domain.BlockOutDate;
+import com.marcs.app.blockoutdate.client.domain.request.BlockOutDateGetRequest;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.common.page.Page;
 import com.marcs.sql.SqlParamBuilder;
@@ -95,9 +99,12 @@ public class BlockOutDateDao extends BaseDao {
 	 * @return {@link BlockOutDate} with the replaced fields.
 	 */
 	private BlockOutDate mapNonNullBlockOutDateFields(BlockOutDate destination, BlockOutDate source) {
-		if(destination.getStartDate() == null) destination.setStartDate(source.getStartDate());
-		if(destination.getEndDate() == null) destination.setEndDate(source.getEndDate());
-		if(destination.getInsertUserId() == 0) destination.setInsertUserId(source.getInsertUserId());
+		if (destination.getStartDate() == null)
+			destination.setStartDate(source.getStartDate());
+		if (destination.getEndDate() == null)
+			destination.setEndDate(source.getEndDate());
+		if (destination.getInsertUserId() == 0)
+			destination.setInsertUserId(source.getInsertUserId());
 		return destination;
 	}
 }

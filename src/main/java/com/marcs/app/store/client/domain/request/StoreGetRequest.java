@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.store.client.domain.request;
 
 import java.util.Arrays;
@@ -10,25 +14,36 @@ import com.marcs.common.search.SearchField;
 import com.marcs.common.search.SearchFieldParams;
 import com.marcs.common.search.SearchParam;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * This class handles lookups passed to the DAO.
  *
  * @author Sam Butler
  * @since September 9, 2021
  */
+@Schema(description = "Store get request object.")
 public class StoreGetRequest implements SearchParam, PageParam, SearchFieldParams<StoreSearchFields> {
+
+    @Schema(description = "Set of unique store ids.")
     private Set<String> id;
 
+    @Schema(description = "Set of Regional ids.")
     private Set<Integer> regionalId;
 
+    @Schema(description = "Set of Manager ids.")
     private Set<Integer> managerId;
 
+    @Schema(description = "Set of store names.")
     private Set<String> name;
 
+    @Schema(description = "Search criteria for the store request.")
     private String search;
 
+    @Schema(description = "The page size to be returned.")
     private int pageSize;
 
+    @Schema(description = "The row offset of the data to start at.")
     private int rowOffset;
 
     public Set<String> getId() {

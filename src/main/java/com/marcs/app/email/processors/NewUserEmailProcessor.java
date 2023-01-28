@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.email.processors;
 
 import java.util.List;
@@ -23,7 +27,7 @@ public class NewUserEmailProcessor extends EmailProcessor<User> {
         String emailContent = readEmailTemplate("NewUserEmail.html");
 
         return List.of(send(buildUserEmail(newUser.getEmail(), "Welcome to Marc's!",
-                                           emailContent.replace("::USER_NAME::", newUser.getFirstName()))));
+                emailContent.replace("::USER_NAME::", newUser.getFirstName()))));
     }
 
     @Override

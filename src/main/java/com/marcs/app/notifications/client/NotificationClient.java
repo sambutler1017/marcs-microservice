@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.notifications.client;
 
 import java.util.List;
@@ -133,13 +137,11 @@ public class NotificationClient {
         n.setLinkId(link);
         n.setType(type);
 
-        if(u.getWebRole().isManager()) {
+        if (u.getWebRole().isManager()) {
             n.setReceiverId(storeClient.getRegionalOfStoreById(u.getStoreId()).getId());
-        }
-        else if(u.getWebRole().equals(WebRole.EMPLOYEE)) {
+        } else if (u.getWebRole().equals(WebRole.EMPLOYEE)) {
             n.setReceiverId(storeClient.getManagerOfStoreById(u.getStoreId()).getId());
-        }
-        else {
+        } else {
             n.setReceiverId(0); // Notification to only site admin and admins
         }
         return controller.createNotification(n);

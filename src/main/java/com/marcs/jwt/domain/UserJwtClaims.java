@@ -1,4 +1,10 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.jwt.domain;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * Global jwt claim fields.
@@ -6,6 +12,7 @@ package com.marcs.jwt.domain;
  * @author Sam Butler
  * @since August 22,2022
  */
+@Schema(description = "User JWT Claim variables.")
 public abstract class UserJwtClaims {
     // User JWT Claims
     public static final String USER_ID = "userId";

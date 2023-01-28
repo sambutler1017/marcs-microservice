@@ -1,4 +1,10 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.jwt.domain;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * Jwt type to confirm what type of jwt token is being used.
@@ -6,6 +12,7 @@ package com.marcs.jwt.domain;
  * @author Sam Butler
  * @since August 23, 2022
  */
+@Schema(description = "The user JWT type.")
 public enum JwtType {
     WEB("WEB_JWT");
 

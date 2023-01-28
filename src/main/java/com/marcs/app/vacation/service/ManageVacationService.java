@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.vacation.service;
 
 import java.util.List;
@@ -77,7 +81,7 @@ public class ManageVacationService {
 	 */
 	public List<Vacation> createBatchVacations(int id, List<Vacation> vacs) {
 		userClient.getUserById(id);
-		for(Vacation vac : vacs) {
+		for (Vacation vac : vacs) {
 			createVacation(id, vac);
 		}
 		return vacationService.getVacationsByUserId(id);

@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.user.client.domain;
 
 import java.time.LocalDateTime;
@@ -5,39 +9,57 @@ import java.time.LocalDateTime;
 import com.marcs.common.enums.AccountStatus;
 import com.marcs.common.enums.WebRole;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * Class to create a user profile object
  * 
  * @author Sam Butler
  * @since June 25, 2020
  */
+@Schema(description = "User data object.")
 public class User {
+
+	@Schema(description = "The unique id of the user.")
 	private int id;
 
+	@Schema(description = "The user first name.")
 	private String firstName;
 
+	@Schema(description = "The user last name.")
 	private String lastName;
 
+	@Schema(description = "The user email address.")
 	private String email;
 
+	@Schema(description = "The web role of the user.")
 	private WebRole webRole;
 
+	@Schema(description = "The access of the user to the website.")
 	private Boolean appAccess;
 
+	@Schema(description = "User email reports enabled for the user.")
 	private Boolean emailReportsEnabled;
 
+	@Schema(description = "The password of the user.")
 	private String password;
 
+	@Schema(description = "What store the user belongs too, if exists.")
 	private String storeId;
 
+	@Schema(description = "The store name the user belongs too.")
 	private String storeName;
 
+	@Schema(description = "The user account status.")
 	private AccountStatus accountStatus;
 
+	@Schema(description = "The users last login date and time.")
 	private LocalDateTime lastLoginDate;
 
+	@Schema(description = "When the user was hired.")
 	private LocalDateTime hireDate;
 
+	@Schema(description = "When the user was created.")
 	private LocalDateTime insertDate;
 
 	public int getId() {

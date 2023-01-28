@@ -1,26 +1,41 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.requestTracker.client.domain;
 
 import java.time.LocalDateTime;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
- * Class to represent a store object
+ * Class to represent a request object.
  * 
  * @author Sam Butler
  * @since May 11, 2021
  */
+@Schema(description = "User Request object.")
 public class UserRequest<T> {
+
+	@Schema(description = "The unique request id.")
 	private int requestId;
 
+	@Schema(description = "The user id the request belongs too.")
 	private int userId;
 
+	@Schema(description = "The request type.")
 	private RequestType type;
 
+	@Schema(description = "The request status.")
 	private RequestStatus status;
 
+	@Schema(description = "Any notes attached to the requeset.")
 	private String notes;
 
+	@Schema(description = "The request data.")
 	private T requestData;
 
+	@Schema(description = "When the user request was inserted.")
 	private LocalDateTime insertDate;
 
 	public int getRequestId() {

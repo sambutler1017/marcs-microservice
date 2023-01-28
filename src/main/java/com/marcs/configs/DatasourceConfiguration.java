@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.configs;
 
 import javax.sql.DataSource;
@@ -36,7 +40,7 @@ public class DatasourceConfiguration {
      * @return {@link DataSource} object.
      */
     @Bean
-    @Profile({"production", "local"})
+    @Profile({ "production", "local" })
     @ConfigurationProperties("spring.datasource")
     public DataSource dataSource() {
         return DatabaseConnectionBuilder.create().useDefaultProperties().url(dbUrl).username(dbUsername)

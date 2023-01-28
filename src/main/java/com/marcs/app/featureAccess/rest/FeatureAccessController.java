@@ -1,4 +1,8 @@
-package com.marcs.app.featureAccess.rest;
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
+package com.marcs.app.featureaccess.rest;
 
 import java.util.List;
 import java.util.Map;
@@ -9,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.marcs.annotations.interfaces.RestApiController;
-import com.marcs.app.featureAccess.service.FeatureAccessService;
+import com.marcs.app.featureaccess.service.FeatureAccessService;
 
 /**
  * Gets feature access for a user

@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.email.processors;
 
 import java.util.List;
@@ -37,10 +41,9 @@ public class ForgotPasswordEmailProcessor extends EmailProcessor<String> {
     public List<UserEmail> process() {
         String content = getForgotPasswordContent(email);
 
-        if(!"".equals(content)) {
+        if (!"".equals(content)) {
             return List.of(send(buildUserEmail(email, "Forgot Password", content)));
-        }
-        else {
+        } else {
             LOGGER.warn("Email could not be processed. No user found for email '{}'", email);
         }
         return null;
@@ -66,10 +69,10 @@ public class ForgotPasswordEmailProcessor extends EmailProcessor<String> {
         request.setEmail(Sets.newHashSet(email));
         List<User> users = userClient.getUsers(request);
 
-        if(users.size() < 1)
+        if (users.size() < 1)
             return "";
         else
             return emailContent.replace("::FORGOT_PASSWORD_LINK::",
-                                        RESET_LINK + jwtTokenUtil.generateToken(users.get(0), true));
+                    RESET_LINK + jwtTokenUtil.generateToken(users.get(0), true));
     }
 }

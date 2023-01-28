@@ -1,16 +1,20 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.reports.service;
 
 import java.util.List;
-
-import com.marcs.app.reports.dao.VacationReportsDao;
-import com.marcs.app.vacation.client.domain.Vacation;
-import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
-import com.marcs.common.csv.CSVBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
+import com.marcs.app.reports.dao.VacationReportsDao;
+import com.marcs.app.vacation.client.domain.Vacation;
+import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
+import com.marcs.common.csv.CSVBuilder;
 
 /**
  * User Reports Service class that will handle all the calls for formatting a

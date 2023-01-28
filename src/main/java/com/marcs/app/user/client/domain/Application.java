@@ -1,4 +1,10 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.user.client.domain;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * Class to create a User Application object
@@ -6,13 +12,19 @@ package com.marcs.app.user.client.domain;
  * @author Sam Butler
  * @since June 25, 2020
  */
+@Schema(description = "The application object.")
 public class Application {
+
+    @Schema(description = "The unique id of the application.")
     private int id;
 
+    @Schema(description = "The application name.")
     private String name;
 
+    @Schema(description = "The application access.")
     private boolean access;
 
+    @Schema(description = "The enabled status of the application.")
     private boolean enabled;
 
     public int getId() {

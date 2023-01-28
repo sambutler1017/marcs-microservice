@@ -1,4 +1,8 @@
-package com.marcs.app.featureAccess.client;
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
+package com.marcs.app.featureaccess.client;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +10,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.marcs.annotations.interfaces.Client;
-import com.marcs.app.featureAccess.rest.FeatureAccessController;
+import com.marcs.app.featureaccess.rest.FeatureAccessController;
 
 /**
  * This class exposes the feature access endpoint's to other app's to pull data

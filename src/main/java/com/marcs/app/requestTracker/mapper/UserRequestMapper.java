@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.requestTracker.mapper;
 
 import java.sql.ResultSet;
@@ -22,7 +26,8 @@ public class UserRequestMapper<T> extends AbstractMapper<UserRequest<T>> {
     private UserRequest<T> newInstance;
     private Class<T> type;
 
-    public UserRequestMapper() {}
+    public UserRequestMapper() {
+    }
 
     public UserRequestMapper(Class<T> clazz) {
         this.newInstance = new UserRequest<T>();
@@ -40,8 +45,7 @@ public class UserRequestMapper<T> extends AbstractMapper<UserRequest<T>> {
 
         try {
             request.setRequestData(DefaultMapper.objectMapper().readValue(rs.getString(DATA), this.type));
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             request.setRequestData(null);
         }
         return request;

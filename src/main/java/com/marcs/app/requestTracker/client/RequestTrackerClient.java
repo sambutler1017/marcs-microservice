@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.requestTracker.client;
 
 import com.marcs.annotations.interfaces.Client;

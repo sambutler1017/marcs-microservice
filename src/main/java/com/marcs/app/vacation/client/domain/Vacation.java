@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.vacation.client.domain;
 
 import java.time.LocalDate;
@@ -9,36 +13,49 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.common.enums.WebRole;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * Class to create a vacation object
  * 
  * @author Sam Butler
  * @since June 25, 2020
  */
+@Schema(description = "Vacation data object.")
 public class Vacation {
 
+	@Schema(description = "Unique id of the vacation.")
 	private int id;
 
+	@Schema(description = "The user id the vacation belongs too.")
 	private int userId;
 
+	@Schema(description = "The full name of the user.")
 	private String fullName;
 
+	@Schema(description = "The web role of the user.")
 	private WebRole webRole;
 
+	@Schema(description = "The store id of the vacation.")
 	private String storeId;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	@Schema(description = "The start date of the vacation.")
 	private LocalDate startDate;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	@Schema(description = "The end date of the vacation.")
 	private LocalDate endDate;
 
+	@Schema(description = "Notes on the vacation.")
 	private String notes;
 
+	@Schema(description = "When the vacation was created.")
 	private LocalDateTime insertDate;
 
+	@Schema(description = "The status of the vaction.")
 	private VacationStatus status;
 
 	public int getId() {

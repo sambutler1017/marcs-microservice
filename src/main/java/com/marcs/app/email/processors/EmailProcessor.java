@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.email.processors;
 
 import java.io.BufferedReader;
@@ -84,9 +88,8 @@ public abstract class EmailProcessor<T> {
 
             Response res = sg.api(request);
             LOGGER.info("Email sent to '{}' with status code : {}", userEmail.getRecipient().getEmail(),
-                        res.getStatusCode());
-        }
-        catch(IOException e) {
+                    res.getStatusCode());
+        } catch (IOException e) {
             LOGGER.info("Email could not be sent. Error processing Email");
         }
 
@@ -122,10 +125,9 @@ public abstract class EmailProcessor<T> {
         final String filePath = String.format("%s/%s", BASE_HTML_PATH, fileName);
         String emailContent = "";
 
-        try(final BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (final BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             emailContent = br.lines().collect(Collectors.joining(" "));
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             LOGGER.warn("Could not process email template: '{}'", fileName);
         }
 

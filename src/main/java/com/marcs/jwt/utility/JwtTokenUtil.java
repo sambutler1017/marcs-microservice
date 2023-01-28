@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.jwt.utility;
 
 import java.io.Serializable;
@@ -11,7 +15,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.marcs.app.featureAccess.client.FeatureAccessClient;
+import com.marcs.app.featureaccess.client.FeatureAccessClient;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
@@ -120,7 +124,7 @@ public class JwtTokenUtil implements Serializable {
         claims.put(UserJwtClaims.ACCESS, featureAccessClient.getFeatureAccess(user.getWebRole().getRank()));
         claims.put(UserJwtClaims.PASSWORD_RESET, reset);
 
-        if(user.getStoreId() != null) {
+        if (user.getStoreId() != null) {
             claims.put("storeId", user.getStoreId());
         }
 

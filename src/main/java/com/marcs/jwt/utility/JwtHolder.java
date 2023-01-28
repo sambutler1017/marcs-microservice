@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.jwt.utility;
 
 import org.springframework.beans.factory.annotation.Autowired;

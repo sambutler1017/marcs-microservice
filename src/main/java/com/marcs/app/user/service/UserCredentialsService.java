@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +78,7 @@ public class UserCredentialsService {
      */
     public User updateUserPasswordById(int userId, PasswordUpdate passUpdate) {
         User updatingUser = userProfileClient.getUserById(userId);
-        if(userId != updatingUser.getId() && jwtHolder.getWebRole().getRank() <= updatingUser.getWebRole().getRank()) {
+        if (userId != updatingUser.getId() && jwtHolder.getWebRole().getRank() <= updatingUser.getWebRole().getRank()) {
             throw new InsufficientPermissionsException(String
                     .format("Your role of '%s' can not update a user of role '%s'", jwtHolder.getWebRole(),
                             updatingUser.getWebRole()));
@@ -93,7 +97,7 @@ public class UserCredentialsService {
      *                   not able to hash the new password.
      */
     public User resetUserPassword(String pass) throws Exception {
-        if(!jwtHolder.getResetPassword()) {
+        if (!jwtHolder.getResetPassword()) {
             throw new Exception("Invalid token for reset password!");
         }
 
@@ -109,7 +113,7 @@ public class UserCredentialsService {
      * @throws Exception
      */
     private User passwordUpdate(int userId, String password) {
-        if(password != null && password.trim() != "") {
+        if (password != null && password.trim() != "") {
             dao.updateUserPassword(userId, BCrypt.hashpw(password, BCrypt.gensalt()));
         }
         return userProfileClient.getCurrentUser();

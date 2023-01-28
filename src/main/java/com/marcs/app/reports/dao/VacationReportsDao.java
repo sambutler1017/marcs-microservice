@@ -1,6 +1,10 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.reports.dao;
 
-import static com.marcs.app.vacation.mapper.VacationMapper.*;
+import static com.marcs.app.vacation.mapper.VacationMapper.VACATION_MAPPER;
 
 import java.util.List;
 

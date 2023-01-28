@@ -1,6 +1,10 @@
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
 package com.marcs.app.notifications.dao;
 
-import static com.marcs.app.notifications.mapper.NotificationMapper.*;
+import static com.marcs.app.notifications.mapper.NotificationMapper.NOTIFICATION_MAPPER;
 
 import java.time.LocalDateTime;
 

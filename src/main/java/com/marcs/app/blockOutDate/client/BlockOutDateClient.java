@@ -1,13 +1,17 @@
-package com.marcs.app.blockOutDate.client;
+/**
+ * Copyright (c) 2023 Marcs App.
+ * All rights reserved.
+ */
+package com.marcs.app.blockoutdate.client;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.marcs.annotations.interfaces.Client;
-import com.marcs.app.blockOutDate.client.domain.BlockOutDate;
-import com.marcs.app.blockOutDate.client.domain.request.BlockOutDateGetRequest;
-import com.marcs.app.blockOutDate.rest.BlockOutDateController;
+import com.marcs.app.blockoutdate.client.domain.BlockOutDate;
+import com.marcs.app.blockoutdate.client.domain.request.BlockOutDateGetRequest;
+import com.marcs.app.blockoutdate.rest.BlockOutDateController;
 
 /**
  * This class exposes the block out date endpoint's to other app's to pull data
