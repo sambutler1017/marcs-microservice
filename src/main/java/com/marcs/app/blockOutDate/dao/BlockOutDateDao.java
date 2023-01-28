@@ -54,10 +54,9 @@ public class BlockOutDateDao extends BaseDao {
 	 * @return {@link BlockOutDate} with the updated fields.
 	 */
 	public BlockOutDate updateBlockOutDateById(int id, BlockOutDate currentBlockOutDate, BlockOutDate blockDate) {
-		blockDate = mapNonNullBlockOutDateFields(blockDate, currentBlockOutDate);
-
 		MapSqlParameterSource params = SqlParamBuilder.with().withParam(ID, id)
-				.withParam(START_DATE, blockDate.getStartDate()).withParam(END_DATE, blockDate.getEndDate())
+				.withParam(START_DATE, blockDate.getStartDate())
+				.withParam(END_DATE, blockDate.getEndDate())
 				.withParam(INSERT_USER_ID, blockDate.getInsertUserId()).build();
 
 		update("updateBlockOutDateById", params);
@@ -89,22 +88,5 @@ public class BlockOutDateDao extends BaseDao {
 	 */
 	public void deleteBlockOutDate(int id) {
 		delete("deleteBlockOutDate", parameterSource(ID, id));
-	}
-
-	/**
-	 * Maps non null block out date fields from the source to the desitnation.
-	 * 
-	 * @param destination Where the null fields should be replaced.
-	 * @param source      Where to get the replacements for the null fields.
-	 * @return {@link BlockOutDate} with the replaced fields.
-	 */
-	private BlockOutDate mapNonNullBlockOutDateFields(BlockOutDate destination, BlockOutDate source) {
-		if (destination.getStartDate() == null)
-			destination.setStartDate(source.getStartDate());
-		if (destination.getEndDate() == null)
-			destination.setEndDate(source.getEndDate());
-		if (destination.getInsertUserId() == 0)
-			destination.setInsertUserId(source.getInsertUserId());
-		return destination;
 	}
 }

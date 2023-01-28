@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
@@ -90,18 +91,15 @@ public class UserProfileDao extends BaseDao {
 	 * Update the user for the given user object. Null out password field so that it
 	 * is not returned on the {@link User} object
 	 * 
-	 * @param userId      Id of the usre being updated.
-	 * @param updateInfo  The user information to be updated.
-	 * @param currentInfo The current user info.
+	 * @param userId     Id of the usre being updated.
+	 * @param updateInfo The user information to be updated.
 	 */
-	public void updateUserProfile(int userId, User updateInfo, User currentInfo) {
+	public void updateUserProfile(int userId, User updateInfo) {
 		updateInfo.setPassword(null);
-		updateInfo = mapNonNullUserFields(updateInfo, currentInfo);
-
 		MapSqlParameterSource params = SqlParamBuilder.with().withParam(FIRST_NAME, updateInfo.getFirstName())
 				.withParam(LAST_NAME, updateInfo.getLastName()).withParam(EMAIL, updateInfo.getEmail())
-				.withParam(STORE_ID, updateInfo.getStoreId().trim() == "" ? null : updateInfo.getStoreId())
-				.withParam(WEB_ROLE_ID, updateInfo.getWebRole().getRank())
+				.withParam(STORE_ID, StringUtils.hasText(updateInfo.getStoreId()) ? updateInfo.getStoreId() : null)
+				.withParam(WEB_ROLE_ID, updateInfo.getWebRole() == null ? null : updateInfo.getWebRole().getRank())
 				.withParam(HIRE_DATE, updateInfo.getHireDate()).withParam(ID, userId)
 				.withParam(EMAIL_REPORTS_ENABLED, updateInfo.isEmailReportsEnabled()).build();
 
@@ -127,32 +125,5 @@ public class UserProfileDao extends BaseDao {
 	 */
 	public void deleteUser(int id) {
 		delete("deleteUser", parameterSource(ID, id));
-	}
-
-	/**
-	 * Maps non null user fields from the source to the desitnation.
-	 * 
-	 * @param destination Where the null fields should be replaced.
-	 * @param source      Where to get the replacements for the null fields.
-	 * @return {@link User} with the replaced fields.
-	 */
-	private User mapNonNullUserFields(User destination, User source) {
-		if (destination.getFirstName() == null)
-			destination.setFirstName(source.getFirstName());
-		if (destination.getLastName() == null)
-			destination.setLastName(source.getLastName());
-		if (destination.getEmail() == null)
-			destination.setEmail(source.getEmail());
-		if (destination.getStoreId() == null)
-			destination.setStoreId(source.getStoreId());
-		if (destination.getWebRole() == null)
-			destination.setWebRole(source.getWebRole());
-		if (destination.isAppAccess() == null)
-			destination.setAppAccess(source.isAppAccess());
-		if (destination.isEmailReportsEnabled() == null)
-			destination.setEmailReportsEnabled(source.isEmailReportsEnabled());
-		if (destination.getHireDate() == null)
-			destination.setHireDate(source.getHireDate());
-		return destination;
 	}
 }

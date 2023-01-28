@@ -35,7 +35,6 @@ public class UserStatusDao extends BaseDao {
      * 
      * @param userId The id of the user to get the status for.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     public UserStatus getUserStatusById(int userId) {
         return get("getUserStatusById", parameterSource(USER_ID, userId), USER_STATUS_MAPPER);
@@ -47,7 +46,6 @@ public class UserStatusDao extends BaseDao {
      * @param userStatus     Object to be inserted.
      * @param updatingUserId The user that has updated the user account status last.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     public UserStatus insertUserStatus(UserStatus userStatus, int updatingUserId) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -67,12 +65,8 @@ public class UserStatusDao extends BaseDao {
      * 
      * @param id The id of the user to get the status for.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     public UserStatus updateUserStatusByUserId(int id, UserStatus userStatus) {
-        UserStatus currentStatus = getUserStatusById(id);
-        userStatus = mapNonNullUserStatusFields(userStatus, currentStatus);
-
         MapSqlParameterSource params = SqlParamBuilder.with().withParam(USER_ID, id)
                 .withParam(ACCOUNT_STATUS, userStatus.getAccountStatus())
                 .withParam(APP_ACCESS, userStatus.isAppAccess())
@@ -81,23 +75,5 @@ public class UserStatusDao extends BaseDao {
         update("updateUserStatus", params);
 
         return getUserStatusById(id);
-    }
-
-    /**
-     * Maps non null user fields from the source to the desitnation.
-     * 
-     * @param destination Where the null fields should be replaced.
-     * @param source      Where to get the replacements for the null fields.
-     * @return {@link UserStatus} with the replaced fields.
-     */
-    private UserStatus mapNonNullUserStatusFields(UserStatus destination, UserStatus source) {
-        if (destination.getAccountStatus() == null)
-            destination.setAccountStatus(source.getAccountStatus());
-        if ((destination.getUpdatedUserId() == null || destination.getUpdatedUserId() == 0)
-                && source.getUpdatedUserId() != 0)
-            destination.setUpdatedUserId(source.getUpdatedUserId());
-        if (destination.isAppAccess() == null)
-            destination.setAppAccess(source.isAppAccess());
-        return destination;
     }
 }

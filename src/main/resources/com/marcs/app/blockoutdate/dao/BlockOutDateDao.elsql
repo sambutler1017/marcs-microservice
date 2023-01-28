@@ -29,9 +29,9 @@
 @NAME(updateBlockOutDateById)
   UPDATE block_out_dates 
   SET 
-    start_date     = :start_date,
-    end_date       = :end_date,
-    insert_user_id = :insert_user_id
+    start_date     = IFNULL(:start_date,start_date),
+    end_date       = IFNULL(:end_date,end_date),
+    insert_user_id = IFNULL(:insert_user_id,insert_user_id)
   WHERE id = :id
 
 @NAME(deleteBlockOutDate)

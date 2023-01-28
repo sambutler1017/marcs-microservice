@@ -132,8 +132,7 @@ public class ManageUserProfileService {
 	 * @return user associated to that id with the updated information.
 	 */
 	private User updateUserProfile(int userId, User user) {
-		User currentUser = userProfileService.getUserById(userId);
-		dao.updateUserProfile(userId, user, currentUser);
+		dao.updateUserProfile(userId, user);
 		return userProfileService.getUserById(userId);
 	}
 }

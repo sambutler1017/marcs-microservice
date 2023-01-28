@@ -6,6 +6,7 @@ package com.marcs.sql;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -113,7 +114,7 @@ public class SqlParamBuilder {
      * @return this builder object {@link SqlParamBuilder}
      */
     public SqlParamBuilder withParam(String name, LocalDateTime dt) {
-        return withParam(name, dt.toString());
+        return withParam(name, dt == null ? null : dt.toString());
     }
 
     /**
@@ -125,7 +126,7 @@ public class SqlParamBuilder {
      * @return this builder object {@link SqlParamBuilder}
      */
     public SqlParamBuilder withParam(String name, LocalDate dt) {
-        return withParam(name, dt.toString());
+        return withParam(name, dt == null ? null : dt.toString());
     }
 
     /**
@@ -138,7 +139,8 @@ public class SqlParamBuilder {
      */
     public SqlParamBuilder withParamDefault(String name, LocalDateTime dt) {
         if (dt == null) {
-            return withParam(name, LocalDateTime.now(TimeZoneUtil.SYSTEM_ZONE));
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            return withParam(name, LocalDateTime.now(TimeZoneUtil.SYSTEM_ZONE).format(formatter));
         }
         return withParam(name, dt.toString());
     }
