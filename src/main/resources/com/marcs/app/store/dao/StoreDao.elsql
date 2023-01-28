@@ -35,10 +35,8 @@
   @INCLUDE(getStoresBase)
 
 @NAME(getRegionalOfStore)
-  SELECT 
-    @INCLUDE(userProfileFields), @INCLUDE(storeFields), @INCLUDE(userStatusFields)
-  FROM
-    stores st
+  SELECT @INCLUDE(userProfileFields), @INCLUDE(storeFields), @INCLUDE(userStatusFields)
+  FROM stores st
     LEFT JOIN user_profile up ON st.regional_id = up.id
     JOIN web_role wr ON up.web_role_id = wr.id
     JOIN user_status us ON up.id = us.user_id
@@ -47,8 +45,7 @@
 
 @NAME(getManagerOfStoreById)
   SELECT @INCLUDE(userProfileFields), @INCLUDE(storeFields), @INCLUDE(userStatusFields)
-  FROM
-    stores st
+  FROM stores st
     LEFT JOIN user_profile up ON st.manager_id = up.id
     JOIN web_role wr ON up.web_role_id = wr.id
     JOIN user_status us ON up.id = us.user_id

@@ -3,16 +3,11 @@
   st.id AS 'store_id', st.regional_id, CONCAT(up.first_name, ' ', up.last_name) AS name, up.web_role_id
 
 @NAME(getVacations)
-  SELECT 
-    @INCLUDE(vacationFields)
-  FROM
-    user_vacations v
-      JOIN
-    user_profile up ON v.user_id = up.id
-      JOIN
-    web_role wr ON up.web_role_id = wr.id
-      LEFT JOIN
-    stores st ON up.store_id = st.id
+  SELECT @INCLUDE(vacationFields)
+  FROM user_vacations v
+    INNER JOIN user_profile up ON v.user_id = up.id
+    INNER JOIN web_role wr ON up.web_role_id = wr.id
+    LEFT JOIN stores st ON up.store_id = st.id
   @WHERE
     @AND(:id)
       v.id IN (:id)

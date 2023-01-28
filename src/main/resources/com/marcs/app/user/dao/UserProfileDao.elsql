@@ -30,9 +30,9 @@
 
 @NAME(getUsersBase)
   FROM user_profile up
-  JOIN web_role wr ON up.web_role_id = wr.id
-  LEFT JOIN stores st ON up.store_id = st.id
-  JOIN user_status us ON up.id = us.user_id
+    INNER JOIN web_role wr ON up.web_role_id = wr.id
+    LEFT JOIN stores st ON up.store_id = st.id
+    INNER JOIN user_status us ON up.id = us.user_id
   @INCLUDE(userFilters)
 
 @NAME(getUsersPage)
@@ -51,12 +51,9 @@
     a.app_name AS 'app_name',
     wraa.access AS 'access',
     a.enabled AS 'enabled'
-  FROM
-    user_profile up
-      JOIN
-    web_role_app_access wraa ON up.web_role_id = wraa.web_role_id
-      JOIN
-    application a ON wraa.app_id = a.id
+  FROM user_profile up
+    INNER JOIN web_role_app_access wraa ON up.web_role_id = wraa.web_role_id
+    INNER JOIN application a ON wraa.app_id = a.id
   @WHERE
     @AND(:user_id)
       up.id = :user_id
@@ -80,15 +77,12 @@
     web_role_id = :web_role_id,
     email_reports_enabled = :email_reports_enabled,
     hire_date = :hire_date
-  WHERE
-    id = :id
+  WHERE id = :id
 
 @NAME(updateUserLastLoginToNow)
   UPDATE user_profile 
-  SET
-    last_login_date = :last_login_date
-  WHERE
-    id = :id
+  SET last_login_date = :last_login_date
+  WHERE id = :id
 
 @NAME(search)
   (@VALUE(:searchContent))

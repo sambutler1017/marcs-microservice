@@ -6,12 +6,15 @@ package com.marcs.gateway.domain.interfaces;
 
 import javax.servlet.http.HttpServletRequest;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * Base interface for request validators.
  * 
  * @author Sam Butler
  * @since August 24, 2022
  */
+@Schema(description = "Contract for base request validator.")
 public interface BaseRequestValidator {
 
     /**

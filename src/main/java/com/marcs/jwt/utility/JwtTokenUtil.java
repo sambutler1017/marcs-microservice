@@ -51,7 +51,7 @@ public class JwtTokenUtil implements Serializable {
     /**
      * Pulls the email (Subject Field) from the token
      * 
-     * @param token - The token being inspected
+     * @param token The token being inspected
      * @return String of the subject field
      */
     public String getIdFromToken(String token) {
@@ -61,7 +61,7 @@ public class JwtTokenUtil implements Serializable {
     /**
      * Pulls the expiration date from a given token
      * 
-     * @param token - The token being inspected
+     * @param token The token being inspected
      * @return A Date object
      */
     public LocalDateTime getExpirationDateFromToken(String token) {
@@ -71,9 +71,9 @@ public class JwtTokenUtil implements Serializable {
     /**
      * Get Specfic claims from a token based on the passed in resolver
      * 
-     * @param <T>            - Object type
-     * @param token          - Token to be inspected
-     * @param claimsResolver - Claims resolver
+     * @param <T>            Object type
+     * @param token          Token to be inspected
+     * @param claimsResolver Claims resolver
      * @return The generic type passed in of the claims
      */
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
@@ -84,7 +84,7 @@ public class JwtTokenUtil implements Serializable {
     /**
      * Pulls all the claims off of a given token
      * 
-     * @param token - The token to inspect and pull the claims from
+     * @param token The token to inspect and pull the claims from
      * @return Claims object is returned
      */
     public Claims getAllClaimsFromToken(String token) {
@@ -134,8 +134,8 @@ public class JwtTokenUtil implements Serializable {
     /**
      * Generate a token based on the given Claims and subject
      * 
-     * @param claims  - The claims/fields to be added to the token
-     * @param subject - The main subject to be added to the field
+     * @param claims  The claims/fields to be added to the token
+     * @param subject The main subject to be added to the field
      * @return String of the generated JWT token
      */
     private String doGenerateToken(Map<String, Object> claims) {
