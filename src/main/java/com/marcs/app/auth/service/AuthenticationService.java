@@ -84,7 +84,7 @@ public class AuthenticationService {
      */
     public User verifyUser(String email, String password) {
         String hashedPassword = authDao.getUserAuthPassword(email)
-                .orElseThrow(() -> new UserNotFoundException(String.format("User not found for email: %s", email)));
+                .orElseThrow(() -> new UserNotFoundException(String.format("User not found or does not have access for email: '%s'", email)));
 
         if (BCrypt.checkpw(password, hashedPassword)) {
             User authUser = getAuthenticatedUser(email);

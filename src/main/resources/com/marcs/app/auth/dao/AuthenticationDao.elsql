@@ -2,4 +2,6 @@
   SELECT uc.password
   FROM user_profile up
   INNER JOIN user_credentials uc ON up.id = uc.user_id
+  INNER JOIN user_status us ON up.id = us.id
   WHERE up.email = :email
+  AND us.app_access = 1
