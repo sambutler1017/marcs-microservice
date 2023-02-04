@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.notifications.service;
 
@@ -50,7 +49,7 @@ public class ManageNotificationService {
      * @throws Exception
      */
     public Notification createNotification(Notification n) throws Exception {
-        if (n.getLinkId() == 0 || n.getType() == null) {
+        if(n.getLinkId() == 0 || n.getType() == null) {
             throw new Exception("Link ID, and Type are required fields");
         }
         return dao.createNotification(n);

@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.configs;
 
@@ -32,9 +31,9 @@ public class PageSerializationConfiguration implements WebMvcConfigurer {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         ListIterator<HttpMessageConverter<?>> iterator = converters.listIterator();
 
-        while (iterator.hasNext()) {
+        while(iterator.hasNext()) {
             HttpMessageConverter<?> converter = iterator.next();
-            if (converter instanceof AbstractJackson2HttpMessageConverter) {
+            if(converter instanceof AbstractJackson2HttpMessageConverter) {
                 iterator.previous();
                 iterator.add(new PageSerializerMessageConverter(objectMapper));
                 break;

@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.blockoutdate.service;
 
@@ -51,9 +50,9 @@ public class ManageBlockOutDateService {
 	 * @return The block out date with the insert time stamp and unique id.
 	 */
 	public BlockOutDate createBlockOutDate(BlockOutDate blockDate) throws Exception {
-		if (jwtHolder.getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
-			throw new Exception(String.format("User with role '%s' does not have permission to create block out dates!",
-					jwtHolder.getWebRole().toString()));
+		if(jwtHolder.getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
+			throw new Exception(String.format(	"User with role '%s' does not have permission to create block out dates!",
+												jwtHolder.getWebRole().toString()));
 		}
 
 		blockDate.setInsertUserId(jwtHolder.getUserId());

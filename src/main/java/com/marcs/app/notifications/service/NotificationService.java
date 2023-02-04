@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.notifications.service;
 
@@ -59,7 +58,7 @@ public class NotificationService {
         request.setId(Sets.newHashSet(id));
 
         List<Notification> notifications = getNotifications(request).getList();
-        if (notifications.isEmpty()) {
+        if(notifications.isEmpty()) {
             throw new Exception(String.format("Notification not found for id '%d'", id));
         }
         return notifications.get(0);

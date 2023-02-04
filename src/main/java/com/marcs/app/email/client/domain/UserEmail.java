@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.email.client.domain;
 
@@ -34,8 +33,7 @@ public class UserEmail {
     @Schema(description = "When the email was sent.")
     private LocalDateTime sentDate;
 
-    public UserEmail() {
-    }
+    public UserEmail() {}
 
     public UserEmail(Email recipient, String subject, String body) {
         this.recipient = recipient;

@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.vacation.mapper;
 
@@ -34,7 +33,8 @@ public class VacationMapper extends AbstractMapper<Vacation> {
 		try {
 			vacation.setStartDate(parseDate(rs.getString(START_DATE)));
 			vacation.setEndDate(parseDate(rs.getString(END_DATE)));
-		} catch (Exception e) {
+		}
+		catch(Exception e) {
 			vacation.setStartDate(null);
 			vacation.setEndDate(null);
 		}

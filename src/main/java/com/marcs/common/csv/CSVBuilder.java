@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.common.csv;
 
@@ -77,10 +76,8 @@ public class CSVBuilder<T> {
      */
     public ResponseEntity<Resource> build(String filename) {
         InputStreamResource file = new InputStreamResource(generateCSV());
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-                .contentType(MediaType.parseMediaType("application/csv"))
-                .body(file);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/csv")).body(file);
     }
 
     /**
@@ -93,17 +90,18 @@ public class CSVBuilder<T> {
      */
     private ByteArrayInputStream generateCSV() {
         final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
-        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try(ByteArrayOutputStream out = new ByteArrayOutputStream();
                 CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
             csvPrinter.printRecord(getColumnHeaders());
-            for (T d : this.data) {
+            for(T d : this.data) {
                 List<String> data = convertToMap(d).values().stream().map(e -> e == null ? "" : e).map(Object::toString)
                         .collect(Collectors.toList());
                 csvPrinter.printRecord(data);
             }
             csvPrinter.flush();
             return new ByteArrayInputStream(out.toByteArray());
-        } catch (IOException e) {
+        }
+        catch(IOException e) {
             throw new RuntimeException("fail to import data to CSV file: " + e.getMessage());
         }
     }
@@ -119,15 +117,16 @@ public class CSVBuilder<T> {
         Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 
         Field[] allFields = d.getClass().getDeclaredFields();
-        for (Field field : allFields) {
+        for(Field field : allFields) {
             field.setAccessible(true);
-            if (!this.csvParams.containsKey(field.getName())) {
+            if(!this.csvParams.containsKey(field.getName())) {
                 continue;
             }
 
             try {
                 dataMap.put(field.getName(), field.get(d));
-            } catch (Exception e) {
+            }
+            catch(Exception e) {
                 dataMap.put(field.getName(), null);
             }
         }

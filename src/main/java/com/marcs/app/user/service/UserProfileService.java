@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.user.service;
 
@@ -113,7 +112,7 @@ public class UserProfileService {
 		request.setEmail(Sets.newHashSet(email));
 		List<User> users = getUsers(request).getList();
 
-		if (users.size() == 0) {
+		if(users.size() == 0) {
 			throw new BaseException(String.format("User not found for email '%s'", email));
 		}
 

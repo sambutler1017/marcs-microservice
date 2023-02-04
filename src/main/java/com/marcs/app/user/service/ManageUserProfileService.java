@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.user.service;
 
@@ -95,7 +94,7 @@ public class ManageUserProfileService {
 	 */
 	public User updateUserProfileById(int id, User user) {
 		User updatingUser = userProfileService.getUserById(id);
-		if (id != updatingUser.getId() && jwtHolder.getWebRole().getRank() <= updatingUser.getWebRole().getRank()) {
+		if(id != updatingUser.getId() && jwtHolder.getWebRole().getRank() <= updatingUser.getWebRole().getRank()) {
 			throw new InsufficientPermissionsException(String
 					.format("Your role of '%s' can not update a user of role '%s'", jwtHolder.getWebRole(),
 							updatingUser.getWebRole()));

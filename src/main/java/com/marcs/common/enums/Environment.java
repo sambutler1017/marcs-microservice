@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.common.enums;
 
@@ -11,7 +10,8 @@ package com.marcs.common.enums;
  * @since July 31, 2021
  */
 public enum Environment {
-    PRODUCTION("https://marcs-microservice.herokuapp.com"), LOCAL("http://localhost:8080");
+    PRODUCTION("https://marcs-microservice.herokuapp.com"),
+    LOCAL("http://localhost:8080");
 
     private String uri;
 
@@ -20,9 +20,8 @@ public enum Environment {
     }
 
     public static Environment getEnvrionment(String text) {
-        for (Environment w : Environment.values())
-            if (w.toString().equals(text.toUpperCase()))
-                return w;
+        for(Environment w : Environment.values())
+            if(w.toString().equals(text.toUpperCase())) return w;
         return LOCAL;
     }
 

@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.user.client.domain;
 
@@ -35,8 +34,7 @@ public class UserStatus {
     @Schema(description = "The last update user id of the user.")
     private Integer updatedUserId;
 
-    public UserStatus() {
-    }
+    public UserStatus() {}
 
     public UserStatus(int userId, AccountStatus accountStatus, Boolean appAccess) {
         this.userId = userId;

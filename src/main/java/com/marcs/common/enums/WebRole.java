@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.common.enums;
 
@@ -11,10 +10,15 @@ package com.marcs.common.enums;
  * @since September 6, 2021
  */
 public enum WebRole implements TextEnum {
-	EMPLOYEE(1, "EMPLOYEE"), CORPORATE_USER(2, "CORPORATE_USER"),
-	CUSTOMER_SERVICE_MANAGER(3, "CUSTOMER_SERVICE_MANAGER"), ASSISTANT_MANAGER(4, "ASSISTANT_MANAGER"),
-	STORE_MANAGER(5, "STORE_MANAGER"), DISTRICT_MANAGER(6, "DISTRICT_MANAGER"), REGIONAL(7, "REGIONAL"),
-	SITE_ADMIN(8, "SITE_ADMIN"), ADMIN(9, "ADMIN");
+	EMPLOYEE(1, "EMPLOYEE"),
+	CORPORATE_USER(2, "CORPORATE_USER"),
+	CUSTOMER_SERVICE_MANAGER(3, "CUSTOMER_SERVICE_MANAGER"),
+	ASSISTANT_MANAGER(4, "ASSISTANT_MANAGER"),
+	STORE_MANAGER(5, "STORE_MANAGER"),
+	DISTRICT_MANAGER(6, "DISTRICT_MANAGER"),
+	REGIONAL(7, "REGIONAL"),
+	SITE_ADMIN(8, "SITE_ADMIN"),
+	ADMIN(9, "ADMIN");
 
 	private int rank;
 	private String textId;
@@ -50,9 +54,8 @@ public enum WebRole implements TextEnum {
 	 * @return {@link WebRole} of the rank found, if any.
 	 */
 	public static WebRole getRole(int rank) {
-		for (WebRole w : WebRole.values())
-			if (w.rank == rank)
-				return w;
+		for(WebRole w : WebRole.values())
+			if(w.rank == rank) return w;
 		return EMPLOYEE;
 	}
 

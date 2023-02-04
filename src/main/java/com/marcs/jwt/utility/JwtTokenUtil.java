@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.jwt.utility;
 
@@ -124,7 +123,7 @@ public class JwtTokenUtil implements Serializable {
         claims.put(UserJwtClaims.ACCESS, featureAccessClient.getFeatureAccess(user.getWebRole().getRank()));
         claims.put(UserJwtClaims.PASSWORD_RESET, reset);
 
-        if (user.getStoreId() != null) {
+        if(user.getStoreId() != null) {
             claims.put("storeId", user.getStoreId());
         }
 

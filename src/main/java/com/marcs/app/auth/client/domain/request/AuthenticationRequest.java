@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.auth.client.domain.request;
 
@@ -23,8 +22,7 @@ public class AuthenticationRequest implements Serializable {
     @Schema(description = "The password associated with the email.")
     private String password;
 
-    public AuthenticationRequest() {
-    }
+    public AuthenticationRequest() {}
 
     public AuthenticationRequest(String email, String password) {
         this.email = email;

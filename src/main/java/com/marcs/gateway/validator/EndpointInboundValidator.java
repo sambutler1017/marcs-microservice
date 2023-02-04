@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.gateway.validator;
 
@@ -35,7 +34,7 @@ public class EndpointInboundValidator extends CommonTokenValidator {
      * @throws JwtTokenException If the jwt token is not valid.
      */
     public void validateRequest(HttpServletRequest request) throws JwtTokenException {
-        if (shouldNotFilter(request, excludedMatchers())) {
+        if(shouldNotFilter(request, excludedMatchers())) {
             return;
         }
 

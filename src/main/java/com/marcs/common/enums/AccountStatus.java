@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.common.enums;
 
@@ -11,7 +10,9 @@ package com.marcs.common.enums;
  * @since October 9, 2021
  */
 public enum AccountStatus implements TextEnum {
-    PENDING("PENDING"), APPROVED("APPROVED"), DENIED("DENIED");
+    PENDING("PENDING"),
+    APPROVED("APPROVED"),
+    DENIED("DENIED");
 
     private String textId;
 

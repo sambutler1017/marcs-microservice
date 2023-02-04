@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.blockoutdate.dao;
 
@@ -55,8 +54,7 @@ public class BlockOutDateDao extends BaseDao {
 	 */
 	public BlockOutDate updateBlockOutDateById(int id, BlockOutDate currentBlockOutDate, BlockOutDate blockDate) {
 		MapSqlParameterSource params = SqlParamBuilder.with().withParam(ID, id)
-				.withParam(START_DATE, blockDate.getStartDate())
-				.withParam(END_DATE, blockDate.getEndDate())
+				.withParam(START_DATE, blockDate.getStartDate()).withParam(END_DATE, blockDate.getEndDate())
 				.withParam(INSERT_USER_ID, blockDate.getInsertUserId()).build();
 
 		update("updateBlockOutDateById", params);

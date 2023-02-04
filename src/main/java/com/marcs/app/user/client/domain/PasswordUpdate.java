@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.user.client.domain;
 
@@ -22,8 +21,7 @@ public class PasswordUpdate {
     @Schema(description = "The new password.")
     private String newPassword;
 
-    public PasswordUpdate() {
-    }
+    public PasswordUpdate() {}
 
     public PasswordUpdate(String currentPassword, String newPassword) {
         this.currentPassword = currentPassword;

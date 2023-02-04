@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.subscription.stomp;
 
@@ -46,8 +45,7 @@ public class SubscriptionConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.setUserDestinationPrefix("/user").enableSimpleBroker("/queue", "/topic", "/user")
-                .setTaskScheduler(taskScheduler())
-                .setHeartbeatValue(new long[] { DEFAULT_HEARTBEAT, DEFAULT_HEARTBEAT });
+                .setTaskScheduler(taskScheduler()).setHeartbeatValue(new long[] {DEFAULT_HEARTBEAT, DEFAULT_HEARTBEAT});
     }
 
     @Override

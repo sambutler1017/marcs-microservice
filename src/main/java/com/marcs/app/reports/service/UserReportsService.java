@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.reports.service;
 
@@ -41,7 +40,6 @@ public class UserReportsService {
         return CSVBuilder.download(userList).withColumn("ID", "id").withColumn("First Name", "firstName")
                 .withColumn("Last Name", "lastName").withColumn("Email", "email").withColumn("Web Role", "webRole")
                 .withColumn("Store ID", "storeId").withColumn("Store Name", "storeName")
-                .withColumn("Hire Date", "hireDate")
-                .build("user-download.csv");
+                .withColumn("Hire Date", "hireDate").build("user-download.csv");
     }
 }

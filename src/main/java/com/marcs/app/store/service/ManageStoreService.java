@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.store.service;
 
@@ -45,7 +44,7 @@ public class ManageStoreService {
 		storeService.getStoreById(storeId);
 		dao.updateStore(storeId, store);
 
-		if (store.getRegionalId() > 0) {
+		if(store.getRegionalId() > 0) {
 			updateRegionalOfStore(store.getRegionalId(), store.getId());
 		}
 		return storeService.getStoreById(store.getId());
@@ -61,7 +60,7 @@ public class ManageStoreService {
 	 * @return {@link Store} object with the updated manager.
 	 */
 	public Store updateStoreManagerOfStore(int userId, String storeId) {
-		if (!userProfileClient.getUserById(userId).getWebRole().equals(WebRole.STORE_MANAGER)) {
+		if(!userProfileClient.getUserById(userId).getWebRole().equals(WebRole.STORE_MANAGER)) {
 			throw new BaseException(String
 					.format("User id '%d' is not a STORE_MANAGER web role. Can not update store manager of store!",
 							userId));
@@ -80,7 +79,7 @@ public class ManageStoreService {
 	 * @return {@link Store} object with the updated regional.
 	 */
 	public Store updateRegionalOfStore(int userId, String storeId) {
-		if (userProfileClient.getUserById(userId).getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
+		if(userProfileClient.getUserById(userId).getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
 			throw new BaseException(String
 					.format("User id '%d' is not a sufficient web role. Can not update overseer of store!", userId));
 		}
@@ -122,7 +121,7 @@ public class ManageStoreService {
 	 */
 	private void demoteStoreManagerOfStore(String storeId) {
 		int currentManagerId = storeService.getStoreById(storeId).getManagerId();
-		if (currentManagerId != 0) {
+		if(currentManagerId != 0) {
 			User updatedUserRole = new User();
 			updatedUserRole.setWebRole(WebRole.ASSISTANT_MANAGER);
 			userProfileClient.updateUserProfileById(currentManagerId, updatedUserRole);

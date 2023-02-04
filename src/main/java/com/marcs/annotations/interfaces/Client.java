@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.annotations.interfaces;
 
@@ -17,6 +16,4 @@ import org.springframework.stereotype.Component;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Component
-public @interface Client {
-
-}
+public @interface Client {}

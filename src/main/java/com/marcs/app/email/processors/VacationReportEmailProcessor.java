@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.email.processors;
 
@@ -51,10 +50,10 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
         List<User> usersWithNotifications = getUsersWithEmailReportsEnabled();
         List<UserEmail> emails = new ArrayList<>();
 
-        for (User user : usersWithNotifications) {
+        for(User user : usersWithNotifications) {
             VacationGetRequest req = new VacationGetRequest();
             req.setStatus(Sets.newHashSet(VacationStatus.APPROVED));
-            if (user.getWebRole().equals(WebRole.REGIONAL) || user.getWebRole().equals(WebRole.DISTRICT_MANAGER)) {
+            if(user.getWebRole().equals(WebRole.REGIONAL) || user.getWebRole().equals(WebRole.DISTRICT_MANAGER)) {
                 req.setRegionalId(Sets.newHashSet(user.getId()));
             }
 
@@ -64,8 +63,7 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
     }
 
     @Override
-    public void setParams(Void params) {
-    }
+    public void setParams(Void params) {}
 
     /**
      * Helper method for replacing the dynamic fields in the email message.
@@ -103,18 +101,18 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
      * @return Formatted String
      */
     private String buildHTMLCard(List<Vacation> vacs) {
-        if (vacs.size() == 0) {
+        if(vacs.size() == 0) {
             return "No Vacations";
         }
 
         String htmlCards = "";
         String defaultCard = "<div class=\"card\"><div class=\"card-data\">::DATA_NAME::</div><div class=\"card-date\">::DATA_DATE::</div></div>";
 
-        for (Vacation vac : vacs) {
+        for(Vacation vac : vacs) {
             String replaceName = String.format("%s (%s)", vac.getFullName(), vac.getStoreId());
             String replaceDate = String.format("%s - %s", formatDate(vac.getStartDate()), formatDate(vac.getEndDate()));
             htmlCards += defaultCard.replace(EMAIL_DYNAMIC_DATA_NAME, replaceName).replace(EMAIL_DYNAMIC_DATA_DATE,
-                    replaceDate);
+                                                                                           replaceDate);
         }
         return htmlCards;
     }

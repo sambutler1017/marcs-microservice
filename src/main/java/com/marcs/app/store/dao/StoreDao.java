@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.store.dao;
 
@@ -55,7 +54,8 @@ public class StoreDao extends BaseDao {
 	public User getRegionalOfStoreById(String storeId) {
 		try {
 			return get("getRegionalOfStore", parameterSource(ID, storeId), USER_MAPPER);
-		} catch (EmptyResultDataAccessException e) {
+		}
+		catch(EmptyResultDataAccessException e) {
 			return null;
 		}
 	}
@@ -68,7 +68,8 @@ public class StoreDao extends BaseDao {
 	public User getManagerOfStoreById(String storeId) {
 		try {
 			return get("getManagerOfStoreById", parameterSource(ID, storeId), USER_MAPPER);
-		} catch (EmptyResultDataAccessException e) {
+		}
+		catch(EmptyResultDataAccessException e) {
 			return null;
 		}
 	}

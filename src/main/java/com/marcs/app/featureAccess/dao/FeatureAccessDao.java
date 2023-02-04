@@ -1,10 +1,9 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.featureaccess.dao;
 
-import static com.marcs.app.featureaccess.mapper.FeatureAccessMapper.FEATURE_ACCESS_MAPPER;
+import static com.marcs.app.featureaccess.mapper.FeatureAccessMapper.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,13 +51,14 @@ public class FeatureAccessDao extends BaseDao {
     private Map<String, List<Map<String, String>>> mapSingleton(List<Feature> data) {
         Map<String, List<Map<String, String>>> dataMap = new HashMap<String, List<Map<String, String>>>();
 
-        for (Feature f : data) {
+        for(Feature f : data) {
             Map<String, String> current = new HashMap<String, String>();
             current.put(f.getFeature(), f.getAccess());
-            if (dataMap.get(f.getApp()) == null) {
+            if(dataMap.get(f.getApp()) == null) {
                 dataMap.put(f.getApp(), new ArrayList<Map<String, String>>());
                 dataMap.get(f.getApp()).add(current);
-            } else {
+            }
+            else {
                 List<Map<String, String>> temp = dataMap.get(f.getApp());
                 temp.add(current);
             }

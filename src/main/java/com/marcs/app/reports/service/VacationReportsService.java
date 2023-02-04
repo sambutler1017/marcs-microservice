@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.reports.service;
 
@@ -40,9 +39,7 @@ public class VacationReportsService {
 
         return CSVBuilder.download(vacationList).withColumn("User ID", "userId").withColumn("Name", "fullName")
                 .withColumn("Store ID", "storeId").withColumn("Start Date", "startDate")
-                .withColumn("End Date", "endDate")
-                .withColumn("Notes", "notes").withColumn("Date Created", "insertDate")
-                .withColumn("Status", "status")
-                .build("vacation-download.csv");
+                .withColumn("End Date", "endDate").withColumn("Notes", "notes").withColumn("Date Created", "insertDate")
+                .withColumn("Status", "status").build("vacation-download.csv");
     }
 }

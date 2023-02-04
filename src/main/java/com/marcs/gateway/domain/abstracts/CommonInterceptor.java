@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.gateway.domain.abstracts;
 
@@ -49,9 +48,11 @@ public abstract class CommonInterceptor implements Filter {
         try {
             v.validateRequest((HttpServletRequest) req);
             chain.doFilter(req, res);
-        } catch (Exception e) {
+        }
+        catch(Exception e) {
             resolveException(req, res, e);
-        } finally {
+        }
+        finally {
             clearThreadToken();
         }
     }

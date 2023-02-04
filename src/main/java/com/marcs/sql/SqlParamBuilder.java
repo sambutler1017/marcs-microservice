@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.sql;
 
@@ -34,9 +33,10 @@ public class SqlParamBuilder {
 
     private SqlParamBuilder(CommonParam commonParam, MapSqlParameterSource sqlParams) {
         this.commonParam = commonParam;
-        if (sqlParams == null) {
+        if(sqlParams == null) {
             this.sqlParams = new MapSqlParameterSource();
-        } else {
+        }
+        else {
             this.sqlParams = sqlParams;
         }
     }
@@ -118,8 +118,8 @@ public class SqlParamBuilder {
     }
 
     /**
-     * Add {@link LocalDate} parameter to sql map and check that the text enum
-     * is not null, if not get the text id.
+     * Add {@link LocalDate} parameter to sql map and check that the text enum is
+     * not null, if not get the text id.
      * 
      * @param name  The name of the parameter.
      * @param value The value of the parameter
@@ -138,7 +138,7 @@ public class SqlParamBuilder {
      * @return this builder object {@link SqlParamBuilder}
      */
     public SqlParamBuilder withParamDefault(String name, LocalDateTime dt) {
-        if (dt == null) {
+        if(dt == null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             return withParam(name, LocalDateTime.now(TimeZoneUtil.SYSTEM_ZONE).format(formatter));
         }
@@ -155,7 +155,7 @@ public class SqlParamBuilder {
      */
     public SqlParamBuilder withParamTextEnumCollection(String name, Collection<? extends TextEnum> values) {
         return withParam(name,
-                values == null ? null : values.stream().map(TextEnum::getTextId).collect(Collectors.toList()));
+                         values == null ? null : values.stream().map(TextEnum::getTextId).collect(Collectors.toList()));
     }
 
     /**
@@ -166,13 +166,13 @@ public class SqlParamBuilder {
      * @return {@link SqlParamBuilder} with the search ability.
      */
     public SqlParamBuilder useSearch() {
-        if (!(commonParam instanceof SearchParam)) {
+        if(!(commonParam instanceof SearchParam)) {
             return this;
         }
 
         SearchParam searchParam = (SearchParam) commonParam;
 
-        if (searchParam.getSearch() == null) {
+        if(searchParam.getSearch() == null) {
             return this;
         }
 
@@ -188,7 +188,7 @@ public class SqlParamBuilder {
      * @return {@link SqlParamBuilder} with the search fields.
      */
     public SqlParamBuilder useSearchField() {
-        if (!(commonParam instanceof SearchFieldParams)) {
+        if(!(commonParam instanceof SearchFieldParams)) {
             return this;
         }
 
@@ -197,7 +197,7 @@ public class SqlParamBuilder {
         String searchFieldSql = "";
 
         List<SearchField> fieldList = searchFieldParams.getSearchFields();
-        for (int i = 0; i < fieldList.size(); i++) {
+        for(int i = 0; i < fieldList.size(); i++) {
             searchFieldSql += String.format("%s LIKE :searchValue", fieldList.get(i).getColumn());
             searchFieldSql += i == fieldList.size() - 1 ? "" : " OR ";
         }
@@ -212,13 +212,13 @@ public class SqlParamBuilder {
      * @return {@link SqlParamBuilder} with the pagenation.
      */
     public SqlParamBuilder usePagenation() {
-        if (!(commonParam instanceof PageParam)) {
+        if(!(commonParam instanceof PageParam)) {
             return this;
         }
 
         PageParam pageParam = (PageParam) commonParam;
 
-        if (pageParam.getPageSize() == 0) {
+        if(pageParam.getPageSize() == 0) {
             return this;
         }
 

@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.blockoutdate.service;
 
@@ -46,7 +45,8 @@ public class BlockOutDateService {
 			BlockOutDateGetRequest request = new BlockOutDateGetRequest();
 			request.setId(Sets.newHashSet(id));
 			return getBlockOutDates(request).getList().get(0);
-		} catch (Exception e) {
+		}
+		catch(Exception e) {
 			throw new Exception(String.format("Block out date id '%d' does not exist!", id));
 		}
 

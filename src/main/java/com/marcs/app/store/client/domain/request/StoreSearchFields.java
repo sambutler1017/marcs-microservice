@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.store.client.domain.request;
 
@@ -16,7 +15,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
  */
 @Schema(description = "The store search fields.")
 public enum StoreSearchFields implements SearchField {
-    STORE_ID("st.id"), STORE_NAME("st.name");
+    STORE_ID("st.id"),
+    STORE_NAME("st.name");
 
     private String column;
 

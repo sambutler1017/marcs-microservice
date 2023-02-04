@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.user.mapper;
 
@@ -36,7 +35,8 @@ public class UserProfileMapper extends AbstractMapper<User> {
 
 		try {
 			user.setPassword(rs.getString(PASSWORD));
-		} catch (Exception e) {
+		}
+		catch(Exception e) {
 			user.setPassword(null);
 		}
 

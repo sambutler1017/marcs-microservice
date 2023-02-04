@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.app.user.client.domain.request;
 
@@ -16,7 +15,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
  */
 @Schema(description = "The user profile search fields.")
 public enum UserProfileSearchFields implements SearchField {
-    STORE_ID("st.id"), STORE_NAME("st.name"), FIRST_NAME("up.first_name"), LAST_NAME("up.last_name");
+    STORE_ID("st.id"),
+    STORE_NAME("st.name"),
+    FIRST_NAME("up.first_name"),
+    LAST_NAME("up.last_name");
 
     private String column;
 

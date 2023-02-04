@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.common.exceptions.domain;
 
@@ -25,8 +24,7 @@ public class ExceptionError {
 
     private String message;
 
-    public ExceptionError() {
-    }
+    public ExceptionError() {}
 
     public ExceptionError(String message) {
         this.status = HttpStatus.BAD_REQUEST.value();

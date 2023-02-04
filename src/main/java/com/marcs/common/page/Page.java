@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.common.page;
 
@@ -24,8 +23,7 @@ public class Page<T> {
     @Schema(description = "The list of generic objects.")
     private List<T> list;
 
-    public Page() {
-    }
+    public Page() {}
 
     public Page(long totalCount, List<T> list) {
         this.totalCount = totalCount;

@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2023 Marcs App.
- * All rights reserved.
+ * Copyright of Marcs App. All rights reserved.
  */
 package com.marcs.common.enums;
 
@@ -11,7 +10,10 @@ package com.marcs.common.enums;
  * @since September 6, 2021
  */
 public enum VacationStatus implements TextEnum {
-    APPROVED("APPROVED"), DENIED("DENIED"), PENDING("PENDING"), EXPIRED("EXPIRED");
+    APPROVED("APPROVED"),
+    DENIED("DENIED"),
+    PENDING("PENDING"),
+    EXPIRED("EXPIRED");
 
     private String textId;
 
