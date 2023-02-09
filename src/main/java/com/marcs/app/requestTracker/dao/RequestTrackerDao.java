@@ -4,6 +4,7 @@
 package com.marcs.app.requestTracker.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
@@ -13,8 +14,6 @@ import org.springframework.stereotype.Repository;
 import com.marcs.app.requestTracker.client.domain.RequestType;
 import com.marcs.app.requestTracker.client.domain.UserRequest;
 import com.marcs.app.requestTracker.mapper.UserRequestMapper;
-import com.marcs.app.store.client.domain.Store;
-import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.sql.SqlParamBuilder;
 
@@ -37,42 +36,22 @@ public class RequestTrackerDao extends BaseDao {
 	 * @param userId of the user.
 	 * @return {@link UserRequest}
 	 */
-	public List<UserRequest<Void>> getCurrentUserRequests(long userId) throws Exception {
+	public List<UserRequest<Void>> getCurrentUserRequests(long userId) {
 		MapSqlParameterSource params = parameterSource(USER_ID, userId);
 		return getList("getUserRequest", params, getUserRequestMapper(Void.class));
 	}
 
 	/**
-	 * Gets the user vacation request by the request id.
-	 * 
-	 * @param id of the request
-	 * @return {@link UserRequest}
-	 */
-	public UserRequest<Vacation> getUserVacationRequestById(long id) throws Exception {
-		return getUserRequestById(id, RequestType.VACATION, Vacation.class);
-	}
-
-	/**
-	 * Gets the user vacation request by the request id.
-	 * 
-	 * @param id of the request
-	 * @return {@link UserRequest}
-	 */
-	public UserRequest<Store> getUserStoreRequestById(long id) throws Exception {
-		return getUserRequestById(id, RequestType.STORE, Store.class);
-	}
-
-	/**
 	 * Base get for user request to take in generic types of the user request.
 	 * 
-	 * @param id     The id of the request.
-	 * @param type   The Request type.
-	 * @param mapper The Request Tracker Mapper.
+	 * @param id    The id of the request.
+	 * @param type  The Request type.
+	 * @param clazz The Request class.
 	 * @return The User Request found.
 	 */
-	private <T> UserRequest<T> getUserRequestById(long id, RequestType type, Class<T> clazz) {
+	public <T> Optional<UserRequest<T>> getUserRequestById(long id, RequestType type, Class<T> clazz) {
 		MapSqlParameterSource params = SqlParamBuilder.with().withParam(REQUEST_ID, id).withParam(TYPE, type).build();
-		return get("getUserRequest", params, getUserRequestMapper(clazz));
+		return getOptional("getUserRequest", params, getUserRequestMapper(clazz));
 	}
 
 	/**
