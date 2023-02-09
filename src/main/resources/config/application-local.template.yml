@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    username:
+    password:
+    url:
+
+security:
+  signing-key: "local-key"
+  sendgrid-key:
