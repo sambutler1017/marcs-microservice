@@ -3,11 +3,9 @@
  */
 package com.marcs.common.exceptions.domain;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.springframework.http.HttpStatus;
-
-import com.marcs.common.date.TimeZoneUtil;
 
 /**
  * Custom exception object to be returned when endpoints have errors.
@@ -16,7 +14,7 @@ import com.marcs.common.date.TimeZoneUtil;
  * @since August 24, 2021
  */
 public class ExceptionError {
-    private LocalDateTime timestamp;
+    private Date timestamp;
 
     private int status;
 
@@ -24,34 +22,37 @@ public class ExceptionError {
 
     private String message;
 
-    public ExceptionError() {}
+    private String path;
+
+    public ExceptionError() {
+    }
 
     public ExceptionError(String message) {
         this.status = HttpStatus.BAD_REQUEST.value();
         this.error = HttpStatus.BAD_REQUEST.getReasonPhrase();
-        this.timestamp = LocalDateTime.now(TimeZoneUtil.SYSTEM_ZONE);
+        this.timestamp = new Date();
         this.message = message;
     }
 
     public ExceptionError(String message, HttpStatus status) {
         this.status = status.value();
         this.error = status.getReasonPhrase();
-        this.timestamp = LocalDateTime.now(TimeZoneUtil.SYSTEM_ZONE);
+        this.timestamp = new Date();
         this.message = message;
     }
 
-    public ExceptionError(LocalDateTime timestamp, HttpStatus status, String error, String message) {
+    public ExceptionError(Date timestamp, HttpStatus status, String error, String message) {
         this.timestamp = timestamp;
         this.status = status.value();
         this.error = error;
         this.message = message;
     }
 
-    public LocalDateTime getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -59,8 +60,8 @@ public class ExceptionError {
         return status;
     }
 
-    public void setStatus(HttpStatus status) {
-        this.status = status.value();
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getError() {
@@ -79,4 +80,11 @@ public class ExceptionError {
         this.message = message;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 }
