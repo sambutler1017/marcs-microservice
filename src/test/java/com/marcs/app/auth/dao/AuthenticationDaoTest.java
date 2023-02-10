@@ -8,7 +8,7 @@ import com.marcs.test.factory.annotations.MarcsDaoTest;
 import com.marcs.test.factory.utility.MarcsDAOTestConfig;
 
 /**
- * Test class for the Authenticate DAO.
+ * Test class for the Authenticate Dao.
  * 
  * @author Sam Butler
  * @since August 23, 2022
