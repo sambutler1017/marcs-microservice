@@ -11,7 +11,8 @@ package com.marcs.common.enums;
  */
 public enum Environment {
     PRODUCTION("https://marcs-microservice.herokuapp.com"),
-    LOCAL("http://localhost:8080");
+    LOCAL("http://localhost:8080"),
+    TEST("");
 
     private String uri;
 
@@ -20,8 +21,9 @@ public enum Environment {
     }
 
     public static Environment getEnvrionment(String text) {
-        for(Environment w : Environment.values())
-            if(w.toString().equals(text.toUpperCase())) return w;
+        for (Environment w : Environment.values())
+            if (w.toString().equals(text.toUpperCase()))
+                return w;
         return LOCAL;
     }
 

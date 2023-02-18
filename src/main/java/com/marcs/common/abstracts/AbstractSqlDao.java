@@ -45,7 +45,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * 
      * @return {@link NamedParameterJdbcTemplate} object.
      */
-    public NamedParameterJdbcTemplate getTemplate() {
+    protected NamedParameterJdbcTemplate getTemplate() {
         return template;
     }
 
@@ -59,7 +59,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param mapper   The mapper to return the data as.
      * @return Object of the returned data.
      */
-    public <T> T get(String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
+    protected <T> T get(String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
         String sql = getSql(fragment, params);
         return getTemplate().queryForObject(sql, params, mapper);
     }
@@ -73,7 +73,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param mapper   The mapper to return the data as.
      * @return Object of the returned data.
      */
-    public <T> T get(String fragment, RowMapper<T> mapper) {
+    protected <T> T get(String fragment, RowMapper<T> mapper) {
         return get(fragment, new MapSqlParameterSource(), mapper);
     }
 
@@ -87,7 +87,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param clazz    The class to map the data as.
      * @return Object of the returned data.
      */
-    public <T> T get(String fragment, MapSqlParameterSource params, Class<T> clazz) {
+    protected <T> T get(String fragment, MapSqlParameterSource params, Class<T> clazz) {
         String sql = getSql(fragment, params);
         return getTemplate().queryForObject(sql, params, clazz);
     }
@@ -102,7 +102,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param clazz    The class to map the data as.
      * @return Object of the returned data.
      */
-    public <T> T get(String fragment, Class<T> clazz) {
+    protected <T> T get(String fragment, Class<T> clazz) {
         return get(fragment, new MapSqlParameterSource(), clazz);
     }
 
@@ -117,11 +117,10 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param clazz    The class to map the data as.
      * @return Object of the returned data.
      */
-    public <T> Optional<T> getOptional(String fragment, MapSqlParameterSource params, Class<T> clazz) {
+    protected <T> Optional<T> getOptional(String fragment, MapSqlParameterSource params, Class<T> clazz) {
         try {
             return Optional.of(get(fragment, params, clazz));
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return Optional.empty();
         }
     }
@@ -136,11 +135,10 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param clazz    The class to map the data as.
      * @return Object of the returned data.
      */
-    public <T> Optional<T> getOptional(String fragment, Class<T> clazz) {
+    protected <T> Optional<T> getOptional(String fragment, Class<T> clazz) {
         try {
             return Optional.of(get(fragment, clazz));
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return Optional.empty();
         }
     }
@@ -156,11 +154,10 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param mapper   The mapper to serialize the data as.
      * @return Object of the returned data.
      */
-    public <T> Optional<T> getOptional(String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
+    protected <T> Optional<T> getOptional(String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
         try {
             return Optional.of(get(fragment, params, mapper));
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return Optional.empty();
         }
     }
@@ -175,11 +172,10 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param mapper   The mapper to serialize the data as.
      * @return Object of the returned data.
      */
-    public <T> Optional<T> getOptional(String fragment, RowMapper<T> mapper) {
+    protected <T> Optional<T> getOptional(String fragment, RowMapper<T> mapper) {
         try {
             return Optional.of(get(fragment, mapper));
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return Optional.empty();
         }
     }
@@ -194,7 +190,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param mapper   The mapper to return the data as.
      * @return List of the returned data.
      */
-    public <T> List<T> getList(String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
+    protected <T> List<T> getList(String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
         String sql = getSql(fragment, params);
         return getTemplate().query(sql, params, mapper);
     }
@@ -209,7 +205,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param mapper   The mapper to return the data as.
      * @return List of the returned data.
      */
-    public <T> Page<T> getPage(String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
+    protected <T> Page<T> getPage(String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
         return getPage(fragment + "TotalCount", fragment, params, mapper);
     }
 
@@ -224,7 +220,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param mapper   The mapper to return the data as.
      * @return List of the returned data.
      */
-    private <T> Page<T> getPage(String total, String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
+    protected <T> Page<T> getPage(String total, String fragment, MapSqlParameterSource params, RowMapper<T> mapper) {
         int totalCount = get(total, params, Integer.class);
         List<T> list = getList(fragment, params, mapper);
         return new Page<T>(totalCount, list);
@@ -236,7 +232,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param fragment The name of the sql fragment.
      * @param params   Params to be inserted into the query.
      */
-    public int update(String fragment, MapSqlParameterSource params) {
+    protected int update(String fragment, MapSqlParameterSource params) {
         String sql = getSql(fragment, params);
         return getTemplate().update(sql, params);
     }
@@ -248,7 +244,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param params    Params to be inserted into the query.
      * @param keyHolder The keyholder for the autoincrement id.
      */
-    public int update(String fragment, MapSqlParameterSource params, KeyHolder keyHolder) {
+    protected int update(String fragment, MapSqlParameterSource params, KeyHolder keyHolder) {
         String sql = getSql(fragment, params);
         return getTemplate().update(sql, params, keyHolder);
     }
@@ -261,7 +257,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param params    Params to be inserted into the query.
      * @param keyHolder used to get the auto increment id.
      */
-    public int post(String fragment, MapSqlParameterSource params, KeyHolder keyHolder) {
+    protected int post(String fragment, MapSqlParameterSource params, KeyHolder keyHolder) {
         return update(fragment, params, keyHolder);
     }
 
@@ -271,7 +267,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param fragment The name of the sql fragment.
      * @param params   Params to be inserted into the query.
      */
-    public int post(String fragment, MapSqlParameterSource params) {
+    protected int post(String fragment, MapSqlParameterSource params) {
         return update(fragment, params);
     }
 
@@ -281,7 +277,7 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @param fragment The name of the sql fragment.
      * @param params   Params to be inserted into the query.
      */
-    public int delete(String fragment, MapSqlParameterSource params) {
+    protected int delete(String fragment, MapSqlParameterSource params) {
         return update(fragment, params);
     }
 

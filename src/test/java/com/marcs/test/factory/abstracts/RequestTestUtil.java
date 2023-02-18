@@ -1,14 +1,15 @@
 package com.marcs.test.factory.abstracts;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.function.Consumer;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.marcs.common.exceptions.domain.ExceptionError;
+import com.marcs.common.mapping.DefaultMapper;
 
 /**
  * Request Test Util for common test functionality.
@@ -77,7 +78,7 @@ public abstract class RequestTestUtil {
      */
     public static <T> Consumer<ResponseEntity<T>> error(HttpStatus httpStatus) {
         return serialized(body -> {
-            ExceptionError e = new ObjectMapper().convertValue(body, ExceptionError.class);
+            ExceptionError e = DefaultMapper.objectMapper().convertValue(body, ExceptionError.class);
             assertEquals(httpStatus.value(), e.getStatus());
         });
     }
@@ -93,7 +94,7 @@ public abstract class RequestTestUtil {
      */
     public static <T> Consumer<ResponseEntity<T>> error(HttpStatus httpStatus, String errorMsg) {
         return serialized(body -> {
-            ExceptionError e = new ObjectMapper().convertValue(body, ExceptionError.class);
+            ExceptionError e = DefaultMapper.objectMapper().convertValue(body, ExceptionError.class);
             assertEquals(errorMsg, e.getMessage());
             assertEquals(httpStatus.value(), e.getStatus());
         });
