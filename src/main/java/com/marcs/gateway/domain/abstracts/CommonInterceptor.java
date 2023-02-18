@@ -86,6 +86,7 @@ public abstract class CommonInterceptor implements Filter {
     private HttpServletResponse getAllowedOriginResponse(ServletResponse res) {
         HttpServletResponse r = (HttpServletResponse) res;
         r.setHeader("Access-Control-Allow-Origin", "*");
+        r.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Total-Count");
         return r;
     }
 }
