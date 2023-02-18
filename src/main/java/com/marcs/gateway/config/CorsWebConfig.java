@@ -25,9 +25,9 @@ public class CorsWebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping(CORS_MAPPING).allowedHeaders(HttpHeaders.AUTHORIZATION, HttpHeaders.CACHE_CONTROL,
-                                                                 HttpHeaders.CONTENT_TYPE, "Total-Count")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE");
+                registry.addMapping(CORS_MAPPING)
+                        .allowedHeaders(HttpHeaders.AUTHORIZATION, HttpHeaders.CACHE_CONTROL, HttpHeaders.CONTENT_TYPE)
+                        .allowedMethods("GET", "POST", "PUT", "DELETE").exposedHeaders("Total-Count");
             }
         };
     }
