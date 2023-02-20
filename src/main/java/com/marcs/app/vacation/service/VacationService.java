@@ -33,6 +33,7 @@ public class VacationService {
 	/**
 	 * Get page of vacations for the current request.
 	 * 
+	 * @param request The vacation request filters
 	 * @return {@link Vacation} object.
 	 */
 	public Page<Vacation> getVacations(VacationGetRequest request) {
@@ -42,10 +43,33 @@ public class VacationService {
 	/**
 	 * Gets the current logged in users vacations.
 	 * 
+	 * @param request The vacation request filters
 	 * @return {@link Vacation} object.
 	 */
-	public Page<Vacation> getCurrentUserVacations() {
-		return getVacationsByUserId(jwtHolder.getUserId());
+	public Page<Vacation> getCurrentUserVacations(VacationGetRequest request) {
+		return getVacationsByUserId(jwtHolder.getUserId(), request);
+	}
+
+	/**
+	 * Get a list of vacations for the given user id.
+	 * 
+	 * @param userId The user id to get vacations for.
+	 * @return {@link List<Vacation>} for the user.
+	 */
+	public Page<Vacation> getVacationsByUserId(int userId) {
+		return getVacationsByUserId(userId, new VacationGetRequest());
+	}
+
+	/**
+	 * Get a list of vacations for the given user id.
+	 * 
+	 * @param userId  The user id to get vacations for.
+	 * @param request The vacation request filters
+	 * @return {@link List<Vacation>} for the user.
+	 */
+	public Page<Vacation> getVacationsByUserId(int userId, VacationGetRequest request) {
+		request.setUserId(Sets.newHashSet(userId));
+		return getVacations(request);
 	}
 
 	/**
@@ -58,18 +82,6 @@ public class VacationService {
 		VacationGetRequest request = new VacationGetRequest();
 		request.setId(Sets.newHashSet(id));
 		return getVacations(request).getList().get(0);
-	}
-
-	/**
-	 * Get a list of vacations for the given user id.
-	 * 
-	 * @param userId The user id to get vacations for.
-	 * @return {@link List<Vacation>} for the user.
-	 */
-	public Page<Vacation> getVacationsByUserId(int userId) {
-		VacationGetRequest request = new VacationGetRequest();
-		request.setUserId(Sets.newHashSet(userId));
-		return getVacations(request);
 	}
 
 	/**

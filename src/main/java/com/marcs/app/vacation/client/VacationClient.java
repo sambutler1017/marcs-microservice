@@ -28,6 +28,7 @@ public class VacationClient {
 	/**
 	 * Get list of vacations for the current request.
 	 * 
+	 * @param request The vacation request filters
 	 * @return {@link Vacation} object.
 	 */
 	public List<Vacation> getVacations(VacationGetRequest request) throws Exception {
@@ -37,11 +38,12 @@ public class VacationClient {
 	/**
 	 * Client method to get a list of vacations by user id
 	 * 
-	 * @param id of the user to search under
+	 * @param id      of the user to search under
+	 * @param request The vacation request filters
 	 * @return List of vacations under that regional
 	 */
-	public List<Vacation> getVacationsByUserId(int id) throws Exception {
-		return controller.getVacationsByUserId(id).getList();
+	public List<Vacation> getVacationsByUserId(int id, VacationGetRequest request) throws Exception {
+		return controller.getVacationsByUserId(id, request).getList();
 	}
 
 	/**

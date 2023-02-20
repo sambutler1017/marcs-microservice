@@ -49,8 +49,8 @@ public class VacationController {
 	 * @return {@link Vacation} object.
 	 */
 	@GetMapping(path = "/current-user", produces = APPLICATION_JSON_VALUE)
-	public Page<Vacation> getCurrentUserVacations() {
-		return vacationService.getCurrentUserVacations();
+	public Page<Vacation> getCurrentUserVacations(VacationGetRequest request) {
+		return vacationService.getCurrentUserVacations(request);
 	}
 
 	/**
@@ -71,8 +71,8 @@ public class VacationController {
 	 * @return {@link Lst<Vacation>} for the user.
 	 */
 	@GetMapping(path = "/{userId}/user", produces = APPLICATION_JSON_VALUE)
-	public Page<Vacation> getVacationsByUserId(@PathVariable int userId) {
-		return vacationService.getVacationsByUserId(userId);
+	public Page<Vacation> getVacationsByUserId(@PathVariable int userId, VacationGetRequest request) {
+		return vacationService.getVacationsByUserId(userId, request);
 	}
 
 	/**
