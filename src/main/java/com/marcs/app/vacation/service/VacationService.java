@@ -44,7 +44,7 @@ public class VacationService {
 	 * 
 	 * @return {@link Vacation} object.
 	 */
-	public List<Vacation> getCurrentUserVacations() {
+	public Page<Vacation> getCurrentUserVacations() {
 		return getVacationsByUserId(jwtHolder.getUserId());
 	}
 
@@ -66,10 +66,10 @@ public class VacationService {
 	 * @param userId The user id to get vacations for.
 	 * @return {@link List<Vacation>} for the user.
 	 */
-	public List<Vacation> getVacationsByUserId(int userId) {
+	public Page<Vacation> getVacationsByUserId(int userId) {
 		VacationGetRequest request = new VacationGetRequest();
 		request.setUserId(Sets.newHashSet(userId));
-		return getVacations(request).getList();
+		return getVacations(request);
 	}
 
 	/**

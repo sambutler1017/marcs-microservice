@@ -83,7 +83,7 @@ public class ManageVacationService {
 		for(Vacation vac : vacs) {
 			createVacation(id, vac);
 		}
-		return vacationService.getVacationsByUserId(id);
+		return vacationService.getVacationsByUserId(id).getList();
 	}
 
 	/**

@@ -41,7 +41,7 @@ public class VacationClient {
 	 * @return List of vacations under that regional
 	 */
 	public List<Vacation> getVacationsByUserId(int id) throws Exception {
-		return controller.getVacationsByUserId(id);
+		return controller.getVacationsByUserId(id).getList();
 	}
 
 	/**
