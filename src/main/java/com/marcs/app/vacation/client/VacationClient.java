@@ -31,7 +31,7 @@ public class VacationClient {
 	 * @return {@link Vacation} object.
 	 */
 	public List<Vacation> getVacations(VacationGetRequest request) throws Exception {
-		return controller.getVacations(request);
+		return controller.getVacations(request).getList();
 	}
 
 	/**

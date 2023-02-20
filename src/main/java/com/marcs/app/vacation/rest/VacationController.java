@@ -3,7 +3,7 @@
  */
 package com.marcs.app.vacation.rest;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.*;
 
 import java.util.List;
 
@@ -21,6 +21,7 @@ import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.app.vacation.service.ManageVacationService;
 import com.marcs.app.vacation.service.VacationService;
+import com.marcs.common.page.Page;
 
 @RequestMapping("api/vacation-app/vacations")
 @RestApiController
@@ -33,12 +34,12 @@ public class VacationController {
 	private ManageVacationService manageVacationService;
 
 	/**
-	 * Get list of vacations for the current request.
+	 * Get page of vacations for the current request.
 	 * 
 	 * @return {@link Vacation} object.
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
-	public List<Vacation> getVacations(VacationGetRequest request) {
+	public Page<Vacation> getVacations(VacationGetRequest request) {
 		return vacationService.getVacations(request);
 	}
 

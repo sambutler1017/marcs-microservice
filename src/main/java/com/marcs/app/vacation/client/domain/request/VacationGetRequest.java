@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.common.enums.WebRole;
-import com.marcs.common.search.CommonParam;
+import com.marcs.common.page.domain.PageParam;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @since September 21, 2021
  */
 @Schema(description = "Vacation get request object.")
-public class VacationGetRequest implements CommonParam {
+public class VacationGetRequest implements PageParam {
 
     @Schema(description = "Set of vacation ids.")
     private Set<Integer> id;
@@ -37,6 +37,12 @@ public class VacationGetRequest implements CommonParam {
 
     @Schema(description = "Set of web roles.")
     private Set<WebRole> webRole;
+
+    @Schema(description = "The page size to be returned.")
+    private int pageSize;
+
+    @Schema(description = "The row offset of the data to start at.")
+    private int rowOffset;
 
     public Set<Integer> getId() {
         return id;
@@ -84,5 +90,21 @@ public class VacationGetRequest implements CommonParam {
 
     public void setWebRole(Set<WebRole> webRole) {
         this.webRole = webRole;
+    }
+
+    public int getRowOffset() {
+        return rowOffset;
+    }
+
+    public void setRowOffset(int rowOffset) {
+        this.rowOffset = rowOffset;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

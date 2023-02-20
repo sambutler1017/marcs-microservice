@@ -3,7 +3,7 @@
  */
 package com.marcs.app.vacation.dao;
 
-import static com.marcs.app.vacation.mapper.VacationMapper.VACATION_MAPPER;
+import static com.marcs.app.vacation.mapper.VacationMapper.*;
 
 import java.util.List;
 
@@ -18,6 +18,7 @@ import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.common.abstracts.BaseDao;
 import com.marcs.common.enums.VacationStatus;
+import com.marcs.common.page.Page;
 import com.marcs.sql.SqlParamBuilder;
 
 /**
@@ -38,14 +39,14 @@ public class VacationDao extends BaseDao {
 	 * 
 	 * @return {@link Vacation} object.
 	 */
-	public List<Vacation> getVacations(VacationGetRequest request) {
-		MapSqlParameterSource params = SqlParamBuilder.with(request).withParam(ID, request.getId())
+	public Page<Vacation> getVacations(VacationGetRequest request) {
+		MapSqlParameterSource params = SqlParamBuilder.with(request).usePagenation().withParam(ID, request.getId())
 				.withParam(USER_ID, request.getUserId()).withParam(REGIONAL_ID, request.getRegionalId())
 				.withParam(STORE_ID, request.getStoreId())
 				.withParamTextEnumCollection(WEB_ROLE_TEXT_ID, request.getWebRole())
 				.withParamTextEnumCollection(STATUS, request.getStatus()).build();
 
-		return getList("getVacations", params, VACATION_MAPPER);
+		return getPage("getVacationsPage", params, VACATION_MAPPER);
 	}
 
 	/**

@@ -12,6 +12,7 @@ import com.google.common.collect.Sets;
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.app.vacation.dao.VacationDao;
+import com.marcs.common.page.Page;
 import com.marcs.jwt.utility.JwtHolder;
 
 /**
@@ -30,11 +31,11 @@ public class VacationService {
 	private JwtHolder jwtHolder;
 
 	/**
-	 * Get list of vacations for the current request.
+	 * Get page of vacations for the current request.
 	 * 
 	 * @return {@link Vacation} object.
 	 */
-	public List<Vacation> getVacations(VacationGetRequest request) {
+	public Page<Vacation> getVacations(VacationGetRequest request) {
 		return dao.getVacations(request);
 	}
 
@@ -56,7 +57,7 @@ public class VacationService {
 	public Vacation getVacationById(int id) {
 		VacationGetRequest request = new VacationGetRequest();
 		request.setId(Sets.newHashSet(id));
-		return getVacations(request).get(0);
+		return getVacations(request).getList().get(0);
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class VacationService {
 	public List<Vacation> getVacationsByUserId(int userId) {
 		VacationGetRequest request = new VacationGetRequest();
 		request.setUserId(Sets.newHashSet(userId));
-		return getVacations(request);
+		return getVacations(request).getList();
 	}
 
 	/**
