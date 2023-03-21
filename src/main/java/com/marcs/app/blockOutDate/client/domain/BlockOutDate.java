@@ -6,10 +6,6 @@ package com.marcs.app.blockoutdate.client.domain;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
@@ -24,13 +20,9 @@ public class BlockOutDate {
     @Schema(description = "Block out date unique id.")
     private int id;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Schema(description = "The start date of the block out date.")
     private LocalDate startDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Schema(description = "The end date of the block out date.")
     private LocalDate endDate;
 

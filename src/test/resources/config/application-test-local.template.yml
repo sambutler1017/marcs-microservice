@@ -10,3 +10,4 @@ security:
   allowed:
     domains: "*"
   signing-key: "test-local-key"
+  sendgrid-key: "email-key"

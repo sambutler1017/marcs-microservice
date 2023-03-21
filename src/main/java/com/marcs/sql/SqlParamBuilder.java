@@ -146,6 +146,22 @@ public class SqlParamBuilder {
     }
 
     /**
+     * Add {@link LocalDate} parameter to sql map. If the value is null it will add
+     * the default date time now value.
+     * 
+     * @param name  The name of the parameter.
+     * @param value The value of the parameter
+     * @return this builder object {@link SqlParamBuilder}
+     */
+    public SqlParamBuilder withParamDefault(String name, LocalDate dt) {
+        if(dt == null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            return withParam(name, LocalDate.now(TimeZoneUtil.SYSTEM_ZONE).format(formatter));
+        }
+        return withParam(name, dt.toString());
+    }
+
+    /**
      * Add parameter to sql map for an enum collection and check that the text enum
      * is not null, if not get the text id.
      * 

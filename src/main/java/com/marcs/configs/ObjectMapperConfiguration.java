@@ -3,6 +3,7 @@
  */
 package com.marcs.configs;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,7 +17,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 /**
@@ -28,10 +31,11 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 @Configuration
 public class ObjectMapperConfiguration {
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     @Bean
     @Primary
-    public ObjectMapper objectMapper() {
+    ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(Include.NON_NULL);
         mapper.registerModule(new JavaTimeModule());
@@ -48,9 +52,12 @@ public class ObjectMapperConfiguration {
      */
     private SimpleModule addLocalDateTimeModule() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         SimpleModule localDateModule = new SimpleModule();
         localDateModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTimeFormatter));
         localDateModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter));
+        localDateModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(dateFormatter));
+        localDateModule.addSerializer(LocalDate.class, new LocalDateSerializer(dateFormatter));
         return localDateModule;
     }
 }

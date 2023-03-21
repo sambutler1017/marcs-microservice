@@ -6,9 +6,6 @@ package com.marcs.app.vacation.client.domain;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.marcs.common.enums.VacationStatus;
 import com.marcs.common.enums.WebRole;
 
@@ -38,13 +35,9 @@ public class Vacation {
 	@Schema(description = "The store id of the vacation.")
 	private String storeId;
 
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	@Schema(description = "The start date of the vacation.")
 	private LocalDate startDate;
 
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	@Schema(description = "The end date of the vacation.")
 	private LocalDate endDate;
 
