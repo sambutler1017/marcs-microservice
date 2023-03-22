@@ -86,7 +86,7 @@ public abstract class EmailProcessor<T> {
             request.setBody(mail.build());
 
             Response res = sg.api(request);
-            LOGGER.info("Email sent to '{}' with status code : {}", userEmail.getRecipient().getEmail(),
+            LOGGER.info("Email sent to '{}' with status code: {}", userEmail.getRecipient().getEmail(),
                         res.getStatusCode());
         }
         catch(IOException e) {
