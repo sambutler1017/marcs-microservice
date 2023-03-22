@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.marcs.app.email.client.domain.UserEmail;
 import com.marcs.app.email.rest.EmailController;
 import com.marcs.app.vacation.client.VacationClient;
 
@@ -39,9 +38,8 @@ public class VacationScheduler {
     @Scheduled(cron = "0 0 12 * * MON", zone = "UTC")
     public void create() throws Exception {
         LOGGER.info("Sending Vacation Reports...");
-        for(UserEmail e : emailController.sendVacationReport()) {
-            LOGGER.info("Vacation Report Sent to: '{}'", e.getRecipient().getEmail());
-        }
+        emailController.sendVacationReport();
+        LOGGER.info("Reports Sent Complete!");
     }
 
     /**
