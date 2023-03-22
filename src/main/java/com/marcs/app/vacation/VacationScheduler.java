@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.marcs.app.email.client.domain.UserEmail;
 import com.marcs.app.email.rest.EmailController;
 import com.marcs.app.vacation.client.VacationClient;
 
@@ -38,8 +39,9 @@ public class VacationScheduler {
     @Scheduled(cron = "0 0 12 * * MON", zone = "UTC")
     public void create() throws Exception {
         LOGGER.info("Sending Vacation Reports...");
-        emailController.sendVacationReport();
-        LOGGER.info("Reports Sent Complete!");
+        for(UserEmail e : emailController.sendVacationReport()) {
+            LOGGER.info("Vacation Report Sent to: '{}'", e.getRecipient().getEmail());
+        }
     }
 
     /**
@@ -65,7 +67,7 @@ public class VacationScheduler {
     public void removeExpiredVacations() throws Exception {
         LOGGER.info("Removing Expired Vacations...");
         int affectedRows = vacationClient.deleteAllExpiredVacations(DELETE_RANGE);
-        LOGGER.info("Vacations Marked Expired Complete! '{}' rows updated.", affectedRows);
+        LOGGER.info("Vacations Removed Complete! '{}' rows updated.", affectedRows);
     }
 
 }
