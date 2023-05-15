@@ -10,10 +10,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Sets;
 import com.marcs.app.reports.dao.UserReportsDao;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.csv.CSVBuilder;
+import com.marcs.jwt.utility.JwtHolder;
 
 /**
  * User Reports Service class that will handle all the calls for formatting a
@@ -28,6 +30,9 @@ public class UserReportsService {
     @Autowired
     private UserReportsDao dao;
 
+    @Autowired
+    private JwtHolder jwtHolder;
+
     /**
      * This will generate a report for a list of users.
      * 
@@ -35,11 +40,40 @@ public class UserReportsService {
      * @throws Exception
      */
     public ResponseEntity<Resource> generateUserProfileReport(UserGetRequest request) throws Exception {
-        List<User> userList = dao.getUsers(request);
+        List<User> userList = dao.getUsers(userAccessRestrictions(request));
 
         return CSVBuilder.download(userList).withColumn("ID", "id").withColumn("First Name", "firstName")
                 .withColumn("Last Name", "lastName").withColumn("Email", "email").withColumn("Web Role", "webRole")
                 .withColumn("Store ID", "storeId").withColumn("Store Name", "storeName")
                 .withColumn("Hire Date", "hireDate").build("user-download.csv");
+    }
+
+    /**
+     * Will determine what users, the user making the request, is able to see.
+     * 
+     * @param r The passed in user get request.
+     * @return Updated user get request.
+     */
+    private UserGetRequest userAccessRestrictions(UserGetRequest r) {
+        if(!jwtHolder.isTokenAvaiable()) {
+            return r;
+        }
+
+        if(jwtHolder.getWebRole().isAllAccessUser()) {
+            r.setExcludedUserIds(Sets.newHashSet(jwtHolder.getUserId()));
+        }
+        else if(jwtHolder.getWebRole().isRegional()) {
+            r.setExcludedUserIds(Sets.newHashSet(jwtHolder.getUserId()));
+            r.setRegionalId(Sets.newHashSet(jwtHolder.getUserId()));
+        }
+        else if(jwtHolder.getWebRole().isManager()) {
+            r.setExcludedUserIds(Sets.newHashSet(jwtHolder.getUserId()));
+            r.setStoreId(Sets.newHashSet(jwtHolder.getUser().getStoreId()));
+        }
+        else { // Employee User
+            r.setId(Sets.newHashSet(jwtHolder.getUserId()));
+        }
+
+        return r;
     }
 }

@@ -23,7 +23,6 @@ import com.marcs.app.vacation.rest.VacationController;
 import com.marcs.common.date.LocalDateFormatter;
 import com.marcs.common.date.TimeZoneUtil;
 import com.marcs.common.enums.VacationStatus;
-import com.marcs.common.enums.WebRole;
 
 /**
  * Forgot Password email processor
@@ -53,10 +52,6 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
         for(User user : usersWithNotifications) {
             VacationGetRequest req = new VacationGetRequest();
             req.setStatus(Sets.newHashSet(VacationStatus.APPROVED));
-            if(user.getWebRole().equals(WebRole.REGIONAL) || user.getWebRole().equals(WebRole.DISTRICT_MANAGER)) {
-                req.setRegionalId(Sets.newHashSet(user.getId()));
-            }
-
             emails.add(send(user.getEmail(), "Weekly Report", buildEmailBody(emailContent, req)));
         }
         return emails;
@@ -89,7 +84,6 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
      */
     private List<User> getUsersWithEmailReportsEnabled() {
         UserGetRequest request = new UserGetRequest();
-        request.setWebRole(Sets.newHashSet(WebRole.REGIONAL, WebRole.DISTRICT_MANAGER, WebRole.ADMIN));
         request.setEmailReportsEnabled(true);
         return userClient.getUsers(request);
     }

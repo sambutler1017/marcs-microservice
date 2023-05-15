@@ -97,7 +97,7 @@ public class VacationService {
 	 * @return {@link List<Vacation>} for the user.
 	 */
 	public List<Vacation> getVacationsForReport(VacationGetRequest request) {
-		return dao.getVacationsForReport(request);
+		return dao.getVacationsForReport(vacationAccessRestrictions(request));
 	}
 
 	/**
