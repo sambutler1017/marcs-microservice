@@ -14,7 +14,7 @@ import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.app.user.dao.UserProfileDao;
-import com.marcs.common.exceptions.BaseException;
+import com.marcs.common.exceptions.UserNotFoundException;
 import com.marcs.common.page.Page;
 import com.marcs.jwt.utility.JwtHolder;
 
@@ -43,16 +43,7 @@ public class UserProfileService {
 	 * @return User profile object {@link User}
 	 */
 	public Page<User> getUsers(UserGetRequest request) {
-		return dao.getUsers(request);
-	}
-
-	/**
-	 * Get the current user from the jwt token.
-	 * 
-	 * @return User profile object {@link User}
-	 */
-	public User getCurrentUser() {
-		return getUserById(jwtHolder.getUserId());
+		return dao.getUsers(userAccessRestrictions(request));
 	}
 
 	/**
@@ -62,9 +53,17 @@ public class UserProfileService {
 	 * @return User profile object {@link User}
 	 */
 	public User getUserById(int id) {
-		UserGetRequest request = new UserGetRequest();
-		request.setId(Sets.newHashSet(id));
-		return getUsers(request).getList().get(0);
+		return dao.getUserById(id)
+				.orElseThrow(() -> new UserNotFoundException(String.format("User not found for id: '%d'", id)));
+	}
+
+	/**
+	 * Get the current user from the jwt token.
+	 * 
+	 * @return User profile object {@link User}
+	 */
+	public User getCurrentUser() {
+		return getUserById(jwtHolder.getUserId());
 	}
 
 	/**
@@ -113,10 +112,39 @@ public class UserProfileService {
 		List<User> users = getUsers(request).getList();
 
 		if(users.size() == 0) {
-			throw new BaseException(String.format("User not found for email '%s'", email));
+			throw new UserNotFoundException(String.format("User not found for email '%s'", email));
 		}
 
 		emailClient.forgotPassword(email);
 		return users.get(0);
+	}
+
+	/**
+	 * Will determine was users, the user making the request, is able to see.
+	 * 
+	 * @param r The passed in user get request.
+	 * @return Updated user get request.
+	 */
+	private UserGetRequest userAccessRestrictions(UserGetRequest r) {
+		if(!jwtHolder.isTokenAvaiable()) {
+			return r;
+		}
+
+		if(jwtHolder.getWebRole().isAllAccessUser()) {
+			r.setExcludedUserIds(Sets.newHashSet(jwtHolder.getUserId()));
+		}
+		else if(jwtHolder.getWebRole().isRegional()) {
+			r.setExcludedUserIds(Sets.newHashSet(jwtHolder.getUserId()));
+			r.setRegionalId(Sets.newHashSet(jwtHolder.getUserId()));
+		}
+		else if(jwtHolder.getWebRole().isManager()) {
+			r.setExcludedUserIds(Sets.newHashSet(jwtHolder.getUserId()));
+			r.setStoreId(Sets.newHashSet(jwtHolder.getUser().getStoreId()));
+		}
+		else { // Employee User
+			r.setId(Sets.newHashSet(jwtHolder.getUserId()));
+		}
+
+		return r;
 	}
 }

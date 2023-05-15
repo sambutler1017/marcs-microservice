@@ -15,6 +15,7 @@ import com.marcs.common.exceptions.BaseException;
 import com.marcs.common.exceptions.InsufficientPermissionsException;
 import com.marcs.common.exceptions.InvalidCredentialsException;
 import com.marcs.common.exceptions.JwtTokenException;
+import com.marcs.common.exceptions.UserNotFoundException;
 import com.marcs.common.exceptions.domain.ExceptionError;
 
 /**
@@ -34,11 +35,11 @@ public class ExceptionHandlerController {
         return new ExceptionError(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({NotFoundException.class, UserNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionError handleNotFoundException(Exception ex) {
         LOGGER.error(ex.getMessage());
-        return new ExceptionError(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ExceptionError(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(JwtTokenException.class)

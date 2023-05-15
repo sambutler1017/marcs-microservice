@@ -90,8 +90,8 @@ public class UserProfileClient {
 	 * @param user The user to be created.
 	 * @return The user that would be created.
 	 */
-	public User createUser(User user) throws Exception {
-		return controller.createUser(user);
+	public User registerUser(User user) throws Exception {
+		return controller.registerUser(user);
 	}
 
 	/**

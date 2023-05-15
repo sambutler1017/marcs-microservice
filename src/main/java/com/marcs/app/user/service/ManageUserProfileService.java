@@ -49,12 +49,12 @@ public class ManageUserProfileService {
 	 * @param user The user to create.
 	 * @return {@link User} object of the users data.
 	 */
-	public User createUser(User user, AccountStatus accountStatus) throws Exception {
+	public User registerUser(User user, AccountStatus accountStatus) throws Exception {
 		User newUser = dao.insertUser(user);
 
 		userCredentialsClient.insertUserPassword(newUser.getId(), user.getPassword());
 		userStatusClient.insertUserStatus(new UserStatus(newUser.getId(), accountStatus, false));
-		notificationClient.createNotificationForUser(newUser);
+		notificationClient.sendNotification(newUser);
 		return userProfileService.getUserById(newUser.getId());
 	}
 

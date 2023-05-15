@@ -35,6 +35,10 @@
     INNER JOIN user_status us ON up.id = us.user_id
   @INCLUDE(userFilters)
 
+@NAME(getUserById)
+  SELECT @INCLUDE(userProfileFields), @INCLUDE(storeFields), @INCLUDE(userStatusFields)
+  @INCLUDE(getUsersBase)
+  
 @NAME(getUsersPage)
   @PAGING(:rowOffset, :pageSize)
     SELECT @INCLUDE(userProfileFields), @INCLUDE(storeFields), @INCLUDE(userStatusFields)

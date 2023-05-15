@@ -3,11 +3,12 @@
  */
 package com.marcs.app.user.dao;
 
-import static com.marcs.app.user.mapper.ApplicationMapper.APPLICATION_MAPPER;
-import static com.marcs.app.user.mapper.UserProfileMapper.USER_MAPPER;
+import static com.marcs.app.user.mapper.ApplicationMapper.*;
+import static com.marcs.app.user.mapper.UserProfileMapper.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
@@ -55,6 +56,18 @@ public class UserProfileDao extends BaseDao {
 				.withParamTextEnumCollection(WEB_ROLE_TEXT_ID, request.getWebRole()).build();
 
 		return getPage("getUsersPage", params, USER_MAPPER);
+	}
+
+	/**
+	 * Get a user by id. It will return an optional object incase that user is not
+	 * found.
+	 * 
+	 * @param userId The user id to search for.
+	 * @return Optional User profile object {@link User}
+	 */
+	public Optional<User> getUserById(int userId) {
+		MapSqlParameterSource params = SqlParamBuilder.with().withParam(ID, userId).build();
+		return getOptional("getUserById", params, USER_MAPPER);
 	}
 
 	/**

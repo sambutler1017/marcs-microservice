@@ -38,7 +38,6 @@ public class NotificationService {
      * 
      * @param request The request with how to filter the request.
      * @return List of {@link Notification} objects.
-     * @throws Exception
      */
     public Page<Notification> getNotifications(NotificationGetRequest request) {
         return dao.getNotifications(request);
@@ -51,7 +50,6 @@ public class NotificationService {
      * 
      * @param id The id of the notification to get.
      * @return {@link Notification} objects.
-     * @throws Exception If the notification can not be found
      */
     public Notification getNotificationById(int id) throws Exception {
         NotificationGetRequest request = new NotificationGetRequest();
@@ -69,7 +67,6 @@ public class NotificationService {
      * return an empty list.
      * 
      * @return List of {@link Notification} objects.
-     * @throws Exception If the notification can not be found
      */
     public Page<Notification> getCurrentUserNotifications(NotificationGetRequest req) {
         req.setReceiverId(Sets.newHashSet(jwtHolder.getUserId()));

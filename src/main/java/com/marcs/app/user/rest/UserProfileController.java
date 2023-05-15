@@ -3,7 +3,7 @@
  */
 package com.marcs.app.user.rest;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.*;
 
 import java.util.List;
 
@@ -107,8 +107,8 @@ public class UserProfileController {
 	 * @return {@link User} object of the users data.
 	 */
 	@PostMapping(produces = APPLICATION_JSON_VALUE)
-	public User createUser(@RequestBody User user) throws Exception {
-		return manageUserProfileService.createUser(user, AccountStatus.PENDING);
+	public User registerUser(@RequestBody User user) throws Exception {
+		return manageUserProfileService.registerUser(user, AccountStatus.PENDING);
 	}
 
 	/**

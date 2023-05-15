@@ -30,7 +30,6 @@ public class ManageNotificationService {
      * 
      * @param id The id to mark as read.
      * @return {@link Notification} object.
-     * @throws Exception
      */
     public Notification markNotificationRead(int id) throws Exception {
         Notification n = notificationService.getNotificationById(id);
@@ -46,7 +45,6 @@ public class ManageNotificationService {
      * 
      * @param n The notification that needs inserted.
      * @return {@link Notification} That is created.
-     * @throws Exception
      */
     public Notification createNotification(Notification n) throws Exception {
         if(n.getLinkId() == 0 || n.getType() == null) {
@@ -60,7 +58,6 @@ public class ManageNotificationService {
      * to be deleted then it will return an exception.
      * 
      * @param id The id to be deleted
-     * @throws Exception
      */
     public void deleteNotification(int id) {
         dao.deleteNotification(id);

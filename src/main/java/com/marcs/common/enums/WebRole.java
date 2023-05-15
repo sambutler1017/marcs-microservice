@@ -3,6 +3,8 @@
  */
 package com.marcs.common.enums;
 
+import java.util.List;
+
 /**
  * Enums for all the possible user roles.
  * 
@@ -66,6 +68,29 @@ public enum WebRole implements TextEnum {
 	 * @return {@link Boolean} if the webrole is a manager.
 	 */
 	public boolean isManager() {
-		return rank > 2 && rank < 6;
+		List<Integer> managerRanks = List.of(2, 3, 4, 5, 6);
+		return managerRanks.contains(rank);
+	}
+
+	/**
+	 * Determines if the current webrole is a regional or not. Regionals are ranks 6
+	 * and 7
+	 * 
+	 * @return {@link Boolean} if the webrole is a regional.
+	 */
+	public boolean isRegional() {
+		List<Integer> regionalRanks = List.of(6, 7);
+		return regionalRanks.contains(rank);
+	}
+
+	/**
+	 * Determines if the current webrole is a all access user or not. These roles
+	 * are admins and corporate users.
+	 * 
+	 * @return {@link Boolean} if the webrole is a all access user.
+	 */
+	public boolean isAllAccessUser() {
+		List<Integer> allAccessRanks = List.of(2, 8, 9);
+		return allAccessRanks.contains(rank);
 	}
 }

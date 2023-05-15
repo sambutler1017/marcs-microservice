@@ -54,7 +54,6 @@ public class NotificationClient {
      * 
      * @param request The request with how to filter the request.
      * @return List of {@link Notification} objects.
-     * @throws Exception
      */
     public List<Notification> getNotifications(NotificationGetRequest request) {
         return controller.getNotifications(request).getList();
@@ -91,31 +90,32 @@ public class NotificationClient {
      * 
      * @param id The id to mark as read.
      * @return {@link Notification} object.
-     * @throws Exception
      */
     public Notification markNotificationRead(int id) throws Exception {
         return controller.markNotificationRead(id);
     }
 
     /**
-     * This will create a new notification specific to a VACATION.
+     * This will create a new notification specific to a {@link Vacation}. Once the
+     * notification is created, it will send a web notification to the reciever of
+     * the message.
      * 
      * @param vac The vacation to create a notification for.
-     * @throws Exception
      */
-    public void createNotificationForVacation(Vacation vac) throws Exception {
+    public void sendNotification(Vacation vac) throws Exception {
         User userRequesting = userProfileClient.getUserById(vac.getUserId());
         Notification n = createNotification(userRequesting, vac.getId(), NotificationType.VACATION);
         sendWebNotification(n);
     }
 
     /**
-     * This will create a new notification specific to a USER.
+     * This will create a new notification specific to a {@link User}. Once the
+     * notification is created, it will send a web notification to the reciever of
+     * the message.
      * 
-     * @param vac The vacation to create a notification for.
-     * @throws Exception
+     * @param user The user to create a notification for.
      */
-    public void createNotificationForUser(User user) throws Exception {
+    public void sendNotification(User user) throws Exception {
         Notification n = createNotification(user, user.getId(), NotificationType.USER);
         emailClient.sendNewUserEmail(user);
         sendWebNotification(n);
@@ -124,11 +124,10 @@ public class NotificationClient {
     /**
      * Inserts the notification into the database to be tracked and stored.
      * 
-     * @param u    The user who gets the notification
+     * @param u    The user who generated the notification
      * @param link The link to the data.
      * @param type The type of notification.
-     * @return The updated notification object.
-     * @throws Exception
+     * @return The created notification
      */
     public Notification createNotification(User u, int link, NotificationType type) throws Exception {
         Notification n = new Notification();
@@ -165,10 +164,8 @@ public class NotificationClient {
      * to be deleted then it will return an exception.
      * 
      * @param id The id to be deleted
-     * @throws Exception
      */
     public void deleteNotification(int id) {
         controller.deleteNotification(id);
     }
-
 }

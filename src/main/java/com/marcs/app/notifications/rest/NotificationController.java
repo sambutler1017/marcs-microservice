@@ -3,7 +3,7 @@
  */
 package com.marcs.app.notifications.rest;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -79,7 +79,6 @@ public class NotificationController {
      * 
      * @param id The id to mark as read.
      * @return {@link Notification} object.
-     * @throws Exception
      */
     @PutMapping(path = "/{id}/read", produces = APPLICATION_JSON_VALUE)
     public Notification markNotificationRead(@PathVariable int id) throws Exception {
@@ -92,7 +91,6 @@ public class NotificationController {
      * 
      * @param n The notification that needs inserted.
      * @return {@link Notification} That is created.
-     * @throws Exception
      */
     @PostMapping(produces = APPLICATION_JSON_VALUE)
     public Notification createNotification(@RequestBody Notification n) throws Exception {

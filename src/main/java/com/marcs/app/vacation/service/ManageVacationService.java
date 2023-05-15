@@ -67,7 +67,7 @@ public class ManageVacationService {
 	public Vacation requestVacation(Vacation vac) throws Exception {
 		vac.setStatus(VacationStatus.PENDING);
 		Vacation returnVac = createVacation(jwtHolder.getUserId(), vac);
-		notificationClient.createNotificationForVacation(returnVac);
+		notificationClient.sendNotification(returnVac);
 		return returnVac;
 	}
 
