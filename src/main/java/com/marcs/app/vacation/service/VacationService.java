@@ -12,6 +12,8 @@ import com.google.common.collect.Sets;
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.app.vacation.dao.VacationDao;
+import com.marcs.common.enums.WebRole;
+import com.marcs.common.exceptions.VacationNotFoundException;
 import com.marcs.common.page.Page;
 import com.marcs.jwt.utility.JwtHolder;
 
@@ -37,7 +39,7 @@ public class VacationService {
 	 * @return {@link Vacation} object.
 	 */
 	public Page<Vacation> getVacations(VacationGetRequest request) {
-		return dao.getVacations(request);
+		return dao.getVacations(vacationAccessRestrictions(request));
 	}
 
 	/**
@@ -81,7 +83,12 @@ public class VacationService {
 	public Vacation getVacationById(int id) {
 		VacationGetRequest request = new VacationGetRequest();
 		request.setId(Sets.newHashSet(id));
-		return getVacations(request).getList().get(0);
+		List<Vacation> vacationList = getVacations(request).getList();
+
+		if(vacationList.isEmpty()) {
+			throw new VacationNotFoundException("Vacation not found for id: " + id);
+		}
+		return vacationList.get(0);
 	}
 
 	/**
@@ -91,5 +98,32 @@ public class VacationService {
 	 */
 	public List<Vacation> getVacationsForReport(VacationGetRequest request) {
 		return dao.getVacationsForReport(request);
+	}
+
+	/**
+	 * Will determine what vacations, the user making the request, is able to see.
+	 * 
+	 * @param r The passed in vacation get request.
+	 * @return Updated vacation get request.
+	 */
+	private VacationGetRequest vacationAccessRestrictions(VacationGetRequest r) {
+		if(!jwtHolder.isTokenAvaiable()) {
+			return r;
+		}
+
+		if(jwtHolder.getWebRole().isAllAccessUser()) {
+			// Can See all vacations
+		}
+		if(jwtHolder.getWebRole().isRegional()) {
+			r.setRegionalId(Sets.newHashSet(jwtHolder.getUserId()));
+		}
+		else if(jwtHolder.getWebRole().isManager() || jwtHolder.getWebRole().equals(WebRole.EMPLOYEE)) {
+			r.setStoreId(Sets.newHashSet(jwtHolder.getUser().getStoreId()));
+		}
+		else {// No Access
+			r.setStoreId(Sets.newHashSet("NO_ACCESS"));
+		}
+
+		return r;
 	}
 }

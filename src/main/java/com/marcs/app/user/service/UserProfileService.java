@@ -120,7 +120,7 @@ public class UserProfileService {
 	}
 
 	/**
-	 * Will determine was users, the user making the request, is able to see.
+	 * Will determine what users, the user making the request, is able to see.
 	 * 
 	 * @param r The passed in user get request.
 	 * @return Updated user get request.
