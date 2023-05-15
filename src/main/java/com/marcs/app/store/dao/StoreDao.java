@@ -3,8 +3,8 @@
  */
 package com.marcs.app.store.dao;
 
-import static com.marcs.app.store.mapper.StoreMapper.STORE_MAPPER;
-import static com.marcs.app.user.mapper.UserProfileMapper.USER_MAPPER;
+import static com.marcs.app.store.mapper.StoreMapper.*;
+import static com.marcs.app.user.mapper.UserProfileMapper.*;
 
 import javax.sql.DataSource;
 

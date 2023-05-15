@@ -137,10 +137,12 @@ public class NotificationClient {
         n.setType(type);
 
         if(u.getWebRole().isManager()) {
-            n.setReceiverId(storeClient.getRegionalOfStoreById(u.getStoreId()).getId());
+            User regional = storeClient.getRegionalOfStoreById(u.getStoreId());
+            n.setReceiverId(regional != null ? regional.getId() : 0);
         }
         else if(u.getWebRole().equals(WebRole.EMPLOYEE)) {
-            n.setReceiverId(storeClient.getManagerOfStoreById(u.getStoreId()).getId());
+            User manager = storeClient.getManagerOfStoreById(u.getStoreId());
+            n.setReceiverId(manager != null ? manager.getId() : 0);
         }
         else {
             n.setReceiverId(0); // Notification to only site admin and admins
