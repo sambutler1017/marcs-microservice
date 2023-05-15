@@ -60,14 +60,12 @@ public class UserReportsService {
         }
 
         if(jwtHolder.getWebRole().isAllAccessUser()) {
-            r.setExcludedUserIds(Sets.newHashSet(jwtHolder.getUserId()));
+            // Do Nothing
         }
         else if(jwtHolder.getWebRole().isRegional()) {
-            r.setExcludedUserIds(Sets.newHashSet(jwtHolder.getUserId()));
             r.setRegionalId(Sets.newHashSet(jwtHolder.getUserId()));
         }
         else if(jwtHolder.getWebRole().isManager()) {
-            r.setExcludedUserIds(Sets.newHashSet(jwtHolder.getUserId()));
             r.setStoreId(Sets.newHashSet(jwtHolder.getUser().getStoreId()));
         }
         else { // Employee User
