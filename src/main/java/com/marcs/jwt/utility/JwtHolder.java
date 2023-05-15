@@ -133,6 +133,15 @@ public class JwtHolder {
 	}
 
 	/**
+	 * Get the current user Id.
+	 * 
+	 * @return int of the userId from the current token
+	 */
+	public String getStoreId() {
+		return parse(UserJwtClaims.STORE_ID).toString();
+	}
+
+	/**
 	 * Gets the reset password status.
 	 * 
 	 * @return int of the userId from the current token
@@ -151,6 +160,7 @@ public class JwtHolder {
 		currentUser.setId(getUserId());
 		currentUser.setEmail(getEmail());
 		currentUser.setWebRole(getWebRole());
+		currentUser.setStoreId(getStoreId());
 		currentUser.setFirstName(parse(UserJwtClaims.FIRST_NAME).toString());
 		currentUser.setLastName(parse(UserJwtClaims.LAST_NAME).toString());
 		return currentUser;

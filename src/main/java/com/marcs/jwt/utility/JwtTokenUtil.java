@@ -124,7 +124,7 @@ public class JwtTokenUtil implements Serializable {
         claims.put(UserJwtClaims.PASSWORD_RESET, reset);
 
         if(user.getStoreId() != null) {
-            claims.put("storeId", user.getStoreId());
+            claims.put(UserJwtClaims.STORE_ID, user.getStoreId());
         }
 
         return doGenerateToken(claims);

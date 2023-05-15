@@ -23,6 +23,7 @@ public abstract class UserJwtClaims {
     public static final String PASSWORD_RESET = "passwordReset";
     public static final String APPS = "apps";
     public static final String ACCESS = "access";
+    public static final String STORE_ID = "storeId";
 
     // All Claims
     public static final String JWT_TYPE = "jwtType";
