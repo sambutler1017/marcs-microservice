@@ -87,4 +87,22 @@ public class StoreClient {
 	public Store updateRegionalOfStore(int userId, String storeId) {
 		return controller.updateRegionalOfStore(userId, storeId);
 	}
+
+	/**
+	 * Will clear the manager from the store associated to that user.
+	 * 
+	 * @param userId The user id to clear
+	 */
+	public void clearStoreManager(int userId) {
+		controller.clearStoreManager(userId);
+	}
+
+	/**
+	 * Will clear the regional from all stores associated to that user.
+	 * 
+	 * @param userId The user id to clear
+	 */
+	public void clearRegional(int userId) {
+		controller.clearRegional(userId);
+	}
 }

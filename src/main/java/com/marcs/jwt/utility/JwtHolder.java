@@ -73,7 +73,8 @@ public class JwtHolder {
 	 * @return {@link Object} of the found key.
 	 */
 	public Object parse(String key) {
-		return getClaims().get(key);
+		Object value = getClaims().get(key);
+		return value == null ? "" : value;
 	}
 
 	/**

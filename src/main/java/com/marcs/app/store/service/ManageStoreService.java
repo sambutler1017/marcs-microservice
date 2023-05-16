@@ -114,6 +114,24 @@ public class ManageStoreService {
 	}
 
 	/**
+	 * Will clear the manager from the store associated to that user.
+	 * 
+	 * @param userId The user id to clear
+	 */
+	public void clearStoreManager(int userId) {
+		dao.clearStoreManager(userId);
+	}
+
+	/**
+	 * Will clear the regional from all stores associated to that user.
+	 * 
+	 * @param userId The user id to clear
+	 */
+	public void clearRegional(int userId) {
+		dao.clearRegional(userId);
+	}
+
+	/**
 	 * Will demote the current store manage of a store given the store id. If there
 	 * is no manager of the store, then it will do nothing.
 	 * 

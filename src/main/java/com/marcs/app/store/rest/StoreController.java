@@ -3,7 +3,7 @@
  */
 package com.marcs.app.store.rest;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -133,5 +133,25 @@ public class StoreController {
 	@DeleteMapping(path = "/{storeId}")
 	public void deleteStoreById(@PathVariable String storeId) {
 		manageStoreService.deleteStoreById(storeId);
+	}
+
+	/**
+	 * Will clear the manager from the store associated to that user.
+	 * 
+	 * @param userId The user id to clear
+	 */
+	@DeleteMapping(path = "/manager/{userId}")
+	public void clearStoreManager(@PathVariable int userId) {
+		manageStoreService.clearStoreManager(userId);
+	}
+
+	/**
+	 * Will clear the regional from all stores associated to that user.
+	 * 
+	 * @param userId The user id to clear
+	 */
+	@DeleteMapping(path = "/regional/{userId}")
+	public void clearRegional(@PathVariable int userId) {
+		manageStoreService.clearRegional(userId);
 	}
 }

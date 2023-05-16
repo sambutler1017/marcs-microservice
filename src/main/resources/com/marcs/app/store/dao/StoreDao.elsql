@@ -77,5 +77,15 @@
   DELETE FROM stores
   WHERE id = :id
 
+@NAME(clearStoreManager)
+  UPDATE stores
+  SET manager_id = null
+  WHERE manager_id = :user_id
+
+@NAME(clearRegional)
+  UPDATE stores
+  SET regional_id = null
+  WHERE regional_id = :user_id
+
 @NAME(search)
   (@VALUE(:searchContent))

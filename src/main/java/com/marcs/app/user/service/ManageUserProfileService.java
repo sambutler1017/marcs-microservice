@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.marcs.app.notifications.client.NotificationClient;
+import com.marcs.app.store.client.StoreClient;
 import com.marcs.app.user.client.UserCredentialsClient;
 import com.marcs.app.user.client.UserStatusClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.UserStatus;
 import com.marcs.app.user.dao.UserProfileDao;
 import com.marcs.common.enums.AccountStatus;
+import com.marcs.common.enums.WebRole;
 import com.marcs.common.exceptions.InsufficientPermissionsException;
 import com.marcs.jwt.utility.JwtHolder;
 
@@ -39,6 +41,9 @@ public class ManageUserProfileService {
 
 	@Autowired
 	private NotificationClient notificationClient;
+
+	@Autowired
+	private StoreClient storeClient;
 
 	@Autowired
 	private UserProfileService userProfileService;
@@ -100,6 +105,7 @@ public class ManageUserProfileService {
 							updatingUser.getWebRole()));
 		}
 
+		checkRoleChange(updatingUser, user);
 		return updateUserProfile(id, user);
 	}
 
@@ -133,5 +139,37 @@ public class ManageUserProfileService {
 	private User updateUserProfile(int userId, User user) {
 		dao.updateUserProfile(userId, user);
 		return userProfileService.getUserById(userId);
+	}
+
+	/**
+	 * Checks the role change of the user. If the role has changed it will check to
+	 * see if any other steps need taken to confirm the role over change of the
+	 * user.
+	 * 
+	 * @param currentInfo  The current user info
+	 * @param updatingInfo The info to update on the user.
+	 */
+	private void checkRoleChange(User currentInfo, User updatingInfo) {
+		if(updatingInfo.getWebRole() != null && !currentInfo.getWebRole().equals(updatingInfo.getWebRole())) {
+			switch(currentInfo.getWebRole()) {
+				case STORE_MANAGER:
+					storeClient.clearStoreManager(currentInfo.getId());
+					break;
+				case REGIONAL: {
+					if(!WebRole.DISTRICT_MANAGER.equals(updatingInfo.getWebRole())) {
+						storeClient.clearRegional(currentInfo.getId());
+					}
+				}
+					break;
+				case DISTRICT_MANAGER: {
+					if(!WebRole.REGIONAL.equals(updatingInfo.getWebRole())) {
+						storeClient.clearRegional(currentInfo.getId());
+					}
+				}
+					break;
+				default:
+					break;
+			}
+		}
 	}
 }

@@ -135,4 +135,22 @@ public class StoreDao extends BaseDao {
 	public void deleteStoreById(String storeId) {
 		delete("deleteStore", parameterSource(ID, storeId));
 	}
+
+	/**
+	 * Will clear the manager from the store associated to that user.
+	 * 
+	 * @param userId The user id to clear
+	 */
+	public void clearStoreManager(int userId) {
+		delete("clearStoreManager", parameterSource(USER_ID, userId));
+	}
+
+	/**
+	 * Will clear the regional from all stores associated to that user.
+	 * 
+	 * @param userId The user id to clear
+	 */
+	public void clearRegional(int userId) {
+		delete("clearRegional", parameterSource(USER_ID, userId));
+	}
 }

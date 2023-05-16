@@ -75,7 +75,7 @@
   UPDATE user_profile 
   SET
     email                 = IFNULL(:email,email),
-    store_id              = IFNULL(:store_id,store_id),
+    store_id              = :store_id,
     first_name            = IFNULL(:first_name,first_name),
     last_name             = IFNULL(:last_name,last_name),
     web_role_id           = IFNULL(:web_role_id,web_role_id),
