@@ -80,7 +80,6 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
      * weekly reminder of who is on vacation.
      * 
      * @return List of users
-     * @throws Exception
      */
     private List<User> getUsersWithEmailReportsEnabled() {
         UserGetRequest request = new UserGetRequest();

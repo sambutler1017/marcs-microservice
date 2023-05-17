@@ -3,7 +3,7 @@
  */
 package com.marcs.app.user.rest;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +33,6 @@ public class UserStatusController {
      * 
      * @param id The id of the user to get the status for.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     @GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
     public UserStatus getUserStatusById(@PathVariable int id) {
@@ -45,7 +44,6 @@ public class UserStatusController {
      * 
      * @param userStatus Object to be inserted.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     @PostMapping(produces = APPLICATION_JSON_VALUE)
     public UserStatus insertUserStatus(@RequestBody UserStatus userStatus) {
@@ -57,7 +55,6 @@ public class UserStatusController {
      * 
      * @param id The id of the user to get the status for.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     @PutMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
     public UserStatus updateUserStatusByUserId(@PathVariable int id, @RequestBody UserStatus userStatus) {
@@ -70,7 +67,6 @@ public class UserStatusController {
      * @param id        The id of the user to get the status for.
      * @param appAccess boolean determining what access the user has.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     @PutMapping(path = "/{id}/access/{appAccess}", produces = APPLICATION_JSON_VALUE)
     public UserStatus updateUserAppAccessByUserId(@PathVariable int id, @PathVariable Boolean appAccess) {

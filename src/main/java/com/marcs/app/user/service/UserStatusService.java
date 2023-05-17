@@ -26,7 +26,6 @@ public class UserStatusService {
      * 
      * @param userId The id of the user to get the status for.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     public UserStatus getUserStatusById(int userId) {
         return dao.getUserStatusById(userId);

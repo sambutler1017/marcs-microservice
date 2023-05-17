@@ -38,8 +38,7 @@ public class NotificationController {
      * Vacations)
      * 
      * @param request The request with how to filter the request.
-     * @return Page of {@link Notification} objects.
-     * @throws Exception
+     * @return Page of {@link Notification} objects
      */
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public Page<Notification> getNotifications(NotificationGetRequest request) {

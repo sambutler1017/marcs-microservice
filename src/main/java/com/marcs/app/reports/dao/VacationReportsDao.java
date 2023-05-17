@@ -34,7 +34,6 @@ public class VacationReportsDao extends BaseDao {
          * Get list of vacations for the current request.
          * 
          * @return {@link Vacation} object.
-         * @throws Exception
          */
         public List<Vacation> getVacations(VacationGetRequest request) throws Exception {
                 MapSqlParameterSource params = SqlParamBuilder.with(request).withParam(ID, request.getId())

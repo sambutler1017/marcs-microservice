@@ -44,7 +44,6 @@ public abstract class EmailProcessor<T> {
      * Process the generic email type.
      * 
      * @return {@link UserEmail} object to send.
-     * @throws Exception
      */
     public abstract List<UserEmail> process();
 

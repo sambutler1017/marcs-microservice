@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.user.client.domain.UserStatus;
-import com.marcs.app.user.rest.UserStatusController;
+import com.marcs.app.user.service.ManageUserStatusService;
+import com.marcs.app.user.service.UserStatusService;
 
 /**
  * This class exposes the user endpoint's to other app's to pull data across the
@@ -18,18 +19,21 @@ import com.marcs.app.user.rest.UserStatusController;
  */
 @Client
 public class UserStatusClient {
+
     @Autowired
-    private UserStatusController controller;
+    private UserStatusService service;
+
+    @Autowired
+    private ManageUserStatusService manageUserStatusService;
 
     /**
      * Gets the status for the given user id.
      * 
      * @param id The id of the user to get the status for.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     public UserStatus getUserStatusById(int id) {
-        return controller.getUserStatusById(id);
+        return service.getUserStatusById(id);
     }
 
     /**
@@ -37,10 +41,9 @@ public class UserStatusClient {
      * 
      * @param userStatus Object to be inserted.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     public UserStatus insertUserStatus(UserStatus userStatus) {
-        return controller.insertUserStatus(userStatus);
+        return manageUserStatusService.insertUserStatus(userStatus);
     }
 
     /**
@@ -48,9 +51,8 @@ public class UserStatusClient {
      * 
      * @param id The id of the user to get the status for.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     public UserStatus updateUserStatusByUserId(int id, UserStatus userStatus) {
-        return controller.updateUserStatusByUserId(id, userStatus);
+        return manageUserStatusService.updateUserStatusByUserId(id, userStatus);
     }
 }

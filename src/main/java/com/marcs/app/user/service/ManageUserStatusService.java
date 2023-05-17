@@ -44,7 +44,6 @@ public class ManageUserStatusService {
      * 
      * @param userStatus Object to be inserted.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     public UserStatus insertUserStatus(UserStatus userStatus) {
         return dao.insertUserStatus(userStatus, userStatus.getUserId());
@@ -55,7 +54,6 @@ public class ManageUserStatusService {
      * 
      * @param id The id of the user to get the status for.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     public UserStatus updateUserStatusByUserId(int id, UserStatus userStatus) {
         userStatus.setUpdatedUserId(jwtHolder.getUserId());
@@ -71,7 +69,6 @@ public class ManageUserStatusService {
      * @param id        The id of the user to get the status for.
      * @param appAccess boolean determining what access the user has.
      * @return {@link UserStatus} object
-     * @throws Exception
      */
     public UserStatus updateUserAppAccessByUserId(int id, Boolean appAccess) {
         return dao.updateUserStatusByUserId(id, new UserStatus(jwtHolder.getUserId(), null, appAccess));
@@ -84,7 +81,6 @@ public class ManageUserStatusService {
      * will ignore this call.
      * 
      * @param userId The id of the user to check
-     * @throws Exception
      */
     private void currentStoreManagerCheck(int userId) {
         User user = userProfileClient.getUserById(userId);

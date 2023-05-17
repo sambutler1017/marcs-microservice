@@ -9,7 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.marcs.annotations.interfaces.Client;
-import com.marcs.app.featureaccess.rest.FeatureAccessController;
+import com.marcs.app.featureaccess.service.FeatureAccessService;
 
 /**
  * This class exposes the feature access endpoint's to other app's to pull data
@@ -22,7 +22,7 @@ import com.marcs.app.featureaccess.rest.FeatureAccessController;
 public class FeatureAccessClient {
 
 	@Autowired
-	FeatureAccessController controller;
+	private FeatureAccessService service;
 
 	/**
 	 * Client method to get list of user feature access
@@ -31,6 +31,6 @@ public class FeatureAccessClient {
 	 * @return List of stores {@link Map<String,String>}
 	 */
 	public Map<String, List<Map<String, String>>> getFeatureAccess(int roleId) {
-		return controller.getFeatureAccess(roleId);
+		return service.getFeatureAccess(roleId);
 	}
 }

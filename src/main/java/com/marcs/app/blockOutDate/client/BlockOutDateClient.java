@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.blockoutdate.client.domain.BlockOutDate;
 import com.marcs.app.blockoutdate.client.domain.request.BlockOutDateGetRequest;
-import com.marcs.app.blockoutdate.rest.BlockOutDateController;
+import com.marcs.app.blockoutdate.service.BlockOutDateService;
+import com.marcs.app.blockoutdate.service.ManageBlockOutDateService;
 
 /**
  * This class exposes the block out date endpoint's to other app's to pull data
@@ -23,7 +24,10 @@ import com.marcs.app.blockoutdate.rest.BlockOutDateController;
 public class BlockOutDateClient {
 
 	@Autowired
-	private BlockOutDateController controller;
+	private BlockOutDateService blockOutDateService;
+
+	@Autowired
+	private ManageBlockOutDateService manageBlockOutDateService;
 
 	/**
 	 * Endpoint to get a list of block out dates based on the filter request
@@ -32,7 +36,7 @@ public class BlockOutDateClient {
 	 * @return List of block out date objects {@link BlockOutDate}
 	 */
 	public List<BlockOutDate> getBlockOutDates(BlockOutDateGetRequest request) {
-		return controller.getBlockOutDates(request).getList();
+		return blockOutDateService.getBlockOutDates(request).getList();
 	}
 
 	/**
@@ -42,7 +46,7 @@ public class BlockOutDateClient {
 	 * @return Block out date object {@link BlockOutDate}
 	 */
 	public BlockOutDate getBlockOutDateById(int id) throws Exception {
-		return controller.getBlockOutDateById(id);
+		return blockOutDateService.getBlockOutDateById(id);
 	}
 
 	/**
@@ -52,7 +56,7 @@ public class BlockOutDateClient {
 	 * @return The block out date with the insert time stamp and unique id.
 	 */
 	public BlockOutDate createBlockOutDate(BlockOutDate blockDate) throws Exception {
-		return controller.createBlockOutDate(blockDate);
+		return manageBlockOutDateService.createBlockOutDate(blockDate);
 	}
 
 	/**
@@ -61,6 +65,6 @@ public class BlockOutDateClient {
 	 * @param id The id of the block out date to be deleted.
 	 */
 	public void deleteBlockOutDate(int id) throws Exception {
-		controller.deleteBlockOutDate(id);
+		manageBlockOutDateService.deleteBlockOutDate(id);
 	}
 }

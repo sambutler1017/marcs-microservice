@@ -8,7 +8,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 
 import com.marcs.annotations.interfaces.Client;
-import com.marcs.app.reports.rest.UserReportsController;
+import com.marcs.app.reports.service.UserReportsService;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 
 /**
@@ -22,7 +22,7 @@ import com.marcs.app.user.client.domain.request.UserGetRequest;
 public class UserReportsClient {
 
 	@Autowired
-	private UserReportsController controller;
+	private UserReportsService service;
 
 	/**
 	 * This will generate a report for a list of users.
@@ -30,7 +30,7 @@ public class UserReportsClient {
 	 * @return CSV download object
 	 */
 	public ResponseEntity<Resource> generateUserProfileReport(UserGetRequest request) throws Exception {
-		return controller.generateUserProfileReport(request);
+		return service.generateUserProfileReport(request);
 	}
 
 }

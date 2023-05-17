@@ -6,7 +6,7 @@ package com.marcs.app.email.client;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.marcs.annotations.interfaces.Client;
-import com.marcs.app.email.rest.EmailController;
+import com.marcs.app.email.service.EmailService;
 import com.marcs.app.user.client.domain.User;
 
 /**
@@ -19,27 +19,25 @@ import com.marcs.app.user.client.domain.User;
 public class EmailClient {
 
     @Autowired
-    private EmailController controller;
+    private EmailService service;
 
     /**
      * This will send a forgot password link to the given user. If the email exists
      * in the database then the link will be sent.
      * 
      * @param email Email to search for and send an email too.
-     * @throws Exception
      */
-    public void forgotPassword(String email) {
-        controller.forgotPassword(email);
+    public void sendForgotPasswordEmail(String email) {
+        service.sendForgotPasswordEmail(email);
     }
 
     /**
      * This will send a report to all roles that are district manager or higher of
      * the vacations for the current week.
      * 
-     * @throws Exception
      */
     public void sendVacationReport() {
-        controller.sendVacationReport();
+        service.sendVacationReport();
     }
 
     /**
@@ -49,19 +47,17 @@ public class EmailClient {
      * 
      * @param newUser The new user that was created.
      * 
-     * @throws Exception
      */
     public void sendNewUserEmail(User newUser) {
-        controller.sendNewUserEmail(newUser);
+        service.sendNewUserEmail(newUser);
     }
 
     /**
      * Email endpoint to send status update of a users account
      * 
      * @param userId The id of the user to send an email update too.
-     * @throws Exception
      */
     public void sendUserAccountUpdateStatusEmail(int userId) {
-        controller.sendUserAccountUpdateStatusEmail(userId);
+        service.sendUserAccountUpdateStatusEmail(userId);
     }
 }

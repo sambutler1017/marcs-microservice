@@ -4,12 +4,11 @@
 package com.marcs.app.auth.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 
 import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.auth.client.domain.AuthToken;
 import com.marcs.app.auth.client.domain.request.AuthenticationRequest;
-import com.marcs.app.auth.rest.AuthenticationController;
+import com.marcs.app.auth.service.AuthenticationService;
 
 /**
  * Client method for authentication of a user.
@@ -21,7 +20,7 @@ import com.marcs.app.auth.rest.AuthenticationController;
 public class AuthenticationClient {
 
     @Autowired
-    private AuthenticationController controller;
+    private AuthenticationService service;
 
     /**
      * Verifies user credentials passed as a JWTRequest
@@ -29,16 +28,7 @@ public class AuthenticationClient {
      * @param email    Entered email at login.
      * @param password Password entered at login.
      */
-    public ResponseEntity<AuthToken> authenticateUser(String email, String password) {
-        return controller.authenticateUser(new AuthenticationRequest(email, password));
-    }
-
-    /**
-     * Reauthenticates a user and generates a new token.
-     *
-     * @return a new JWT.
-     */
-    public ResponseEntity<AuthToken> reauthenticateUser() {
-        return controller.reauthenticateUser();
+    public AuthToken authenticate(String email, String password) {
+        return service.authenticate(new AuthenticationRequest(email, password));
     }
 }

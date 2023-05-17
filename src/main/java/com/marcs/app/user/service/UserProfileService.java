@@ -115,7 +115,7 @@ public class UserProfileService {
 			throw new UserNotFoundException(String.format("User not found for email '%s'", email));
 		}
 
-		emailClient.forgotPassword(email);
+		emailClient.sendForgotPasswordEmail(email);
 		return users.get(0);
 	}
 

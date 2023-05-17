@@ -11,7 +11,9 @@ import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
-import com.marcs.app.user.rest.UserProfileController;
+import com.marcs.app.user.service.ManageUserProfileService;
+import com.marcs.app.user.service.UserProfileService;
+import com.marcs.common.enums.AccountStatus;
 
 /**
  * This class exposes the user endpoint's to other app's to pull data across the
@@ -24,26 +26,19 @@ import com.marcs.app.user.rest.UserProfileController;
 public class UserProfileClient {
 
 	@Autowired
-	private UserProfileController controller;
+	private UserProfileService userProfileService;
+
+	@Autowired
+	private ManageUserProfileService manageUserProfileService;
 
 	/**
-	 * Get users with no filters.
+	 * Gets a list of users based of the request filter
 	 * 
-	 * @param request of the user
-	 * @return User profile object {@link User}
-	 */
-	public List<User> getUsers() {
-		return controller.getUsers(new UserGetRequest()).getList();
-	}
-
-	/**
-	 * Get users based on given request filter.
-	 * 
-	 * @param request of the user
-	 * @return User profile object {@link User}
+	 * @param request to filter on
+	 * @return list of user objects
 	 */
 	public List<User> getUsers(UserGetRequest request) {
-		return controller.getUsers(request).getList();
+		return userProfileService.getUsers(request).getList();
 	}
 
 	/**
@@ -52,56 +47,78 @@ public class UserProfileClient {
 	 * @return The user currently logged in.
 	 */
 	public User getCurrentUser() {
-		return controller.getCurrentUser();
+		return userProfileService.getCurrentUser();
 	}
 
 	/**
-	 * Client method to get the user given a user id
+	 * Get user object for the given Id
 	 * 
 	 * @param id of the user
-	 * @return User profile object
+	 * @return user associated to that id
 	 */
 	public User getUserById(int id) {
-		return controller.getUserById(id);
+		return userProfileService.getUserById(id);
 	}
 
 	/**
-	 * Client method to a get a list of users apps that they have access too
+	 * End point to a get a list of users apps that they have access too
 	 * 
 	 * @return List of Application objects {@link Application}
 	 */
 	public List<Application> getUserApps() {
-		return controller.getUserApps();
+		return userProfileService.getUserApps();
 	}
 
 	/**
-	 * Client method to a get a list of users apps for a given id
+	 * End point to a get a list of users apps that they have access too
 	 * 
 	 * @return List of Application objects {@link Application}
-	 * @since May 13, 2020
 	 */
 	public List<Application> getUserAppsById(int id) {
-		return controller.getUserAppsById(id);
+		return userProfileService.getUserAppsById(id);
 	}
 
 	/**
-	 * Creates a new user.
+	 * This will check to see if the email exists. If it does then it will return
+	 * true, otherwise false.
 	 * 
-	 * @param user The user to be created.
-	 * @return The user that would be created.
+	 * @param email The email to check
+	 * @return {@link Boolean} to see if the email exists
+	 */
+	public boolean doesEmailExist(String email) {
+		return userProfileService.doesEmailExist(email);
+	}
+
+	/**
+	 * Creates a new user for the given user object.
+	 * 
+	 * @param user The user to create.
+	 * @return {@link User} object of the users data.
 	 */
 	public User registerUser(User user) throws Exception {
-		return controller.registerUser(user);
+		return manageUserProfileService.registerUser(user, AccountStatus.PENDING);
 	}
 
 	/**
-	 * Allows a user to create a new user account.
+	 * Add's a new user. This is an account created by someone other the user
+	 * accessing the account.
 	 * 
-	 * @param user The user to be created.
-	 * @return The user that would be created.
+	 * @param user The user to create.
+	 * @return {@link User} object of the users data.
 	 */
 	public User addNewUser(User user) {
-		return controller.addNewUser(user);
+		return manageUserProfileService.addNewUser(user);
+	}
+
+	/**
+	 * This gets called when a user forgets their password. This will check to see
+	 * if the passed in email exists as a user, if it does then the user will get an
+	 * email to reset their passowrd.
+	 * 
+	 * @return user associated to that id with the updated information
+	 */
+	public User forgotPassword(String email) throws Exception {
+		return userProfileService.forgotPassword(email);
 	}
 
 	/**
@@ -112,7 +129,7 @@ public class UserProfileClient {
 	 * @return user associated to that id with the updated information
 	 */
 	public User updateUserProfile(User user) {
-		return controller.updateUserProfile(user);
+		return manageUserProfileService.updateUserProfile(user);
 	}
 
 	/**
@@ -122,7 +139,7 @@ public class UserProfileClient {
 	 * @return user associated to that id with the updated information
 	 */
 	public User updateUserProfileById(int id, User user) {
-		return controller.updateUserProfileById(id, user);
+		return manageUserProfileService.updateUserProfileById(id, user);
 	}
 
 	/**
@@ -132,7 +149,7 @@ public class UserProfileClient {
 	 * @return The user object with the updated information.
 	 */
 	public User updateUserLastLoginToNow(int id) {
-		return controller.updateUserLastLoginToNow(id);
+		return manageUserProfileService.updateUserLastLoginToNow(id);
 	}
 
 	/**
@@ -143,7 +160,7 @@ public class UserProfileClient {
 	 * @return user associated to that id with the updated information
 	 */
 	public User patchUserProfileById(int id, User user) {
-		return controller.patchUserProfileById(id, user);
+		return manageUserProfileService.patchUserProfileById(id, user);
 	}
 
 	/**
@@ -152,6 +169,6 @@ public class UserProfileClient {
 	 * @param id The id of the user being deleted
 	 */
 	public void deleteUser(int id) {
-		controller.deleteUser(id);
+		manageUserProfileService.deleteUser(id);
 	}
 }

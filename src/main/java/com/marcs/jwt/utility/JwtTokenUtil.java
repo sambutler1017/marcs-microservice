@@ -107,7 +107,6 @@ public class JwtTokenUtil implements Serializable {
      * @param user  User info to be added to the token
      * @param reset If this is a reset password token.
      * @return String of the new JWT token
-     * @throws Exception
      */
     public String generateToken(User user, boolean reset) {
         Map<String, Object> claims = new HashMap<>();

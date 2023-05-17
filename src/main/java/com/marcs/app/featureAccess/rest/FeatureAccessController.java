@@ -31,7 +31,6 @@ public class FeatureAccessController {
      * Gets the feature access in an application for user.
      * 
      * @return {@link Map} of the list of feature access.
-     * @throws Exception
      */
     @GetMapping("/{webRoleId}")
     public Map<String, List<Map<String, String>>> getFeatureAccess(@PathVariable int webRoleId) {

@@ -44,7 +44,6 @@ public class UserCredentialsService {
      * 
      * @param userId The id to add the password for.
      * @param pass   Contains the hashed password.
-     * @throws Exception
      */
     public void insertUserPassword(int userId, String pass) {
         dao.insertUserPassword(userId, BCrypt.hashpw(pass, BCrypt.gensalt()));
@@ -62,7 +61,7 @@ public class UserCredentialsService {
      *                   not able to hash the new password.
      */
     public User updateUserPassword(PasswordUpdate passUpdate) {
-        authClient.authenticateUser(jwtHolder.getEmail(), passUpdate.getCurrentPassword()).getBody();
+        authClient.authenticate(jwtHolder.getEmail(), passUpdate.getCurrentPassword());
         return passwordUpdate(jwtHolder.getUserId(), passUpdate.getNewPassword());
     }
 
@@ -109,7 +108,6 @@ public class UserCredentialsService {
      * @param userId   Id of the user wanting to update their password.
      * @param password THe password to update on the user's account.
      * @return user associated to that id with the updated information
-     * @throws Exception
      */
     private User passwordUpdate(int userId, String password) {
         if(password != null && password.trim() != "") {

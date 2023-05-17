@@ -37,7 +37,6 @@ public class UserReportsService {
      * This will generate a report for a list of users.
      * 
      * @return CSV download object
-     * @throws Exception
      */
     public ResponseEntity<Resource> generateUserProfileReport(UserGetRequest request) throws Exception {
         List<User> userList = dao.getUsers(userAccessRestrictions(request));

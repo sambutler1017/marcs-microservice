@@ -12,7 +12,8 @@ import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.email.client.EmailClient;
 import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.app.notifications.client.domain.request.NotificationGetRequest;
-import com.marcs.app.notifications.rest.NotificationController;
+import com.marcs.app.notifications.service.ManageNotificationService;
+import com.marcs.app.notifications.service.NotificationService;
 import com.marcs.app.store.client.StoreClient;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
@@ -32,7 +33,10 @@ import com.marcs.subscription.client.SubscriptionNotifierClient;
 public class NotificationClient {
 
     @Autowired
-    private NotificationController controller;
+    private NotificationService notificationService;
+
+    @Autowired
+    private ManageNotificationService manageNotificationService;
 
     @Autowired
     private UserProfileClient userProfileClient;
@@ -56,7 +60,7 @@ public class NotificationClient {
      * @return List of {@link Notification} objects.
      */
     public List<Notification> getNotifications(NotificationGetRequest request) {
-        return controller.getNotifications(request).getList();
+        return notificationService.getNotifications(request).getList();
     }
 
     /**
@@ -69,7 +73,7 @@ public class NotificationClient {
      * @throws Exception If the notification can not be found
      */
     public Notification getNotificationById(int id) throws Exception {
-        return controller.getNotificationById(id);
+        return notificationService.getNotificationById(id);
     }
 
     /**
@@ -81,7 +85,7 @@ public class NotificationClient {
      * @throws Exception If the notification can not be found
      */
     public List<Notification> getCurrentUserNotifications(NotificationGetRequest req) {
-        return controller.getCurrentUserNotifications(req).getList();
+        return notificationService.getCurrentUserNotifications(req).getList();
     }
 
     /**
@@ -92,7 +96,7 @@ public class NotificationClient {
      * @return {@link Notification} object.
      */
     public Notification markNotificationRead(int id) throws Exception {
-        return controller.markNotificationRead(id);
+        return manageNotificationService.markNotificationRead(id);
     }
 
     /**
@@ -146,7 +150,7 @@ public class NotificationClient {
         else {
             n.setReceiverId(0); // Notification to only site admin and admins
         }
-        return controller.createNotification(n);
+        return manageNotificationService.createNotification(n);
     }
 
     /**
@@ -166,6 +170,6 @@ public class NotificationClient {
      * @param id The id to be deleted
      */
     public void deleteNotification(int id) {
-        controller.deleteNotification(id);
+        manageNotificationService.deleteNotification(id);
     }
 }

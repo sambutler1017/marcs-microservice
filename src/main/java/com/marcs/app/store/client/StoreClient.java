@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.store.client.domain.Store;
 import com.marcs.app.store.client.domain.request.StoreGetRequest;
-import com.marcs.app.store.rest.StoreController;
+import com.marcs.app.store.service.ManageStoreService;
+import com.marcs.app.store.service.StoreService;
 import com.marcs.app.user.client.domain.User;
 
 /**
@@ -24,7 +25,10 @@ import com.marcs.app.user.client.domain.User;
 public class StoreClient {
 
 	@Autowired
-	private StoreController controller;
+	private StoreService storeService;
+
+	@Autowired
+	private ManageStoreService manageStoreService;
 
 	/**
 	 * Endpoint to get a list of stores based on the given request
@@ -33,7 +37,7 @@ public class StoreClient {
 	 * @return List of store objects {@link Store}
 	 */
 	public List<Store> getStores(StoreGetRequest request) {
-		return controller.getStores(request).getList();
+		return storeService.getStores(request).getList();
 	}
 
 	/**
@@ -43,7 +47,7 @@ public class StoreClient {
 	 * @return {@link Store} object
 	 */
 	public Store getStoreById(String id) {
-		return controller.getStoreById(id);
+		return storeService.getStoreById(id);
 	}
 
 	/**
@@ -52,7 +56,7 @@ public class StoreClient {
 	 * @return The regional manager of that store
 	 */
 	public User getRegionalManagerOfStoreById(String storeId) {
-		return controller.getRegionalManagerOfStoreById(storeId);
+		return storeService.getRegionalManagerOfStoreById(storeId);
 	}
 
 	/**
@@ -61,7 +65,19 @@ public class StoreClient {
 	 * @return The manager of that store
 	 */
 	public User getManagerOfStoreById(String storeId) {
-		return controller.getManagerOfStoreById(storeId);
+		return storeService.getManagerOfStoreById(storeId);
+	}
+
+	/**
+	 * This will update the information of a store. It will only be able to update
+	 * the store id, store name, and regional manager of the store.
+	 * 
+	 * @param storeId The store Id to update the manager at.
+	 * @param store   The information to be updated
+	 * @return {@link Store} object with the updated information.
+	 */
+	public Store updateStore(String storeId, Store store) {
+		return manageStoreService.updateStore(storeId, store);
 	}
 
 	/**
@@ -74,7 +90,7 @@ public class StoreClient {
 	 * @return {@link Store} object with the updated manager.
 	 */
 	public Store updateStoreManagerOfStore(int userId, String storeId) {
-		return controller.updateStoreManagerOfStore(userId, storeId);
+		return manageStoreService.updateStoreManagerOfStore(userId, storeId);
 	}
 
 	/**
@@ -85,7 +101,27 @@ public class StoreClient {
 	 * @return {@link Store} object with the updated regional manager.
 	 */
 	public Store updateRegionalManagerOfStore(int userId, String storeId) {
-		return controller.updateRegionalManagerOfStore(userId, storeId);
+		return manageStoreService.updateRegionalManagerOfStore(userId, storeId);
+	}
+
+	/**
+	 * This will create a new store for the given store id, store name, and regional
+	 * manager on the store.
+	 * 
+	 * @param store The information to be created
+	 * @return {@link Store} object with the created information.
+	 */
+	public Store createStore(Store store) {
+		return manageStoreService.createStore(store);
+	}
+
+	/**
+	 * This will delete a store for the given store id.
+	 * 
+	 * @param storeId The store id of the store to be deleted.
+	 */
+	public void deleteStoreById(String storeId) {
+		manageStoreService.deleteStoreById(storeId);
 	}
 
 	/**
@@ -94,15 +130,15 @@ public class StoreClient {
 	 * @param userId The user id to clear
 	 */
 	public void clearStoreManager(int userId) {
-		controller.clearStoreManager(userId);
+		manageStoreService.clearStoreManager(userId);
 	}
 
 	/**
-	 * Will clear the regional from all stores associated to that user.
+	 * Will clear the regional manager from all stores associated to that user.
 	 * 
 	 * @param userId The user id to clear
 	 */
 	public void clearRegionalManager(int userId) {
-		controller.clearRegionalManager(userId);
+		manageStoreService.clearRegionalManager(userId);
 	}
 }

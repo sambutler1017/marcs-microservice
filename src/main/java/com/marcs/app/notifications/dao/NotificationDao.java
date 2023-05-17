@@ -3,7 +3,7 @@
  */
 package com.marcs.app.notifications.dao;
 
-import static com.marcs.app.notifications.mapper.NotificationMapper.NOTIFICATION_MAPPER;
+import static com.marcs.app.notifications.mapper.NotificationMapper.*;
 
 import java.time.LocalDateTime;
 
@@ -42,7 +42,6 @@ public class NotificationDao extends BaseDao {
      * 
      * @param request The request with how to filter the request.
      * @return List of {@link Notification} objects.
-     * @throws Exception If no data is returned
      */
     public Page<Notification> getNotifications(NotificationGetRequest request) {
         MapSqlParameterSource params = SqlParamBuilder.with(request).usePagenation().withParam(ID, request.getId())
@@ -58,7 +57,6 @@ public class NotificationDao extends BaseDao {
      * 
      * @param id The id to mark as read.
      * @return {@link Notification} object.
-     * @throws Exception
      */
     public void markNotificationRead(int id) {
         MapSqlParameterSource params = SqlParamBuilder.with().withParam(READ_FLAG, true).withParam(ID, id).build();
@@ -71,7 +69,6 @@ public class NotificationDao extends BaseDao {
      * 
      * @param n The notification that needs inserted.
      * @return {@link Notification} That is created.
-     * @throws Exception
      */
     public Notification createNotification(Notification n) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -90,7 +87,6 @@ public class NotificationDao extends BaseDao {
      * to be deleted then it will return an exception.
      * 
      * @param id The id to be deleted
-     * @throws Exception
      */
     public void deleteNotification(int id) {
         delete("deleteNotification", parameterSource(ID, id));

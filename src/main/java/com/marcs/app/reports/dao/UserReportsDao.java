@@ -35,7 +35,6 @@ public class UserReportsDao extends BaseDao {
          * 
          * @param request of the user
          * @return User profile object {@link User}
-         * @throws Exception
          */
         public List<User> getUsers(UserGetRequest request) throws Exception {
                 MapSqlParameterSource params = SqlParamBuilder.with(request).useAllParams()

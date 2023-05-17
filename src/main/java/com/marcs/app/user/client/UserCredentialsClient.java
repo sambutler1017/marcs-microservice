@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.marcs.annotations.interfaces.Client;
 import com.marcs.app.user.client.domain.PasswordUpdate;
 import com.marcs.app.user.client.domain.User;
-import com.marcs.app.user.rest.UserCredentialsController;
+import com.marcs.app.user.service.UserCredentialsService;
 
 /**
  * This class exposes the user endpoint's to other app's to pull data across the
@@ -21,7 +21,7 @@ import com.marcs.app.user.rest.UserCredentialsController;
 public class UserCredentialsClient {
 
     @Autowired
-    private UserCredentialsController controller;
+    private UserCredentialsService service;
 
     /**
      * This will create a new row in the user_credentails database with the given
@@ -32,7 +32,7 @@ public class UserCredentialsClient {
      * @param authPass The password that was created.
      */
     public void insertUserPassword(int id, String pass) {
-        controller.insertUserPassword(id, pass);
+        service.insertUserPassword(id, pass);
     }
 
     /**
@@ -45,7 +45,7 @@ public class UserCredentialsClient {
      * @return {@link User} object of the user that was updated.
      */
     public User updateUserPassword(PasswordUpdate passUpdate) {
-        return controller.updateUserPassword(passUpdate);
+        return service.updateUserPassword(passUpdate);
     }
 
     /**
@@ -57,20 +57,17 @@ public class UserCredentialsClient {
      * @return {@link User} object of the user that was updated.
      */
     public User updateUserPasswordById(int id, PasswordUpdate passUpdate) {
-        return controller.updateUserPasswordById(id, passUpdate);
+        return service.updateUserPasswordById(id, passUpdate);
     }
 
     /**
      * This will get called when a user has forgotten their password. This will
      * allow them to reset it.
      * 
-     * @param passUpdate Object the holds the current password and new user password
-     *                   to change it too.
+     * @param newPassword The new password
      * @return {@link User} object of the user that was updated.
-     * @throws Exception If the user can not be authenticated or it failed to hash
-     *                   the new password.
      */
-    public User resetUserPassword(PasswordUpdate passUpdate) throws Exception {
-        return controller.resetUserPassword(passUpdate);
+    public User resetUserPassword(String newPassword) throws Exception {
+        return service.resetUserPassword(newPassword);
     }
 }

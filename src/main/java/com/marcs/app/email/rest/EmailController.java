@@ -33,10 +33,9 @@ public class EmailController {
      * in the database then the link will be sent.
      * 
      * @param email Email to search for and send an email too.
-     * @throws Exception
      */
     @PostMapping("/forgot-password")
-    public List<UserEmail> forgotPassword(@RequestBody String email) {
+    public List<UserEmail> sendForgotPasswordEmail(@RequestBody String email) {
         return service.sendForgotPasswordEmail(email);
     }
 
@@ -57,7 +56,6 @@ public class EmailController {
      * 
      * @param newUser The email of the new user that was created.
      * 
-     * @throws Exception
      */
     @PostMapping("/new-user")
     public List<UserEmail> sendNewUserEmail(User newUser) {
@@ -68,7 +66,6 @@ public class EmailController {
      * Email endpoint to send status update of a users account
      * 
      * @param userId The user to send the email too.
-     * @throws Exception
      */
     @PostMapping("/{id}/user/account-update")
     public List<UserEmail> sendUserAccountUpdateStatusEmail(@PathVariable int userId) {
@@ -80,7 +77,6 @@ public class EmailController {
      * there may be.
      * 
      * @param message The message to send to admin.
-     * @throws Exception
      */
     @PostMapping("/contact")
     public List<UserEmail> sendContactAdminEmail(@RequestBody String message) {
