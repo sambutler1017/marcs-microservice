@@ -41,19 +41,19 @@ public class StoreDao extends BaseDao {
 	 */
 	public Page<Store> getStores(StoreGetRequest request) {
 		MapSqlParameterSource params = SqlParamBuilder.with(request).useAllParams().withParam(ID, request.getId())
-				.withParam(REGIONAL_ID, request.getRegionalId()).withParam(MANAGER_ID, request.getManagerId())
-				.withParam(NAME, request.getName()).build();
+				.withParam(REGIONAL_MANAGER_ID, request.getRegionalManagerId())
+				.withParam(MANAGER_ID, request.getManagerId()).withParam(NAME, request.getName()).build();
 		return getPage("getStoresPage", params, STORE_MAPPER);
 	}
 
 	/**
-	 * Get the regional of the passed in store ID
+	 * Get the regional manager of the passed in store ID
 	 * 
-	 * @return The regional of that store
+	 * @return The regional manager of that store
 	 */
-	public User getRegionalOfStoreById(String storeId) {
+	public User getRegionalManagerOfStoreById(String storeId) {
 		try {
-			return get("getRegionalOfStore", parameterSource(ID, storeId), USER_MAPPER);
+			return get("getRegionalManagerOfStoreById", parameterSource(ID, storeId), USER_MAPPER);
 		}
 		catch(EmptyResultDataAccessException e) {
 			return null;
@@ -67,7 +67,7 @@ public class StoreDao extends BaseDao {
 	 */
 	public User getManagerOfStoreById(String storeId) {
 		try {
-			return get("getManagerOfStoreById", parameterSource(ID, storeId), USER_MAPPER);
+			return get("getStoreManagerOfStoreById", parameterSource(ID, storeId), USER_MAPPER);
 		}
 		catch(EmptyResultDataAccessException e) {
 			return null;
@@ -76,7 +76,7 @@ public class StoreDao extends BaseDao {
 
 	/**
 	 * This will update the information of a store. It will only be able to update
-	 * the store id, store name, and regional of the store.
+	 * the store id, store name, and regional manager of the store.
 	 * 
 	 * @param storeId The store Id to update the manager at.
 	 * @param store   The information to be updated
@@ -102,26 +102,26 @@ public class StoreDao extends BaseDao {
 	}
 
 	/**
-	 * This will update the regional of a store.
+	 * This will update the regional manager of a store.
 	 * 
-	 * @param userId  The user id of the regional.
-	 * @param storeId The store Id to update the regional at.
-	 * @return {@link Store} object with the updated regional.
+	 * @param userId  The user id of the regional manager.
+	 * @param storeId The store Id to update the regional manager at.
+	 * @return {@link Store} object with the updated regional manager.
 	 */
-	public void updateRegionalOfStore(int userId, String storeId) {
-		update("updateRegionalOfStore", parameterSource(ID, storeId).addValue(REGIONAL_ID, userId));
+	public void updateRegionalManagerOfStore(int userId, String storeId) {
+		update("updateRegionalManagerOfStore", parameterSource(ID, storeId).addValue(REGIONAL_MANAGER_ID, userId));
 	}
 
 	/**
 	 * This will create a new store for the given store id, store name, and regional
-	 * on the store.
+	 * manager on the store.
 	 * 
 	 * @param store The information to be created
 	 * @return {@link Store} object with the created information.
 	 */
 	public Store createStore(Store store) {
 		MapSqlParameterSource params = SqlParamBuilder.with().useAllParams().withParam(ID, store.getId())
-				.withParam(NAME, store.getName()).withParam(REGIONAL_ID, store.getRegionalId()).build();
+				.withParam(NAME, store.getName()).withParam(REGIONAL_MANAGER_ID, store.getRegionalManagerId()).build();
 
 		post("insertStore", params);
 		return store;
@@ -146,11 +146,11 @@ public class StoreDao extends BaseDao {
 	}
 
 	/**
-	 * Will clear the regional from all stores associated to that user.
+	 * Will clear the regional manager from all stores associated to that user.
 	 * 
 	 * @param userId The user id to clear
 	 */
-	public void clearRegional(int userId) {
-		delete("clearRegional", parameterSource(USER_ID, userId));
+	public void clearRegionalManager(int userId) {
+		delete("clearRegionalManager", parameterSource(USER_ID, userId));
 	}
 }

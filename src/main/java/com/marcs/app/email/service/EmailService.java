@@ -48,7 +48,6 @@ public class EmailService {
      * @param <T>       The generic email processor type.
      * @param processor The processor to run.
      * @return The {@link UserEmail} object that was sent.
-     * @throws Exception
      */
     public <T> List<UserEmail> sendEmail(EmailProcessor<T> p) {
         List<UserEmail> emails = p.process();
@@ -64,7 +63,6 @@ public class EmailService {
      * in the database then the link will be sent.
      * 
      * @param email Email to search for and send an email too.
-     * @throws Exception
      */
     public List<UserEmail> sendForgotPasswordEmail(String email) {
         forgotPasswordEmailProcessor.setParams(email);
@@ -72,11 +70,9 @@ public class EmailService {
     }
 
     /**
-     * This will send a report to the individual regionals of what managers are on
-     * vacation. As well as admins and sitAdmins will get notifications of all users
-     * that are on vacation for the given week.
-     * 
-     * @throws Exception
+     * This will send a report to the individual regional managers of what managers
+     * are on vacation. As well as admins and sitAdmins will get notifications of
+     * all users that are on vacation for the given week.
      */
     public List<UserEmail> sendVacationReport() {
         return sendEmail(vacationReportEmailProcessor);
@@ -88,8 +84,6 @@ public class EmailService {
      * or not it has been approved or denied.
      * 
      * @param newUser The new user that was created.
-     * 
-     * @throws Exception
      */
     public List<UserEmail> sendNewUserEmail(User newUser) {
         newUserEmailProcessor.setParams(newUser);
@@ -100,7 +94,6 @@ public class EmailService {
      * Email endpoint to send status update of a users account
      * 
      * @param userId The id of the user to send an email update too.
-     * @throws Exception
      */
     public List<UserEmail> sendUserAccountUpdateStatusEmail(int userId) {
         userAccountStatusUpadteEmailProcessor.setParams(userId);
@@ -112,7 +105,6 @@ public class EmailService {
      * there may be.
      * 
      * @param message The message to send to admin.
-     * @throws Exception
      */
     public List<UserEmail> sendContactAdminEmail(String message) {
         contactAdminEmailProcessor.setParams(message);

@@ -55,13 +55,13 @@ public class StoreController {
 	}
 
 	/**
-	 * Get the regional of the passed in store ID.
+	 * Get the regional manager of the passed in store ID.
 	 * 
-	 * @return The regional of that store
+	 * @return The regional manager of that store
 	 */
-	@GetMapping(path = "/regional/{storeId}", produces = APPLICATION_JSON_VALUE)
-	public User getRegionalOfStoreById(@PathVariable String storeId) {
-		return storeService.getRegionalOfStoreById(storeId);
+	@GetMapping(path = "/regional-manager/{storeId}", produces = APPLICATION_JSON_VALUE)
+	public User getRegionalManagerOfStoreById(@PathVariable String storeId) {
+		return storeService.getRegionalManagerOfStoreById(storeId);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class StoreController {
 
 	/**
 	 * This will update the information of a store. It will only be able to update
-	 * the store id, store name, and regional of the store.
+	 * the store id, store name, and regional manager of the store.
 	 * 
 	 * @param storeId The store Id to update the manager at.
 	 * @param store   The information to be updated
@@ -102,20 +102,20 @@ public class StoreController {
 	}
 
 	/**
-	 * This will update the regional of a store.
+	 * This will update the regional manager of a store.
 	 * 
-	 * @param userId  The user id of the regional.
-	 * @param storeId The store Id to update the regional at.
-	 * @return {@link Store} object with the updated regional.
+	 * @param userId  The user id of the regional manager.
+	 * @param storeId The store Id to update the regional manager at.
+	 * @return {@link Store} object with the updated regional manager.
 	 */
-	@PutMapping(path = "{userId}/regional/{storeId}", produces = APPLICATION_JSON_VALUE)
-	public Store updateRegionalOfStore(@PathVariable int userId, @PathVariable String storeId) {
-		return manageStoreService.updateRegionalOfStore(userId, storeId);
+	@PutMapping(path = "{userId}/regional-manager/{storeId}", produces = APPLICATION_JSON_VALUE)
+	public Store updateRegionalManagerOfStore(@PathVariable int userId, @PathVariable String storeId) {
+		return manageStoreService.updateRegionalManagerOfStore(userId, storeId);
 	}
 
 	/**
 	 * This will create a new store for the given store id, store name, and regional
-	 * on the store.
+	 * manager on the store.
 	 * 
 	 * @param store The information to be created
 	 * @return {@link Store} object with the created information.
@@ -146,12 +146,12 @@ public class StoreController {
 	}
 
 	/**
-	 * Will clear the regional from all stores associated to that user.
+	 * Will clear the regional manager from all stores associated to that user.
 	 * 
 	 * @param userId The user id to clear
 	 */
-	@DeleteMapping(path = "/regional/{userId}")
-	public void clearRegional(@PathVariable int userId) {
-		manageStoreService.clearRegional(userId);
+	@DeleteMapping(path = "/regional-manager/{userId}")
+	public void clearRegionalManager(@PathVariable int userId) {
+		manageStoreService.clearRegionalManager(userId);
 	}
 }

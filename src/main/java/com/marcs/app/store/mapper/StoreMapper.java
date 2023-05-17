@@ -21,7 +21,7 @@ public class StoreMapper extends AbstractMapper<Store> {
 	public Store mapRow(ResultSet rs, int rowNum) throws SQLException {
 		Store store = new Store();
 		store.setId(rs.getString(STORE_ID));
-		store.setRegionalId(rs.getInt(REGIONAL_ID));
+		store.setRegionalManagerId(rs.getInt(REGIONAL_MANAGER_ID));
 		store.setName(rs.getString(STORE_NAME));
 		store.setManagerId(rs.getInt(MANAGER_ID));
 

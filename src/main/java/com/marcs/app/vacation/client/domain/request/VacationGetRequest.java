@@ -23,8 +23,8 @@ public class VacationGetRequest implements PageParam {
     @Schema(description = "Set of vacation ids.")
     private Set<Integer> id;
 
-    @Schema(description = "Set of regional ids.")
-    private Set<Integer> regionalId;
+    @Schema(description = "Set of regional manager ids.")
+    private Set<Integer> regionalManagerId;
 
     @Schema(description = "Set of user ids.")
     private Set<Integer> userId;
@@ -52,12 +52,12 @@ public class VacationGetRequest implements PageParam {
         this.id = id;
     }
 
-    public Set<Integer> getRegionalId() {
-        return regionalId;
+    public Set<Integer> getRegionalManagerId() {
+        return regionalManagerId;
     }
 
-    public void setRegionalId(Set<Integer> regionalId) {
-        this.regionalId = regionalId;
+    public void setRegionalManagerId(Set<Integer> regionalManagerId) {
+        this.regionalManagerId = regionalManagerId;
     }
 
     public Set<Integer> getUserId() {

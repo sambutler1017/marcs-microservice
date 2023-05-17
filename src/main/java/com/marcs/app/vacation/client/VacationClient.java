@@ -40,7 +40,7 @@ public class VacationClient {
 	 * 
 	 * @param id      of the user to search under
 	 * @param request The vacation request filters
-	 * @return List of vacations under that regional
+	 * @return List of vacations under that regional manager
 	 */
 	public List<Vacation> getVacationsByUserId(int id, VacationGetRequest request) throws Exception {
 		return controller.getVacationsByUserId(id, request).getList();

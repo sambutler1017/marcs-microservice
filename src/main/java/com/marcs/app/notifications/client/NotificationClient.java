@@ -136,8 +136,8 @@ public class NotificationClient {
         n.setType(type);
 
         if(u.getWebRole().isManager()) {
-            User regional = storeClient.getRegionalOfStoreById(u.getStoreId());
-            n.setReceiverId(regional != null ? regional.getId() : 0);
+            User regionalManager = storeClient.getRegionalManagerOfStoreById(u.getStoreId());
+            n.setReceiverId(regionalManager != null ? regionalManager.getId() : 0);
         }
         else if(u.getWebRole().equals(WebRole.EMPLOYEE)) {
             User manager = storeClient.getManagerOfStoreById(u.getStoreId());

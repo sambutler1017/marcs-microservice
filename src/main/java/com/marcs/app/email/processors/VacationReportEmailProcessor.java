@@ -76,8 +76,8 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
     }
 
     /**
-     * Get the list of regionals that have notifications enabled to get a weekly
-     * reminder of who is on vacation.
+     * Get the list of regional managers that have notifications enabled to get a
+     * weekly reminder of who is on vacation.
      * 
      * @return List of users
      * @throws Exception
@@ -91,7 +91,7 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
     /**
      * Build out the vacation cards
      * 
-     * @param vacs The vacations for the regional
+     * @param vacs The vacations for the regional manager
      * @return Formatted String
      */
     private String buildHTMLCard(List<Vacation> vacs) {

@@ -62,8 +62,8 @@ public class UserReportsService {
         if(jwtHolder.getWebRole().isAllAccessUser()) {
             // Do Nothing
         }
-        else if(jwtHolder.getWebRole().isRegional()) {
-            r.setRegionalId(Sets.newHashSet(jwtHolder.getUserId()));
+        else if(jwtHolder.getWebRole().isRegionalManager()) {
+            r.setRegionalManagerId(Sets.newHashSet(jwtHolder.getUserId()));
         }
         else if(jwtHolder.getWebRole().isManager()) {
             r.setStoreId(Sets.newHashSet(jwtHolder.getUser().getStoreId()));

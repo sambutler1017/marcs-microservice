@@ -48,8 +48,9 @@ public class UserProfileDao extends BaseDao {
 	public Page<User> getUsers(UserGetRequest request) {
 		MapSqlParameterSource params = SqlParamBuilder.with(request).useAllParams().withParam(ID, request.getId())
 				.withParam(EMAIL, request.getEmail()).withParam(STORE_ID, request.getStoreId())
-				.withParam(REGIONAL_ID, request.getRegionalId()).withParam(FIRST_NAME, request.getFirstName())
-				.withParam(LAST_NAME, request.getLastName()).withParam(STORE_NAME, request.getStoreName())
+				.withParam(REGIONAL_MANAGER_ID, request.getRegionalManagerId())
+				.withParam(FIRST_NAME, request.getFirstName()).withParam(LAST_NAME, request.getLastName())
+				.withParam(STORE_NAME, request.getStoreName())
 				.withParam(EMAIL_REPORTS_ENABLED, request.getEmailReportsEnabled())
 				.withParam(EXCLUDED_USER_IDS, request.getExcludedUserIds())
 				.withParamTextEnumCollection(ACCOUNT_STATUS, request.getAccountStatus())
@@ -128,6 +129,25 @@ public class UserProfileDao extends BaseDao {
 		MapSqlParameterSource params = SqlParamBuilder.with()
 				.withParam(LAST_LOGIN_DATE, LocalDateTime.now(TimeZoneUtil.SYSTEM_ZONE)).withParam(ID, userId).build();
 		update("updateUserLastLoginToNow", params);
+	}
+
+	/**
+	 * Will patch a user for the given id.
+	 * 
+	 * @param id   of the user
+	 * @param user The user info to be updated
+	 * @return user associated to that id with the updated information
+	 */
+	public void patchUserProfileById(int id, User user) {
+		user.setPassword(null);
+		MapSqlParameterSource params = SqlParamBuilder.with().withParam(FIRST_NAME, user.getFirstName())
+				.withParam(LAST_NAME, user.getLastName()).withParam(EMAIL, user.getEmail())
+				.withParam(STORE_ID, StringUtils.hasText(user.getStoreId()) ? user.getStoreId() : null)
+				.withParam(WEB_ROLE_ID, user.getWebRole() == null ? null : user.getWebRole().getRank())
+				.withParam(HIRE_DATE, user.getHireDate()).withParam(ID, id)
+				.withParam(EMAIL_REPORTS_ENABLED, user.isEmailReportsEnabled()).build();
+
+		update("patchUserProfile", params);
 	}
 
 	/**

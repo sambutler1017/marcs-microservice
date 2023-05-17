@@ -3,7 +3,7 @@
  */
 package com.marcs.app.reports.dao;
 
-import static com.marcs.app.vacation.mapper.VacationMapper.VACATION_MAPPER;
+import static com.marcs.app.vacation.mapper.VacationMapper.*;
 
 import java.util.List;
 
@@ -38,7 +38,8 @@ public class VacationReportsDao extends BaseDao {
          */
         public List<Vacation> getVacations(VacationGetRequest request) throws Exception {
                 MapSqlParameterSource params = SqlParamBuilder.with(request).withParam(ID, request.getId())
-                                .withParam(USER_ID, request.getUserId()).withParam(REGIONAL_ID, request.getRegionalId())
+                                .withParam(USER_ID, request.getUserId())
+                                .withParam(REGIONAL_MANAGER_ID, request.getRegionalManagerId())
                                 .withParam(STORE_ID, request.getStoreId())
                                 .withParamTextEnumCollection(WEB_ROLE_TEXT_ID, request.getWebRole())
                                 .withParamTextEnumCollection(STATUS, request.getStatus()).build();

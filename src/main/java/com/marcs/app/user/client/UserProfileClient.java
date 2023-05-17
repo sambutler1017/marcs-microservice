@@ -136,6 +136,17 @@ public class UserProfileClient {
 	}
 
 	/**
+	 * Will patch a user for the given id.
+	 * 
+	 * @param id   of the user
+	 * @param user The user info to be updated
+	 * @return user associated to that id with the updated information
+	 */
+	public User patchUserProfileById(int id, User user) {
+		return controller.patchUserProfileById(id, user);
+	}
+
+	/**
 	 * Delete the user for the given id.
 	 * 
 	 * @param id The id of the user being deleted

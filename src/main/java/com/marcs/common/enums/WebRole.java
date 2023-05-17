@@ -18,7 +18,7 @@ public enum WebRole implements TextEnum {
 	ASSISTANT_MANAGER(4, "ASSISTANT_MANAGER"),
 	STORE_MANAGER(5, "STORE_MANAGER"),
 	DISTRICT_MANAGER(6, "DISTRICT_MANAGER"),
-	REGIONAL(7, "REGIONAL"),
+	REGIONAL_MANAGER(7, "REGIONAL_MANAGER"),
 	SITE_ADMIN(8, "SITE_ADMIN"),
 	ADMIN(9, "ADMIN");
 
@@ -78,7 +78,7 @@ public enum WebRole implements TextEnum {
 	 * 
 	 * @return {@link Boolean} if the webrole is a regional.
 	 */
-	public boolean isRegional() {
+	public boolean isRegionalManager() {
 		List<Integer> regionalRanks = List.of(6, 7);
 		return regionalRanks.contains(rank);
 	}

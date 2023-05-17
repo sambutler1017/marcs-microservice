@@ -1,6 +1,6 @@
 @NAME(vacationFields)
   v.id, v.user_id, v.start_date, v.end_date, v.insert_date, v.status, v.notes,
-  st.id AS 'store_id', st.regional_id, CONCAT(up.first_name, ' ', up.last_name) AS name, up.web_role_id
+  st.id AS 'store_id', st.regional_manager_id, CONCAT(up.first_name, ' ', up.last_name) AS name, up.web_role_id
 
 @NAME(vacationFilters)
   @WHERE
@@ -8,8 +8,8 @@
       v.id IN (:id)
     @AND(:user_id)
       v.user_id IN (:user_id)
-    @AND(:regional_id)
-      st.regional_id IN (:regional_id)
+    @AND(:regional_manager_id)
+      st.regional_manager_id IN (:regional_manager_id)
     @AND(:status)
       v.status IN (:status)
     @AND(:store_id)

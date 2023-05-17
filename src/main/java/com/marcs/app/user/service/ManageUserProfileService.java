@@ -78,6 +78,10 @@ public class ManageUserProfileService {
 		userCredentialsClient.insertUserPassword(newUser.getId(), user.getPassword());
 		userStatusClient.insertUserStatus(new UserStatus(newUser.getId(), AccountStatus.APPROVED, user.isAppAccess()));
 
+		if(WebRole.STORE_MANAGER.equals(newUser.getWebRole())) {
+			processStoreManagerChange(newUser.getId(), newUser.getStoreId());
+		}
+
 		return userProfileService.getUserById(newUser.getId());
 	}
 
@@ -94,19 +98,21 @@ public class ManageUserProfileService {
 	/**
 	 * Updates a user for the given id.
 	 * 
-	 * @param id of the user
+	 * @param id               The id of the user
+	 * @param userInfoToUpdate The info to update the user with
 	 * @return user associated to that id with the updated information.
 	 */
-	public User updateUserProfileById(int id, User user) {
-		User updatingUser = userProfileService.getUserById(id);
-		if(id != updatingUser.getId() && jwtHolder.getWebRole().getRank() <= updatingUser.getWebRole().getRank()) {
+	public User updateUserProfileById(int id, User userInfoToUpdate) {
+		User currentUser = userProfileService.getUserById(id);
+		if(id != currentUser.getId() && jwtHolder.getWebRole().getRank() <= currentUser.getWebRole().getRank()) {
 			throw new InsufficientPermissionsException(String
 					.format("Your role of '%s' can not update a user of role '%s'", jwtHolder.getWebRole(),
-							updatingUser.getWebRole()));
+							currentUser.getWebRole()));
 		}
 
-		checkRoleChange(updatingUser, user);
-		return updateUserProfile(id, user);
+		User updatedUser = updateUserProfile(id, userInfoToUpdate);
+		processRoleChange(currentUser, userInfoToUpdate);
+		return updatedUser;
 	}
 
 	/**
@@ -118,6 +124,18 @@ public class ManageUserProfileService {
 	public User updateUserLastLoginToNow(int userId) {
 		dao.updateUserLastLoginToNow(userId);
 		return userProfileService.getUserById(userId);
+	}
+
+	/**
+	 * Will patch a user for the given id.
+	 * 
+	 * @param id   of the user
+	 * @param user The user info to be updated
+	 * @return user associated to that id with the updated information
+	 */
+	public User patchUserProfileById(int id, User user) {
+		dao.patchUserProfileById(id, user);
+		return userProfileService.getUserById(id);
 	}
 
 	/**
@@ -149,27 +167,53 @@ public class ManageUserProfileService {
 	 * @param currentInfo  The current user info
 	 * @param updatingInfo The info to update on the user.
 	 */
-	private void checkRoleChange(User currentInfo, User updatingInfo) {
+	private void processRoleChange(User currentInfo, User updatingInfo) {
 		if(updatingInfo.getWebRole() != null && !currentInfo.getWebRole().equals(updatingInfo.getWebRole())) {
-			switch(currentInfo.getWebRole()) {
+			switch(updatingInfo.getWebRole()) {
 				case STORE_MANAGER:
-					storeClient.clearStoreManager(currentInfo.getId());
+					processStoreManagerChange(currentInfo.getId(), updatingInfo.getStoreId());
 					break;
-				case REGIONAL: {
-					if(!WebRole.DISTRICT_MANAGER.equals(updatingInfo.getWebRole())) {
-						storeClient.clearRegional(currentInfo.getId());
-					}
-				}
-					break;
-				case DISTRICT_MANAGER: {
-					if(!WebRole.REGIONAL.equals(updatingInfo.getWebRole())) {
-						storeClient.clearRegional(currentInfo.getId());
-					}
-				}
+				case REGIONAL_MANAGER:
+					processRegionalManagerChange(currentInfo.getId());
 					break;
 				default:
+					processDefaultChange(currentInfo.getId());
 					break;
 			}
 		}
+	}
+
+	/**
+	 * Hepler method to process a role change to a
+	 * {@link WebRole#CORPORATE_USER},{@link WebRole#EMPLOYEE},
+	 * {@link WebRole#CUSTOMER_SERVICE_MANAGER}, {@link WebRole#ASSISTANT_MANAGER}
+	 * {@link WebRole#SITE_ADMIN} or {@link WebRole#ADMIN}
+	 * 
+	 * @param userId The user id to process
+	 */
+	private void processDefaultChange(int userId) {
+		storeClient.clearStoreManager(userId);
+		storeClient.clearRegionalManager(userId);
+	}
+
+	/**
+	 * Hepler method to process a role change to a {@link WebRole#STORE_MANAGER}
+	 * 
+	 * @param userId  The user id to process
+	 * @param storeId The store id to set the manager for.
+	 */
+	private void processStoreManagerChange(int userId, String storeId) {
+		storeClient.clearRegionalManager(userId);
+		storeClient.updateStoreManagerOfStore(userId, storeId);
+	}
+
+	/**
+	 * Hepler method to process a role change to a {@link WebRole#REGIONAL_MANAGER}
+	 * or {@link WebRole#DISTRICT_MANAGER}
+	 * 
+	 * @param userId The user id to process
+	 */
+	private void processRegionalManagerChange(int userId) {
+		storeClient.clearStoreManager(userId);
 	}
 }

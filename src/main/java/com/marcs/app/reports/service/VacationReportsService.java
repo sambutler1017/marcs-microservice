@@ -62,8 +62,8 @@ public class VacationReportsService {
         if(jwtHolder.getWebRole().isAllAccessUser()) {
             // Can See all vacations
         }
-        else if(jwtHolder.getWebRole().isRegional()) {
-            r.setRegionalId(Sets.newHashSet(jwtHolder.getUserId()));
+        else if(jwtHolder.getWebRole().isRegionalManager()) {
+            r.setRegionalManagerId(Sets.newHashSet(jwtHolder.getUserId()));
         }
         else if(jwtHolder.getWebRole().isManager() || jwtHolder.getWebRole().equals(WebRole.EMPLOYEE)) {
             r.setStoreId(Sets.newHashSet(jwtHolder.getUser().getStoreId()));

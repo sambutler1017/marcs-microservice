@@ -47,8 +47,8 @@ public class UserGetRequest implements SearchParam, PageParam, SearchFieldParams
     @Schema(description = "Set of Store Names.")
     private Set<String> storeName;
 
-    @Schema(description = "Set of regional ID's")
-    private Set<Integer> regionalId;
+    @Schema(description = "Set of regional manager ID's")
+    private Set<Integer> regionalManagerId;
 
     @Schema(description = "Set of Account Status values.")
     private Set<AccountStatus> accountStatus;
@@ -124,12 +124,12 @@ public class UserGetRequest implements SearchParam, PageParam, SearchFieldParams
         this.storeName = storeName;
     }
 
-    public Set<Integer> getRegionalId() {
-        return regionalId;
+    public Set<Integer> getRegionalManagerId() {
+        return regionalManagerId;
     }
 
-    public void setRegionalId(Set<Integer> regionalId) {
-        this.regionalId = regionalId;
+    public void setRegionalManagerId(Set<Integer> regionalManagerId) {
+        this.regionalManagerId = regionalManagerId;
     }
 
     public Set<AccountStatus> getAccountStatus() {

@@ -133,9 +133,9 @@ public class UserProfileService {
 		if(jwtHolder.getWebRole().isAllAccessUser()) {
 			r.setExcludedUserIds(Sets.newHashSet(jwtHolder.getUserId()));
 		}
-		else if(jwtHolder.getWebRole().isRegional()) {
+		else if(jwtHolder.getWebRole().isRegionalManager()) {
 			r.setExcludedUserIds(Sets.newHashSet(jwtHolder.getUserId()));
-			r.setRegionalId(Sets.newHashSet(jwtHolder.getUserId()));
+			r.setRegionalManagerId(Sets.newHashSet(jwtHolder.getUserId()));
 		}
 		else if(jwtHolder.getWebRole().isManager()) {
 			r.setExcludedUserIds(Sets.newHashSet(jwtHolder.getUserId()));

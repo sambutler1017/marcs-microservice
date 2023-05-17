@@ -34,7 +34,7 @@ public class ManageStoreService {
 
 	/**
 	 * This will update the information of a store. It will only be able to update
-	 * the store id, store name, and regional of the store.
+	 * the store id, store name, and regional manager of the store.
 	 * 
 	 * @param storeId The store Id to update the manager at.
 	 * @param store   The information to be updated
@@ -44,8 +44,8 @@ public class ManageStoreService {
 		storeService.getStoreById(storeId);
 		dao.updateStore(storeId, store);
 
-		if(store.getRegionalId() > 0) {
-			updateRegionalOfStore(store.getRegionalId(), store.getId());
+		if(store.getRegionalManagerId() > 0) {
+			updateRegionalManagerOfStore(store.getRegionalManagerId(), store.getId());
 		}
 		return storeService.getStoreById(store.getId());
 	}
@@ -66,31 +66,31 @@ public class ManageStoreService {
 							userId));
 		}
 
-		demoteStoreManagerOfStore(storeId);
+		demoteCurrentStoreManagerOfStore(storeId);
 		dao.updateStoreManagerOfStore(userId, storeId);
 		return storeService.getStoreById(storeId);
 	}
 
 	/**
-	 * This will update the regional of a store.
+	 * This will update the regional manager of a store.
 	 * 
-	 * @param userId  The user id of the regional.
-	 * @param storeId The store Id to update the regional at.
-	 * @return {@link Store} object with the updated regional.
+	 * @param userId  The user id of the regional manager.
+	 * @param storeId The store Id to update the regional manager at.
+	 * @return {@link Store} object with the updated regional manager.
 	 */
-	public Store updateRegionalOfStore(int userId, String storeId) {
+	public Store updateRegionalManagerOfStore(int userId, String storeId) {
 		if(userProfileClient.getUserById(userId).getWebRole().getRank() < WebRole.DISTRICT_MANAGER.getRank()) {
 			throw new BaseException(String
 					.format("User id '%d' is not a sufficient web role. Can not update overseer of store!", userId));
 		}
 
-		dao.updateRegionalOfStore(userId, storeId);
+		dao.updateRegionalManagerOfStore(userId, storeId);
 		return storeService.getStoreById(storeId);
 	}
 
 	/**
 	 * This will create a new store for the given store id, store name, and regional
-	 * on the store.
+	 * manager on the store.
 	 * 
 	 * @param store The information to be created
 	 * @return {@link Store} object with the created information.
@@ -98,7 +98,7 @@ public class ManageStoreService {
 	public Store createStore(Store store) {
 		Assert.notNull(store.getId(), "Store ID is a required field");
 		Assert.notNull(store.getName(), "Store Name is a required field");
-		Assert.isTrue(store.getRegionalId() > 0, "Regional ID must be greater than 0");
+		Assert.isTrue(store.getRegionalManagerId() > 0, "Regional Manager ID must be greater than 0");
 
 		return dao.createStore(store);
 	}
@@ -123,12 +123,12 @@ public class ManageStoreService {
 	}
 
 	/**
-	 * Will clear the regional from all stores associated to that user.
+	 * Will clear the regional manager from all stores associated to that user.
 	 * 
 	 * @param userId The user id to clear
 	 */
-	public void clearRegional(int userId) {
-		dao.clearRegional(userId);
+	public void clearRegionalManager(int userId) {
+		dao.clearRegionalManager(userId);
 	}
 
 	/**
@@ -137,12 +137,12 @@ public class ManageStoreService {
 	 * 
 	 * @param storeId The store id of the manager to demote.
 	 */
-	private void demoteStoreManagerOfStore(String storeId) {
+	private void demoteCurrentStoreManagerOfStore(String storeId) {
 		int currentManagerId = storeService.getStoreById(storeId).getManagerId();
 		if(currentManagerId != 0) {
 			User updatedUserRole = new User();
 			updatedUserRole.setWebRole(WebRole.ASSISTANT_MANAGER);
-			userProfileClient.updateUserProfileById(currentManagerId, updatedUserRole);
+			userProfileClient.patchUserProfileById(currentManagerId, updatedUserRole);
 		}
 	}
 }

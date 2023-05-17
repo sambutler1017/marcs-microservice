@@ -11,10 +11,10 @@
 -- ---------------------------------------------------------------------------------
 
 CREATE TABLE stores (
-  id          VARCHAR(128)          NOT NULL,
-  name        VARCHAR(128)          NOT NULL,
-  regional_id INT          unsigned DEFAULT NULL,
-  manager_id  INT          unsigned DEFAULT NULL,
+  id                  VARCHAR(128)          NOT NULL,
+  name                VARCHAR(128)          NOT NULL,
+  regional_manager_id INT          unsigned DEFAULT NULL,
+  manager_id          INT          unsigned DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

@@ -19,7 +19,7 @@ public abstract class AbstractSqlGlobals {
     protected static final String READ_FLAG = "read_flag";
     protected static final String LINK_ID = "link_id";
     protected static final String NAME = "name";
-    protected static final String REGIONAL_ID = "regional_id";
+    protected static final String REGIONAL_MANAGER_ID = "regional_manager_id";
     protected static final String MANAGER_ID = "manager_id";
     protected static final String USER_ID = "user_id";
     protected static final String PASSWORD = "password";

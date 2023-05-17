@@ -41,7 +41,7 @@ public class VacationDao extends BaseDao {
 	 */
 	public Page<Vacation> getVacations(VacationGetRequest request) {
 		MapSqlParameterSource params = SqlParamBuilder.with(request).usePagenation().withParam(ID, request.getId())
-				.withParam(USER_ID, request.getUserId()).withParam(REGIONAL_ID, request.getRegionalId())
+				.withParam(USER_ID, request.getUserId()).withParam(REGIONAL_MANAGER_ID, request.getRegionalManagerId())
 				.withParam(STORE_ID, request.getStoreId())
 				.withParamTextEnumCollection(WEB_ROLE_TEXT_ID, request.getWebRole())
 				.withParamTextEnumCollection(STATUS, request.getStatus()).build();
@@ -56,7 +56,7 @@ public class VacationDao extends BaseDao {
 	 */
 	public List<Vacation> getVacationsForReport(VacationGetRequest request) {
 		MapSqlParameterSource params = SqlParamBuilder.with(request).withParam(ID, request.getId())
-				.withParam(USER_ID, request.getUserId()).withParam(REGIONAL_ID, request.getRegionalId())
+				.withParam(USER_ID, request.getUserId()).withParam(REGIONAL_MANAGER_ID, request.getRegionalManagerId())
 				.withParam("reportFilter", true).withParamTextEnumCollection(STATUS, request.getStatus()).build();
 
 		return getList("getVacations", params, VACATION_MAPPER);

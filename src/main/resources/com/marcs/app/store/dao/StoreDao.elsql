@@ -3,7 +3,7 @@
   up.email_reports_enabled, up.hire_date, up.insert_date, up.last_login_date
 
 @NAME(storeFields)
-  st.id AS 'store_id', st.name AS 'store_name', st.regional_id, st.manager_id
+  st.id AS 'store_id', st.name AS 'store_name', st.regional_manager_id, st.manager_id
 
 @NAME(userStatusFields)
   us.request_id, us.app_access, us.account_status, us.updated_user_id
@@ -12,8 +12,8 @@
   @WHERE
     @AND(:id)
       st.id IN (:id)
-    @AND(:regional_id)
-      st.regional_id IN (:regional_id)
+    @AND(:regional_manager_id)
+      st.regional_manager_id IN (:regional_manager_id)
     @AND(:manager_id) 
       st.manager_id IN (:manager_id)
     @AND(:searchEnabled = true)
@@ -34,16 +34,16 @@
   SELECT COUNT(*)
   @INCLUDE(getStoresBase)
 
-@NAME(getRegionalOfStore)
+@NAME(getRegionalManagerOfStoreById)
   SELECT @INCLUDE(userProfileFields), @INCLUDE(storeFields), @INCLUDE(userStatusFields)
   FROM stores st
-    LEFT JOIN user_profile up ON st.regional_id = up.id
+    LEFT JOIN user_profile up ON st.regional_manager_id = up.id
     JOIN web_role wr ON up.web_role_id = wr.id
     JOIN user_status us ON up.id = us.user_id
   WHERE
     st.id = :id
 
-@NAME(getManagerOfStoreById)
+@NAME(getStoreManagerOfStoreById)
   SELECT @INCLUDE(userProfileFields), @INCLUDE(storeFields), @INCLUDE(userStatusFields)
   FROM stores st
     LEFT JOIN user_profile up ON st.manager_id = up.id
@@ -64,14 +64,14 @@
   SET manager_id = :manager_id
   WHERE id = :id
 
-@NAME(updateRegionalOfStore)
+@NAME(updateRegionalManagerOfStore)
   UPDATE stores
-  SET regional_id = :regional_id
+  SET regional_manager_id = :regional_manager_id
   WHERE id = :id
 
 @NAME(insertStore)
-  INSERT INTO stores (id, name, regional_id)
-  VALUES (:id, :name, :regional_id)
+  INSERT INTO stores (id, name, regional_manager_id)
+  VALUES (:id, :name, :regional_manager_id)
 
 @NAME(deleteStore)
   DELETE FROM stores
@@ -82,10 +82,10 @@
   SET manager_id = null
   WHERE manager_id = :user_id
 
-@NAME(clearRegional)
+@NAME(clearRegionalManager)
   UPDATE stores
-  SET regional_id = null
-  WHERE regional_id = :user_id
+  SET regional_manager_id = null
+  WHERE regional_manager_id = :user_id
 
 @NAME(search)
   (@VALUE(:searchContent))

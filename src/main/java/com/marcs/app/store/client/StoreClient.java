@@ -47,12 +47,12 @@ public class StoreClient {
 	}
 
 	/**
-	 * Get the regional of the passed in store ID.
+	 * Get the regional manager of the passed in store ID.
 	 * 
-	 * @return The regional of that store
+	 * @return The regional manager of that store
 	 */
-	public User getRegionalOfStoreById(String storeId) {
-		return controller.getRegionalOfStoreById(storeId);
+	public User getRegionalManagerOfStoreById(String storeId) {
+		return controller.getRegionalManagerOfStoreById(storeId);
 	}
 
 	/**
@@ -78,14 +78,14 @@ public class StoreClient {
 	}
 
 	/**
-	 * This will update the regional of a store.
+	 * This will update the regional manager of a store.
 	 * 
-	 * @param userId  The user id of the regional.
-	 * @param storeId The store Id to update the regional at.
-	 * @return {@link Store} object with the updated regional.
+	 * @param userId  The user id of the regional manager.
+	 * @param storeId The store Id to update the regional manager at.
+	 * @return {@link Store} object with the updated regional manager.
 	 */
-	public Store updateRegionalOfStore(int userId, String storeId) {
-		return controller.updateRegionalOfStore(userId, storeId);
+	public Store updateRegionalManagerOfStore(int userId, String storeId) {
+		return controller.updateRegionalManagerOfStore(userId, storeId);
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class StoreClient {
 	 * 
 	 * @param userId The user id to clear
 	 */
-	public void clearRegional(int userId) {
-		controller.clearRegional(userId);
+	public void clearRegionalManager(int userId) {
+		controller.clearRegionalManager(userId);
 	}
 }

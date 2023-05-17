@@ -27,8 +27,8 @@ public class StoreGetRequest implements SearchParam, PageParam, SearchFieldParam
     @Schema(description = "Set of unique store ids.")
     private Set<String> id;
 
-    @Schema(description = "Set of Regional ids.")
-    private Set<Integer> regionalId;
+    @Schema(description = "Set of Regional Manager ids.")
+    private Set<Integer> regionalManagerId;
 
     @Schema(description = "Set of Manager ids.")
     private Set<Integer> managerId;
@@ -53,12 +53,12 @@ public class StoreGetRequest implements SearchParam, PageParam, SearchFieldParam
         this.id = id;
     }
 
-    public Set<Integer> getRegionalId() {
-        return regionalId;
+    public Set<Integer> getRegionalManagerId() {
+        return regionalManagerId;
     }
 
-    public void setRegionalId(Set<Integer> regionalId) {
-        this.regionalId = regionalId;
+    public void setRegionalManagerId(Set<Integer> regionalManagerId) {
+        this.regionalManagerId = regionalManagerId;
     }
 
     public Set<Integer> getManagerId() {

@@ -21,8 +21,8 @@ public class Store {
 	private String id;
 
 	@JsonInclude(Include.NON_DEFAULT)
-	@Schema(description = "The regional id of the store.")
-	private int regionalId;
+	@Schema(description = "The regional manager id of the store.")
+	private int regionalManagerId;
 
 	@JsonInclude(Include.NON_DEFAULT)
 	@Schema(description = "The manage id of the store.")
@@ -39,12 +39,12 @@ public class Store {
 		this.id = id;
 	}
 
-	public int getRegionalId() {
-		return regionalId;
+	public int getRegionalManagerId() {
+		return regionalManagerId;
 	}
 
-	public void setRegionalId(int regionalId) {
-		this.regionalId = regionalId;
+	public void setRegionalManagerId(int regionalManagerId) {
+		this.regionalManagerId = regionalManagerId;
 	}
 
 	public int getManagerId() {

@@ -41,11 +41,9 @@ public class EmailController {
     }
 
     /**
-     * This will send a report to the individual regionals of what managers are on
-     * vacation. As well as admins and sitAdmins will get notifications of all users
-     * that are on vacation for the given week.
-     * 
-     * @throws Exception
+     * This will send a report to the individual regional managers of what managers
+     * are on vacation. As well as admins and sitAdmins will get notifications of
+     * all users that are on vacation for the given week.
      */
     @PostMapping("/report")
     public List<UserEmail> sendVacationReport() {

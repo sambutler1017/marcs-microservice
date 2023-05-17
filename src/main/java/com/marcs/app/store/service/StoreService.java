@@ -48,12 +48,12 @@ public class StoreService {
 	}
 
 	/**
-	 * Get the regional of the passed in store ID
+	 * Get the regional manager of the passed in store ID
 	 * 
-	 * @return The regional of that store
+	 * @return The regional manager of that store
 	 */
-	public User getRegionalOfStoreById(String storeId) {
-		return dao.getRegionalOfStoreById(storeId);
+	public User getRegionalManagerOfStoreById(String storeId) {
+		return dao.getRegionalManagerOfStoreById(storeId);
 	}
 
 	/**

@@ -45,8 +45,8 @@ CREATE INDEX block_out_dates_IDX1 ON block_out_dates(insert_user_id);
 CREATE INDEX notifications_IDX1 ON notifications(receiver_id);
 
 -- Stores Table
-CREATE UNIQUE INDEX stores_AK1 ON stores(regional_id,manager_id);
-CREATE INDEX stores_IDX1 ON stores(regional_id);
+CREATE UNIQUE INDEX stores_AK1 ON stores(regional_manager_id,manager_id);
+CREATE INDEX stores_IDX1 ON stores(regional_manager_id);
 CREATE INDEX stores_IDX2 ON stores(manager_id);
 
 -- ------------------------------------------------------------
@@ -108,7 +108,7 @@ ALTER TABLE block_out_dates
 
 -- Stores Table
 ALTER TABLE stores
-  ADD CONSTRAINT user_profile__stores__FK1 FOREIGN KEY(regional_id) REFERENCES user_profile(id) 
+  ADD CONSTRAINT user_profile__stores__FK1 FOREIGN KEY(regional_manager_id) REFERENCES user_profile(id) 
     ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE stores
   ADD CONSTRAINT user_profile__stores__FK2 FOREIGN KEY(manager_id) REFERENCES user_profile(id)

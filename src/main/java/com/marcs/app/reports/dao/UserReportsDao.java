@@ -3,7 +3,7 @@
  */
 package com.marcs.app.reports.dao;
 
-import static com.marcs.app.user.mapper.UserProfileMapper.USER_MAPPER;
+import static com.marcs.app.user.mapper.UserProfileMapper.*;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class UserReportsDao extends BaseDao {
                 MapSqlParameterSource params = SqlParamBuilder.with(request).useAllParams()
                                 .withParam(ID, request.getId()).withParam(EMAIL, request.getEmail())
                                 .withParam(STORE_ID, request.getStoreId())
-                                .withParam(REGIONAL_ID, request.getRegionalId())
+                                .withParam(REGIONAL_MANAGER_ID, request.getRegionalManagerId())
                                 .withParam(FIRST_NAME, request.getFirstName())
                                 .withParam(LAST_NAME, request.getLastName())
                                 .withParam(STORE_NAME, request.getStoreName())
