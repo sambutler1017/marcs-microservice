@@ -43,7 +43,6 @@ public abstract class AbstractSqlGlobals {
     protected static final String TEXT_ID = "text_id";
     protected static final String APP_ID = "app_id";
     protected static final String ACCESS = "access";
-    protected static final String WEB_FEATURE_ID = "web_feature_id";
     protected static final String FEATURE_ID = "feature_id";
     protected static final String CREATE = "create";
     protected static final String READ = "read";
