@@ -3,19 +3,25 @@
  */
 package com.marcs.app.user.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Sets;
+import com.marcs.app.email.client.EmailClient;
 import com.marcs.app.notifications.client.NotificationClient;
 import com.marcs.app.store.client.StoreClient;
 import com.marcs.app.user.client.UserCredentialsClient;
 import com.marcs.app.user.client.UserStatusClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.UserStatus;
+import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.app.user.dao.UserProfileDao;
 import com.marcs.common.enums.AccountStatus;
 import com.marcs.common.enums.WebRole;
 import com.marcs.common.exceptions.InsufficientPermissionsException;
+import com.marcs.common.exceptions.UserNotFoundException;
 import com.marcs.jwt.utility.JwtHolder;
 
 /**
@@ -44,6 +50,9 @@ public class ManageUserProfileService {
 
 	@Autowired
 	private StoreClient storeClient;
+
+	@Autowired
+	private EmailClient emailClient;
 
 	@Autowired
 	private UserProfileService userProfileService;
@@ -83,6 +92,26 @@ public class ManageUserProfileService {
 		}
 
 		return userProfileService.getUserById(newUser.getId());
+	}
+
+	/**
+	 * This gets called when a user forgets their password. This will check to see
+	 * if the passed in email exists as a user, if it does then the user will get an
+	 * email to reset their passowrd.
+	 * 
+	 * @return user associated to that id with the updated information
+	 */
+	public User forgotPassword(String email) throws Exception {
+		UserGetRequest request = new UserGetRequest();
+		request.setEmail(Sets.newHashSet(email));
+		List<User> users = userProfileService.getUsers(request).getList();
+
+		if(users.size() == 0) {
+			throw new UserNotFoundException(String.format("User not found for email '%s'", email));
+		}
+
+		emailClient.sendForgotPasswordEmail(email);
+		return users.get(0);
 	}
 
 	/**

@@ -133,7 +133,7 @@ public class UserProfileController {
 	 */
 	@PostMapping(path = "/forgot-password", produces = APPLICATION_JSON_VALUE)
 	public User forgotPassword(@RequestBody String email) throws Exception {
-		return userProfileService.forgotPassword(email);
+		return manageUserProfileService.forgotPassword(email);
 	}
 
 	/**

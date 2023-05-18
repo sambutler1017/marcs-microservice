@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Sets;
-import com.marcs.app.email.client.EmailClient;
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
@@ -32,9 +31,6 @@ public class UserProfileService {
 
 	@Autowired
 	private JwtHolder jwtHolder;
-
-	@Autowired
-	private EmailClient emailClient;
 
 	/**
 	 * Get users based on given request filter
@@ -97,26 +93,6 @@ public class UserProfileService {
 		List<User> users = getUsers(request).getList();
 
 		return users.size() > 0;
-	}
-
-	/**
-	 * This gets called when a user forgets their password. This will check to see
-	 * if the passed in email exists as a user, if it does then the user will get an
-	 * email to reset their passowrd.
-	 * 
-	 * @return user associated to that id with the updated information
-	 */
-	public User forgotPassword(String email) throws Exception {
-		UserGetRequest request = new UserGetRequest();
-		request.setEmail(Sets.newHashSet(email));
-		List<User> users = getUsers(request).getList();
-
-		if(users.size() == 0) {
-			throw new UserNotFoundException(String.format("User not found for email '%s'", email));
-		}
-
-		emailClient.sendForgotPasswordEmail(email);
-		return users.get(0);
 	}
 
 	/**

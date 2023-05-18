@@ -118,7 +118,7 @@ public class UserProfileClient {
 	 * @return user associated to that id with the updated information
 	 */
 	public User forgotPassword(String email) throws Exception {
-		return userProfileService.forgotPassword(email);
+		return manageUserProfileService.forgotPassword(email);
 	}
 
 	/**
