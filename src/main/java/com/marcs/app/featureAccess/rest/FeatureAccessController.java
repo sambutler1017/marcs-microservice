@@ -20,7 +20,7 @@ import com.marcs.app.featureaccess.service.FeatureAccessService;
  * @author Sam Butler
  * @since 8/3/2020
  */
-@RequestMapping("api/feature-app/feature-access")
+@RequestMapping("/api/feature-access")
 @RestApiController
 public class FeatureAccessController {
 

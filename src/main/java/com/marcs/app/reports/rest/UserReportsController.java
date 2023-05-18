@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.marcs.app.reports.service.UserReportsService;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 
-@RequestMapping("api/reports-app/user")
+@RequestMapping("/api/reports/user")
 @RestController
 public class UserReportsController {
 

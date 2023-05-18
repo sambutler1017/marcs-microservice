@@ -22,7 +22,7 @@ import com.marcs.app.user.client.domain.User;
  * @author Sam Butler
  * @since August 1, 2021
  */
-@RequestMapping("api/mail-app/email")
+@RequestMapping("/api/mail")
 @RestApiController
 public class EmailController {
     @Autowired

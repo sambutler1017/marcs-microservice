@@ -3,7 +3,7 @@
  */
 package com.marcs.app.blockoutdate.rest;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +22,7 @@ import com.marcs.app.blockoutdate.service.ManageBlockOutDateService;
 import com.marcs.common.page.Page;
 
 @RestApiController
-@RequestMapping("api/block-out-date-app/block-out-dates")
+@RequestMapping("/api/block-out-dates")
 public class BlockOutDateController {
 
 	@Autowired

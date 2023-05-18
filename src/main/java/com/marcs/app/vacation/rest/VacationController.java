@@ -23,7 +23,7 @@ import com.marcs.app.vacation.service.ManageVacationService;
 import com.marcs.app.vacation.service.VacationService;
 import com.marcs.common.page.Page;
 
-@RequestMapping("api/vacation-app/vacations")
+@RequestMapping("/api/vacations")
 @RestApiController
 public class VacationController {
 

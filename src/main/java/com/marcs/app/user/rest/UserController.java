@@ -27,9 +27,9 @@ import com.marcs.app.user.service.UserProfileService;
 import com.marcs.common.enums.AccountStatus;
 import com.marcs.common.page.Page;
 
-@RequestMapping("api/user-app/user-profile")
+@RequestMapping("/api/users")
 @RestController
-public class UserProfileController {
+public class UserController {
 
 	@Autowired
 	private UserProfileService userProfileService;

@@ -22,7 +22,7 @@ import com.marcs.app.notifications.service.NotificationService;
 import com.marcs.common.page.Page;
 
 @RestApiController
-@RequestMapping("api/notification-app/notifications")
+@RequestMapping("/api/notifications")
 public class NotificationController {
 
     @Autowired

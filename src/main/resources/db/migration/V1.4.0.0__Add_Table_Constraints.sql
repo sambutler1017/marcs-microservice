@@ -2,12 +2,11 @@
 -- Script: V1.4.0.0__Add_Table_Constraints.sql
 -- Author: Sam Butler
 -- Date: April 24, 2022
--- Issue: MARCS-2: Create Table Constraints
 -- Version: V1.4.0
 -- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 -- ---------------------------------------------------------------------------------
--- MARCS-2: START
+-- START
 -- ---------------------------------------------------------------------------------
 
 -- ------------------------------------------------------------
@@ -48,6 +47,16 @@ CREATE INDEX notifications_IDX1 ON notifications(receiver_id);
 CREATE UNIQUE INDEX stores_AK1 ON stores(regional_manager_id,manager_id);
 CREATE INDEX stores_IDX1 ON stores(regional_manager_id);
 CREATE INDEX stores_IDX2 ON stores(manager_id);
+
+-- Schedules Table
+CREATE INDEX schedules_IDX1 ON schedules(store_id);
+
+-- User Schedule Table
+CREATE INDEX user_schedule_IDX1 ON user_schedule(schedule_id);
+CREATE INDEX user_schedule_IDX2 ON user_schedule(user_id);
+
+-- User Availability Table
+CREATE INDEX user_availability_IDX2 ON user_availability(user_id);
 
 -- ------------------------------------------------------------
 -- Foreign Keys
@@ -114,8 +123,25 @@ ALTER TABLE stores
   ADD CONSTRAINT user_profile__stores__FK2 FOREIGN KEY(manager_id) REFERENCES user_profile(id)
     ON DELETE SET NULL ON UPDATE CASCADE;
 
+-- Schedules Table
+ALTER TABLE schedules
+  ADD CONSTRAINT stores__schedules__FK1 FOREIGN KEY (store_id) REFERENCES stores (id) 
+    ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- User Schedule Table
+ALTER TABLE user_schedule
+  ADD CONSTRAINT user_profile__user_schedule__FK1 FOREIGN KEY(user_id) REFERENCES user_profile(id) 
+    ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE user_schedule
+  ADD CONSTRAINT schedules__user_schedule__FK2 FOREIGN KEY(schedule_id) REFERENCES schedules(id)
+    ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- User Availability Table
+ALTER TABLE user_availability
+  ADD CONSTRAINT user_profile__user_availability__FK1 FOREIGN KEY (user_id) REFERENCES user_profile(id)  
+    ON DELETE CASCADE ON UPDATE CASCADE;
 -- ---------------------------------------------------------------------------------
--- MARCS-2: END
+-- END
 -- ---------------------------------------------------------------------------------
 
 -- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -16,7 +16,7 @@ import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.subscription.client.domain.UserPrincipal;
 import com.marcs.subscription.service.SubscriptionNotifierService;
 
-@RequestMapping("/api/subscription-app")
+@RequestMapping("/api/subscription")
 @RestApiController
 public class SubscriptionController {
 
@@ -38,7 +38,7 @@ public class SubscriptionController {
      * 
      * @param body The notification to push.
      */
-    @PostMapping(path = "/user/notification")
+    @PostMapping(path = "/users/notification")
     public void pushUserNotification(@RequestBody Notification body) {
         service.sendToUser(body, body.getReceiverId());
     }

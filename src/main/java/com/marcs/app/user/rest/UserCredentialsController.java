@@ -3,7 +3,7 @@
  */
 package com.marcs.app.user.rest;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +16,7 @@ import com.marcs.app.user.client.domain.PasswordUpdate;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.service.UserCredentialsService;
 
-@RequestMapping("api/user-app/user-credentials")
+@RequestMapping("/api/users/credentials")
 @RestController
 public class UserCredentialsController {
 

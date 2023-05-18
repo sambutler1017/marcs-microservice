@@ -18,7 +18,7 @@ import com.marcs.app.user.client.domain.UserStatus;
 import com.marcs.app.user.service.ManageUserStatusService;
 import com.marcs.app.user.service.UserStatusService;
 
-@RequestMapping("api/user-app/user-status")
+@RequestMapping("/api/users/status")
 @RestController
 public class UserStatusController {
 

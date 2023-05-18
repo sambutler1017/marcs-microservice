@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.marcs.app.reports.service.VacationReportsService;
 import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 
-@RequestMapping("api/reports-app/vacation")
+@RequestMapping("/api/reports/vacation")
 @RestController
 public class VacationReportsController {
 

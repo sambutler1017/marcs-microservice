@@ -23,7 +23,7 @@ import com.marcs.app.user.client.domain.User;
 import com.marcs.common.page.Page;
 
 @RestApiController
-@RequestMapping("api/store-app/stores")
+@RequestMapping("/api/stores")
 public class StoreController {
 
 	@Autowired

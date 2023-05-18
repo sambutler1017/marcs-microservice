@@ -17,7 +17,7 @@ import com.marcs.app.store.client.domain.Store;
 import com.marcs.app.vacation.client.domain.Vacation;
 
 @RestApiController
-@RequestMapping("api/request-tracker-app/request")
+@RequestMapping("/api/request-tracker")
 public class RequestTrackerController {
 
 	@Autowired
