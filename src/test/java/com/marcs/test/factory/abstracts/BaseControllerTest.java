@@ -239,7 +239,7 @@ public abstract class BaseControllerTest extends RequestTestUtil {
         u.setWebRole(jwtController.webRole());
 
         String token = jwtTokenUtil.generateToken(u);
-        headers.set("Authorization", "Bearer: " + token);
+        headers.set("Authorization", "Bearer " + token);
         headers.set("Content-Type", "application/json");
     }
 
