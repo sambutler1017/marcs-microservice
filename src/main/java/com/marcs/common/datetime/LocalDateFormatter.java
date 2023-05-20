@@ -1,7 +1,7 @@
 /**
  * Copyright of Marcs App. All rights reserved.
  */
-package com.marcs.common.date;
+package com.marcs.common.datetime;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;

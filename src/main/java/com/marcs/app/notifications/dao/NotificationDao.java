@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 import com.marcs.app.notifications.client.domain.Notification;
 import com.marcs.app.notifications.client.domain.request.NotificationGetRequest;
 import com.marcs.common.abstracts.BaseDao;
-import com.marcs.common.date.TimeZoneUtil;
+import com.marcs.common.datetime.TimeZoneUtil;
 import com.marcs.common.page.Page;
 import com.marcs.sql.SqlParamBuilder;
 

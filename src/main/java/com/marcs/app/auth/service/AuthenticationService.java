@@ -16,7 +16,7 @@ import com.marcs.app.auth.dao.AuthenticationDao;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
-import com.marcs.common.date.TimeZoneUtil;
+import com.marcs.common.datetime.TimeZoneUtil;
 import com.marcs.common.exceptions.BaseException;
 import com.marcs.common.exceptions.InvalidCredentialsException;
 import com.marcs.common.exceptions.UserNotFoundException;

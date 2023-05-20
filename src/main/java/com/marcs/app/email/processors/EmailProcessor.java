@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.marcs.app.email.client.domain.UserEmail;
-import com.marcs.common.date.TimeZoneUtil;
+import com.marcs.common.datetime.TimeZoneUtil;
 import com.marcs.environment.AppEnvironmentService;
 import com.sendgrid.Content;
 import com.sendgrid.Email;

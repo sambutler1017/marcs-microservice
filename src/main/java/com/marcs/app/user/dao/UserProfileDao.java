@@ -22,7 +22,7 @@ import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.abstracts.BaseDao;
-import com.marcs.common.date.TimeZoneUtil;
+import com.marcs.common.datetime.TimeZoneUtil;
 import com.marcs.common.page.Page;
 import com.marcs.sql.SqlParamBuilder;
 

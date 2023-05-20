@@ -24,18 +24,6 @@ public class UserCredentialsController {
     private UserCredentialsService service;
 
     /**
-     * This will create a new row in the user_credentails database with the given
-     * auth password and the id of the user to assign it too. This method will only
-     * be called when creating a new user.
-     * 
-     * @param id       The id of the new user.
-     * @param authPass The password that was created.
-     */
-    public void insertUserPassword(@PathVariable int id, @RequestBody String pass) {
-        service.insertUserPassword(id, pass);
-    }
-
-    /**
      * This will take in a {@link PasswordUpdate} object that will confirm that the
      * current password matches the database password. If it does then it will
      * update the password to the new password.

@@ -18,7 +18,7 @@ import com.marcs.app.featureaccess.client.FeatureAccessClient;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
-import com.marcs.common.date.LocalDateFormatter;
+import com.marcs.common.datetime.LocalDateFormatter;
 import com.marcs.environment.AppEnvironmentService;
 import com.marcs.jwt.domain.JwtType;
 import com.marcs.jwt.domain.UserJwtClaims;
