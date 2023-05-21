@@ -64,7 +64,7 @@ public enum WebRole implements TextEnum {
 
 	/**
 	 * Determines if the current webrole is a manager or not. Managers are ranks
-	 * between 2 and 6.
+	 * between 4 and 6.
 	 * 
 	 * @return {@link Boolean} if the webrole is a manager.
 	 */
