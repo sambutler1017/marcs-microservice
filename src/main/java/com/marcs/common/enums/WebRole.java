@@ -69,7 +69,7 @@ public enum WebRole implements TextEnum {
 	 * @return {@link Boolean} if the webrole is a manager.
 	 */
 	public boolean isManager() {
-		List<Integer> managerRanks = List.of(2, 3, 4, 5, 6);
+		List<Integer> managerRanks = List.of(4, 5, 6);
 		return managerRanks.contains(rank);
 	}
 
@@ -80,7 +80,7 @@ public enum WebRole implements TextEnum {
 	 * @return {@link Boolean} if the webrole is a regional.
 	 */
 	public boolean isRegionalManager() {
-		List<Integer> regionalRanks = List.of(6, 7);
+		List<Integer> regionalRanks = List.of(7, 8);
 		return regionalRanks.contains(rank);
 	}
 
@@ -91,7 +91,7 @@ public enum WebRole implements TextEnum {
 	 * @return {@link Boolean} if the webrole is a all access user.
 	 */
 	public boolean isAllAccessUser() {
-		List<Integer> allAccessRanks = List.of(2, 8, 9);
+		List<Integer> allAccessRanks = List.of(3, 9, 10);
 		return allAccessRanks.contains(rank);
 	}
 }
