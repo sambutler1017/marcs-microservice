@@ -30,6 +30,7 @@ CREATE INDEX user_status_IDX2 ON user_status(updated_user_id);
 CREATE INDEX user_request_IDX1 ON user_request(user_id);
 
 -- Web Role App Access Table
+CREATE INDEX web_role_app_access_AK1 ON web_role_app_access(web_role_id, app_id);
 CREATE INDEX web_role_app_access_IDX1 ON web_role_app_access(web_role_id);
 CREATE INDEX web_role_app_access_IDX2 ON web_role_app_access(app_id);
 
