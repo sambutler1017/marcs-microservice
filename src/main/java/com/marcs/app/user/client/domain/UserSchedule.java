@@ -1,9 +1,6 @@
 package com.marcs.app.user.client.domain;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
-import com.marcs.common.datetime.DateShift;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -21,8 +18,11 @@ public class UserSchedule {
     @Schema(description = "The user id of the availability object")
     private int userId;
 
-    @Schema(description = "The list of shifts the user is scheduled for")
-    private List<DateShift> shifts;
+    @Schema(description = "The start date for a shift")
+    private LocalDateTime startDate;
+
+    @Schema(description = "The end date for a shift")
+    private LocalDateTime endDate;
 
     @Schema(description = "When the user avaiablity was created")
     private LocalDateTime insertDate;
@@ -43,12 +43,20 @@ public class UserSchedule {
         this.userId = userId;
     }
 
-    public List<DateShift> getShifts() {
-        return shifts;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
-    public void setShifts(List<DateShift> shifts) {
-        this.shifts = shifts;
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 
     public LocalDateTime getInsertDate() {

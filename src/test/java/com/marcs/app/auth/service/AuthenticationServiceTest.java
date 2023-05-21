@@ -1,14 +1,8 @@
 package com.marcs.app.auth.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -24,8 +18,8 @@ import com.marcs.app.auth.dao.AuthenticationDao;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
-import com.marcs.common.exceptions.InvalidCredentialsException;
-import com.marcs.common.exceptions.UserNotFoundException;
+import com.marcs.exceptions.type.InvalidCredentialsException;
+import com.marcs.exceptions.type.UserNotFoundException;
 import com.marcs.jwt.utility.JwtHolder;
 import com.marcs.jwt.utility.JwtTokenUtil;
 import com.marcs.test.factory.annotations.MarcsServiceTest;
@@ -91,7 +85,7 @@ public class AuthenticationServiceTest {
         when(dao.getUserAuthPassword(anyString())).thenReturn(Optional.of(HASHED_PASS));
 
         InvalidCredentialsException ex = assertThrows(InvalidCredentialsException.class,
-                () -> service.authenticate(authRequest));
+                                                      () -> service.authenticate(authRequest));
 
         verify(dao).getUserAuthPassword(anyString());
         verify(userProfileClient, never()).getUsers(any(UserGetRequest.class));

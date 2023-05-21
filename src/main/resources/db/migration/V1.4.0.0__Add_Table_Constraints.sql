@@ -56,7 +56,9 @@ CREATE INDEX user_schedule_IDX1 ON user_schedule(schedule_id);
 CREATE INDEX user_schedule_IDX2 ON user_schedule(user_id);
 
 -- User Availability Table
-CREATE INDEX user_availability_IDX2 ON user_availability(user_id);
+CREATE UNIQUE INDEX user_availability_AK1 ON user_availability(user_id,week_day,start_time);
+CREATE UNIQUE INDEX user_availability_AK2 ON user_availability(user_id,week_day,end_time);
+CREATE INDEX user_availability_IDX1 ON user_availability(user_id);
 
 -- ------------------------------------------------------------
 -- Foreign Keys

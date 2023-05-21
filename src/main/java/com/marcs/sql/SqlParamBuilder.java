@@ -5,6 +5,7 @@ package com.marcs.sql;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
@@ -127,6 +128,17 @@ public class SqlParamBuilder {
      */
     public SqlParamBuilder withParam(String name, LocalDate dt) {
         return withParam(name, dt == null ? null : dt.toString());
+    }
+
+    /**
+     * Add {@link LocalTime} parameter to sql map and check that value is not null
+     * 
+     * @param name  The name of the parameter.
+     * @param value The value of the parameter
+     * @return this builder object {@link SqlParamBuilder}
+     */
+    public SqlParamBuilder withParam(String name, LocalTime t) {
+        return withParam(name, t == null ? null : t.toString());
     }
 
     /**

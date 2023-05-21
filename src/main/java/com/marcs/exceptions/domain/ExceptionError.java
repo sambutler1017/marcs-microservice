@@ -1,7 +1,7 @@
 /**
  * Copyright of Marcs App. All rights reserved.
  */
-package com.marcs.common.exceptions.domain;
+package com.marcs.exceptions.domain;
 
 import java.util.Date;
 
@@ -24,8 +24,7 @@ public class ExceptionError {
 
     private String path;
 
-    public ExceptionError() {
-    }
+    public ExceptionError() {}
 
     public ExceptionError(String message) {
         this.status = HttpStatus.BAD_REQUEST.value();

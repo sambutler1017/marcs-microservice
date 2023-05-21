@@ -1,0 +1,24 @@
+@NAME(getUserAvailabilityFields)
+  ua.id, ua.user_id, ua.week_day, ua.start_time, ua.end_time, ua.insert_date
+
+@NAME(getUserAvailabilityFilters)
+  @WHERE
+    @AND(:user_id)
+      ua.user_id = :user_id
+
+@NAME(getUserAvailabilityBase)
+  FROM user_availability ua
+  @INCLUDE(getUserAvailabilityFilters)
+
+@NAME(getUserAvailabilityPage)
+  SELECT @INCLUDE(getUserAvailabilityFields)
+  @INCLUDE(getUserAvailabilityBase)
+  ORDER BY ua.start_time
+
+@NAME(getUserAvailabilityPageTotalCount)
+  SELECT COUNT(*)
+  @INCLUDE(getUserAvailabilityBase)
+
+@NAME(createUserAvailability)
+  INSERT INTO user_availability (user_id, week_day, start_time, end_time)
+  VALUES (:user_id, :week_day, :start_time, :end_time)

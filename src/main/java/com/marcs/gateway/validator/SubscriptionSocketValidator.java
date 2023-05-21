@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Component;
 
-import com.marcs.common.exceptions.JwtTokenException;
+import com.marcs.exceptions.type.JwtTokenException;
 import com.marcs.gateway.domain.abstracts.CommonTokenValidator;
 
 /**

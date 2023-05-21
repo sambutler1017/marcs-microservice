@@ -5,6 +5,7 @@ package com.marcs.common.abstracts;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.jdbc.core.RowMapper;
@@ -37,5 +38,16 @@ public abstract class AbstractMapper<T> extends AbstractSqlGlobals implements Ro
     public LocalDate parseDate(String d) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return LocalDate.parse(d, formatter);
+    }
+
+    /**
+     * Formats a time to the local time object.
+     * 
+     * @param t The time to format.
+     * @return The new LocalTime format.
+     */
+    public LocalTime parseTime(String t) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        return LocalTime.parse(t, formatter);
     }
 }

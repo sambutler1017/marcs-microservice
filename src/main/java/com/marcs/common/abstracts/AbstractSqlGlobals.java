@@ -50,4 +50,7 @@ public abstract class AbstractSqlGlobals {
     protected static final String DELETE = "delete";
     protected static final String RANGE = "range";
     protected static final String DATA = "data";
+    protected static final String WEEK_DAY = "week_day";
+    protected static final String START_TIME = "start_time";
+    protected static final String END_TIME = "end_time";
 }

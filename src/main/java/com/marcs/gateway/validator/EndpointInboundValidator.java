@@ -12,7 +12,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 
 import com.google.common.net.HttpHeaders;
-import com.marcs.common.exceptions.JwtTokenException;
+import com.marcs.exceptions.type.JwtTokenException;
 import com.marcs.gateway.domain.abstracts.CommonTokenValidator;
 
 /**

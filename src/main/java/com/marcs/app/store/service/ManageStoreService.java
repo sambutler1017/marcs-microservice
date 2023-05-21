@@ -12,7 +12,7 @@ import com.marcs.app.store.dao.StoreDao;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.common.enums.WebRole;
-import com.marcs.common.exceptions.BaseException;
+import com.marcs.exceptions.type.BaseException;
 
 /**
  * Store Service class that handles all service calls to the dao

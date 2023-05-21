@@ -17,9 +17,9 @@ import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.common.datetime.TimeZoneUtil;
-import com.marcs.common.exceptions.BaseException;
-import com.marcs.common.exceptions.InvalidCredentialsException;
-import com.marcs.common.exceptions.UserNotFoundException;
+import com.marcs.exceptions.type.BaseException;
+import com.marcs.exceptions.type.InvalidCredentialsException;
+import com.marcs.exceptions.type.UserNotFoundException;
 import com.marcs.jwt.utility.JwtHolder;
 import com.marcs.jwt.utility.JwtTokenUtil;
 

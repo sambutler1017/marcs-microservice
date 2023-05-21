@@ -1,3 +1,4 @@
+DELETE FROM user_credentials;
 DELETE FROM user_profile;
 DELETE FROM web_role;
 
@@ -20,4 +21,4 @@ INSERT INTO user_credentials(user_id, password)
 VALUES (1, '$2a$10$mRP0e8e2WH33nKbdgJPuhe55UZwnsOr7ZQAAFfmkiKzPOnZ3ojnEa');
 
 INSERT INTO user_credentials(user_id, password)
-VALUES (2, '$2a$10$mRP0e8e2WH33nKbdgJPuhe55UZwnsOr7ZQAAFfmkiKzPOnZ3ojnEa')
+VALUES (2, '$2a$10$mRP0e8e2WH33nKbdgJPuhe55UZwnsOr7ZQAAFfmkiKzPOnZ3ojnEa');

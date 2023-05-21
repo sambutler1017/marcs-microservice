@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.marcs.common.enums.Environment;
-import com.marcs.common.exceptions.JwtTokenException;
 import com.marcs.environment.AppEnvironmentService;
+import com.marcs.exceptions.type.JwtTokenException;
 import com.marcs.gateway.domain.interfaces.BaseRequestValidator;
 import com.marcs.jwt.domain.JwtPair;
 import com.marcs.jwt.utility.JwtHolder;

@@ -12,7 +12,7 @@ import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.PasswordUpdate;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.dao.UserCredentialsDao;
-import com.marcs.common.exceptions.InsufficientPermissionsException;
+import com.marcs.exceptions.type.InsufficientPermissionsException;
 import com.marcs.jwt.utility.JwtHolder;
 
 /**

@@ -2,12 +2,9 @@ package com.marcs.app.user.client.domain;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalTime;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-import com.marcs.common.datetime.TimeShift;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -30,9 +27,13 @@ public class UserAvailability {
     @NotNull(message = "Invalid weekDay: Week day is a required field")
     private DayOfWeek weekDay;
 
-    @Schema(description = "The List user shift when they are available")
-    @NotEmpty(message = "Invalid shifts: Can not be empty or null")
-    private List<TimeShift> shifts;
+    @Schema(description = "The start time for a shift")
+    @NotNull(message = "Invalid startTime: Start Time can not be null")
+    private LocalTime startTime;
+
+    @Schema(description = "The end time for a shift")
+    @NotNull(message = "Invalid endTime: End Time can not be null")
+    private LocalTime endTime;
 
     @Schema(description = "When the user avaiablity was created")
     private LocalDateTime insertDate;
@@ -61,12 +62,20 @@ public class UserAvailability {
         this.weekDay = weekDay;
     }
 
-    public List<TimeShift> getShifts() {
-        return shifts;
+    public LocalTime getStartTime() {
+        return startTime;
     }
 
-    public void setShifts(List<TimeShift> shifts) {
-        this.shifts = shifts;
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public LocalDateTime getInsertDate() {

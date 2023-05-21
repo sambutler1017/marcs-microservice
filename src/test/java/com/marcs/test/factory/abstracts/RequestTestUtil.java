@@ -1,15 +1,14 @@
 package com.marcs.test.factory.abstracts;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.Consumer;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.marcs.common.exceptions.domain.ExceptionError;
 import com.marcs.common.mapping.DefaultMapper;
+import com.marcs.exceptions.domain.ExceptionError;
 
 /**
  * Request Test Util for common test functionality.

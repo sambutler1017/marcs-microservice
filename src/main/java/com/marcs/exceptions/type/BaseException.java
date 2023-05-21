@@ -1,7 +1,7 @@
 /**
  * Copyright of Marcs App. All rights reserved.
  */
-package com.marcs.common.exceptions;
+package com.marcs.exceptions.type;
 
 /**
  * Base Exception class. Will omit stack trace and only display exception.

@@ -13,8 +13,8 @@ import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
 import com.marcs.app.vacation.dao.VacationDao;
 import com.marcs.common.enums.WebRole;
-import com.marcs.common.exceptions.VacationNotFoundException;
 import com.marcs.common.page.Page;
+import com.marcs.exceptions.type.VacationNotFoundException;
 import com.marcs.jwt.utility.JwtHolder;
 
 /**

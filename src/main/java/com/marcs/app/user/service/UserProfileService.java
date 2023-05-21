@@ -13,8 +13,8 @@ import com.marcs.app.user.client.domain.Application;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.app.user.dao.UserProfileDao;
-import com.marcs.common.exceptions.UserNotFoundException;
 import com.marcs.common.page.Page;
+import com.marcs.exceptions.type.UserNotFoundException;
 import com.marcs.jwt.utility.JwtHolder;
 
 /**

@@ -1,7 +1,7 @@
 /**
  * Copyright of Marcs App. All rights reserved.
  */
-package com.marcs.common.exceptions;
+package com.marcs.exceptions.type;
 
 /**
  * Exception thrown when user can not be found or updated.

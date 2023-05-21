@@ -20,8 +20,8 @@ import com.marcs.app.user.client.domain.request.UserGetRequest;
 import com.marcs.app.user.dao.UserProfileDao;
 import com.marcs.common.enums.AccountStatus;
 import com.marcs.common.enums.WebRole;
-import com.marcs.common.exceptions.InsufficientPermissionsException;
-import com.marcs.common.exceptions.UserNotFoundException;
+import com.marcs.exceptions.type.InsufficientPermissionsException;
+import com.marcs.exceptions.type.UserNotFoundException;
 import com.marcs.jwt.utility.JwtHolder;
 
 /**
