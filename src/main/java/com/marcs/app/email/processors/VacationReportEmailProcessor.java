@@ -17,9 +17,9 @@ import com.marcs.app.email.client.domain.UserEmail;
 import com.marcs.app.user.client.UserProfileClient;
 import com.marcs.app.user.client.domain.User;
 import com.marcs.app.user.client.domain.request.UserGetRequest;
+import com.marcs.app.vacation.client.VacationClient;
 import com.marcs.app.vacation.client.domain.Vacation;
 import com.marcs.app.vacation.client.domain.request.VacationGetRequest;
-import com.marcs.app.vacation.rest.VacationController;
 import com.marcs.common.datetime.LocalDateFormatter;
 import com.marcs.common.datetime.TimeZoneUtil;
 import com.marcs.common.enums.VacationStatus;
@@ -41,7 +41,7 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
     private UserProfileClient userClient;
 
     @Autowired
-    private VacationController vacationController;
+    private VacationClient vacationClient;
 
     @Override
     public List<UserEmail> process() {
@@ -68,7 +68,7 @@ public class VacationReportEmailProcessor extends EmailProcessor<Void> {
      * @return String of the email content.
      */
     private String buildEmailBody(String content, VacationGetRequest req) {
-        String vacationCards = buildHTMLCard(vacationController.getVacationsForReport(req));
+        String vacationCards = buildHTMLCard(vacationClient.getVacationsForReport(req));
         LocalDate dt = LocalDate.now(TimeZoneUtil.SYSTEM_ZONE).with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
         content = content.replace(EMAIL_DYNAMIC_CARDS, vacationCards);
         content = content.replace(EMAIL_DYNAMIC_DATE, formatDate(dt));

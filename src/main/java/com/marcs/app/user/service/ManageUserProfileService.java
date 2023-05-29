@@ -104,7 +104,7 @@ public class ManageUserProfileService {
 	public User forgotPassword(String email) throws Exception {
 		UserGetRequest request = new UserGetRequest();
 		request.setEmail(Sets.newHashSet(email));
-		List<User> users = userProfileService.getUsers(request).getList();
+		List<User> users = userProfileService.getUsers(request, true).getList();
 
 		if(users.size() == 0) {
 			throw new UserNotFoundException(String.format("User not found for email '%s'", email));

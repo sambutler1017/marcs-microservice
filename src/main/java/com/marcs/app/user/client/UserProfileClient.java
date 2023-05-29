@@ -38,7 +38,7 @@ public class UserProfileClient {
 	 * @return list of user objects
 	 */
 	public List<User> getUsers(UserGetRequest request) {
-		return userProfileService.getUsers(request).getList();
+		return userProfileService.getUsers(request, true).getList();
 	}
 
 	/**

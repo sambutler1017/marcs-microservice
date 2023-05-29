@@ -45,7 +45,7 @@ public class UserController {
 	 */
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	public Page<User> getUsers(UserGetRequest request) {
-		return userProfileService.getUsers(request);
+		return userProfileService.getUsers(request, false);
 	}
 
 	/**

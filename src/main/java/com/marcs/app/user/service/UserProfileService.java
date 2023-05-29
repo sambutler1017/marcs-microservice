@@ -35,11 +35,12 @@ public class UserProfileService {
 	/**
 	 * Get users based on given request filter
 	 * 
-	 * @param request of the user
+	 * @param request           of the user
+	 * @param byPassRestriction If it should byPass the restriction access
 	 * @return User profile object {@link User}
 	 */
-	public Page<User> getUsers(UserGetRequest request) {
-		return dao.getUsers(userAccessRestrictions(request));
+	public Page<User> getUsers(UserGetRequest request, boolean byPassRestriction) {
+		return dao.getUsers(userAccessRestrictions(request, byPassRestriction));
 	}
 
 	/**
@@ -90,7 +91,7 @@ public class UserProfileService {
 	public boolean doesEmailExist(String email) {
 		UserGetRequest request = new UserGetRequest();
 		request.setEmail(Sets.newHashSet(email));
-		List<User> users = getUsers(request).getList();
+		List<User> users = getUsers(request, true).getList();
 
 		return users.size() > 0;
 	}
@@ -101,8 +102,8 @@ public class UserProfileService {
 	 * @param r The passed in user get request.
 	 * @return Updated user get request.
 	 */
-	private UserGetRequest userAccessRestrictions(UserGetRequest r) {
-		if(!jwtHolder.isTokenAvaiable()) {
+	private UserGetRequest userAccessRestrictions(UserGetRequest r, boolean byPassRestriction) {
+		if(!jwtHolder.isTokenAvaiable() || byPassRestriction) {
 			return r;
 		}
 
